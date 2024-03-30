@@ -4,45 +4,31 @@ import java.io.*;
 import java.util.Scanner;
 
 /**
- * Project 4 - User
- * <p>
- * This allows for the manipulation of all the basic information about a user. This information is: the first and
- * last names of the user, the email and password of the user, the type of user that the user is, and the account file
- * object for the file that holds all the login information about a user. This class also contains the basic
- * functions to create, edit, and delete accounts, and to log in to an account. All of this account information is
- * stored in an account file, and every user has their own account file that is created when they create an account,
- * and used to remember the user for when they log in again. A user can edit there first and last names and their
- * password, but not their email or user type as most files associated with a user are created using their email
- * as the unique identifier. When deleting an account, the account file gets deleted. If the user is a customer, then
- * their customer appointments file gets deleted. If the user is a seller, their owned stores file gets deleted, there
- * stores are removed from the All_Store_Info file, and every store info file associated with the deleted user also
- * get deleted. Calendar files and customer appointment files are not updated, because customers can never reach
- * a calendar for a store that doesn't exist, and it is assumed that even though the seller deleted their account, the
- * customers who still made appointments will still want to show up for their appointment.
+ * User
+ *
+ * This class creates a User with a first name, a last name, an email, a bio, a username
+ * a password and a file that holds users.
  */
 
 public class User {
-    private String firstName; // the first name of the user
-    private String lastName; // the last name of the user
-    private String email; // the email of the user
-    private String bio; // the bio of the user
-    private String username; // the username of the user
-    private String password; // the password of the user
-    private File accountFile;  // file object for the account file holding the account information about the user
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String bio;
+    private String username;
+    private String password;
+    private File userFile;
 
-    // default constructor
     public User() {
-        this.firstName = "none";
-        this.lastName = "none";
-        this.email = "none";
-        this.bio = "none";
-        this.username = "none";
-        this.password = "none";
-        this.accountFile = null;
+        this.firstName = null;
+        this.lastName = null;
+        this.email = null;
+        this.bio = null;
+        this.username = null;
+        this.password = null;
+        this.userFile = null;
     }
 
-
-    // customizable constructor
     public User(String firstName, String lastName, String email, String bio, String username,
                 String password) {
         this.firstName = firstName;
@@ -51,246 +37,310 @@ public class User {
         this.bio = bio;
         this.username = username;
         this.password = password;
-        this.accountFile = new File("User_" + email.split("@")[0] + ".txt");
+        this.userFile = new File("User_" + this.username + ".txt");
     }
 
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public String getBio() {
+        return this.bio;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public File getAccountFile() {
+        return this.userFile;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-
-    public String getLastName() {
-        return lastName;
-    }
-
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-
-    public boolean validateName(String name) {
-        return name == null || name.equals("")
-                || name.equals("none") || name.split(" ").length > 1;
-    }
-
-    public boolean validateBio(String bio) {
-        return bio == null || bio.equals("none") || bio.length() < 20 || bio.length() > 40;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getBio() {
-        return bio;
-    }
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-    public String getEmail() {
-        return email;
-    }
-
-
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public boolean validateEmail(String email) {
-        return email == null || email.equals("")
-                || email.equals("none") || email.split(" ").length > 1 || email.split("@").length != 2
-                || email.split("@")[1].split("\\.").length != 2;
-    }
-
-    public boolean checkAccountExists(String email) {
-        File accountFile = new File("User_" + email.split("@")[1]);
-        return accountFile.exists();
-    }
-
-    public String getPassword() {
-        return password;
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public boolean validatePassword(String password) {
-        return password.length() < 4;
-    }
-
-    public File getAccountFile() {
-        return accountFile;
-    }
-
     public void setAccountFile() {
-        this.accountFile = new File("User_" + email.split("@")[0] + ".txt");
+        this.userFile = new File("User_" + this.username + ".txt");
     }
 
+    public boolean checkFirstName(String firstName) {
+        boolean checker = true;
+        if (firstName == null || firstName.isEmpty()) {
+            checker = false;
+        } else if (firstName.contains(" ")) {
+            checker = false;
+        } else {
+            for (int i = 0; i < firstName.length(); i++) {
+                if (!Character.isLetter(firstName.charAt(i))) {
+                    checker = false;
+                }
+            }
+        }
+        return checker;
+    }
+
+    public boolean checkLastName(String lastName) {
+        boolean checker = true;
+        if (lastName == null || lastName.isEmpty()) {
+            checker = false;
+        } else if (lastName.contains(" ")) {
+            checker = false;
+        } else {
+            for (int i = 0; i < lastName.length(); i++) {
+                if (!Character.isLetter(lastName.charAt(i))) {
+                    checker = false;
+                }
+            }
+        }
+        return checker;
+    }
+
+    public boolean checkEmail(String email) {
+        boolean checker = true;
+        if (!email.contains("@") || email.contains(" ")) {
+            checker = false;
+        }
+        return checker;
+    }
+
+    public boolean checkBio(String bio) {
+        boolean checker = true;
+        if (bio.length() > 40 || bio.isEmpty()) {
+            checker = false;
+        }
+        return checker;
+    }
+
+    public boolean checkUsername(String username) {
+        boolean checker = true;
+        if (username.length() > 40 || username.isEmpty()) {
+            checker = false;
+        }
+        return checker;
+    }
+
+    public boolean checkPassword(String password) {
+        boolean checker = true;
+        if (password.length() < 4) {
+            checker = false;
+        }
+        return checker;
+    }
+
+    public boolean checkAccountExists(String username) {
+        File accountInfo2 = new File("User_" + username);
+        return accountInfo2.exists();
+    }
 
     public String changeEmail(Scanner sc) {
-        boolean invalidEmail;  // true if the entered email is invalid
-        String email; // the email te user enters
+        boolean emailChecker;
+        boolean existsEmail;
+        boolean origExists;
+        String emailOrig;
+        String email;
 
-        // validating email
         do {
-            System.out.println("Enter your email:");
-            email = sc.nextLine();
-            invalidEmail = validateEmail(email);
-
-            if (invalidEmail) {  // selection for what to print if email entered incorrectly
-                if (email == null || email.equals("")
-                        || email.equals("none")) {
-                    System.out.println("ERROR! Please enter an email!");
-                } else if (email.split(" ").length > 1 || email.split("@").length != 2
-                        || email.split("@")[1].split("\\.").length != 2) {
-                    System.out.println("ERROR! the email you entered was incorrectly formatted.");
-                    System.out.println("Please enter an email of the form: ___@___.___ with no spaces!");
+            do {
+                System.out.println("Enter your email:");
+                emailOrig = sc.nextLine();
+                origExists = checkAccountExists(emailOrig);
+                if (!origExists) {
+                    System.out.println("This account does not exist.");
+                    System.out.println("Enter your email:");
                 }
-            } else {
-                invalidEmail = checkAccountExists(email);  // checked to see if account with entered email exists
+            } while (origExists);
 
-                if (invalidEmail) {
+            System.out.println("Enter your new email:");
+            email = sc.nextLine();
+
+            if (email == null) {
+                emailChecker = false;
+                System.out.println("ERROR! Please enter an email!");
+            } else if (email.isEmpty()) {
+                emailChecker = false;
+            } else if (email.split(" ").length > 1 || email.split("@").length != 2
+                    || email.split("@")[1].split("\\.").length != 2) {
+                emailChecker = false;
+                System.out.println("ERROR! the email you entered was incorrectly formatted.");
+                System.out.println("Please enter an email of the form: ___@___.___ with no spaces!");
+            } else {
+                emailChecker = true;
+            }
+
+            if (emailChecker) {
+                existsEmail = checkAccountExists(email);
+                if (existsEmail) {
                     System.out.println("ERROR! An account with this email already exists!");
                 }
             }
-
-        } while (invalidEmail);  // end of checking email
+        } while (!emailChecker);
 
         return email;
-
     }
-    public String changeBio(Scanner sc) {
-        boolean invalidBio;  //true if the first name entered is invalid
-        String bio;  // the first name of the user
 
-        // validating first name
+    public String changeBio(Scanner sc) {
+        boolean goodBio;
+        String bio;
+
         do {
-            System.out.println("Enter a bio for yourself:");
+            System.out.println("Enter a new bio for yourself:");
             bio = sc.nextLine();
 
-            invalidBio = validateBio(bio);
-
-            if (bio == null || bio.equals("")
-                    || bio.equals("none")) {
-                System.out.println("ERROR! Please make sure your bio is between 20 to 40 charactors!");
-            } else if (bio.length() < 20 || bio.length() > 40) {
-                System.out.println("ERROR! Please make sure your bio is between 20 to 40 charactors!");
+            if (bio == null) {
+                goodBio = false;
+                System.out.println("ERROR! Please make sure your bio is between 20 to 40 characters!");
+            } else if (bio.isEmpty()) {
+                goodBio = false;
+                System.out.println("ERROR! Please make sure your bio is between 20 to 40 characters!");
+            } else if (bio.length() > 40) {
+                goodBio = false;
+                System.out.println("ERROR! Please make sure your bio is between 20 to 40 characters!");
+            } else {
+                goodBio = true;
             }
 
-        } while (invalidBio);
+        } while (!goodBio);
 
         return bio;
     }
 
     public String changeFirstName(Scanner sc) {
-        boolean invalidFirstName;  //true if the first name entered is invalid
-        String firstName;  // the first name of the user
+        boolean goodFirstName;
+        String firstName;
 
-        // validating first name
         do {
             System.out.println("Enter your first name:");
             firstName = sc.nextLine();
 
-            invalidFirstName = validateName(firstName);
-
-            if (firstName == null || firstName.equals("")
-                    || firstName.equals("none")) {
+            if (firstName == null) {
+                goodFirstName = false;
                 System.out.println("ERROR! Please enter your first name!");
-            } else if (firstName.split(" ").length > 1) {
+            } else if (firstName.isEmpty()) {
+                goodFirstName = false;
+                System.out.println("ERROR! Please enter your first name!");
+            } else if (firstName.contains(" ")) {
+                goodFirstName = false;
                 System.out.println("ERROR! Only your first name with no spaces!");
+            } else {
+                goodFirstName = true;
             }
 
-        } while (invalidFirstName);
+        } while (!goodFirstName);
 
         return firstName;
     }
 
-    public String changeUsername(Scanner sc) {
-        boolean invalidUsername;  //true if the first name entered is invalid
-        String Username;  // the first name of the user
-
-        // validating first name
-        do {
-            System.out.println("Enter your username:");
-            username = sc.nextLine();
-
-            invalidUsername = validateName(username);
-
-            if (username == null || username.equals("")
-                    || username.equals("none")) {
-                System.out.println("ERROR! Please enter your username!");
-            } else if (username.split(" ").length > 1) {
-                System.out.println("ERROR! There should be no spaces in your username!");
-            }
-
-        } while (invalidUsername);
-
-        return username;
-    }
-
     public String changeLastName(Scanner sc) {
-        String lastName;  // the last name of the user
-        boolean invalidLastName;  // true if the last name entered is invalid
+        boolean goodLastName;
+        String lastName;
 
-        // validating last name
         do {
             System.out.println("Enter your last name:");
             lastName = sc.nextLine();
 
-            invalidLastName = validateName(lastName);
-
-            if (lastName == null || lastName.equals("")
-                    || lastName.equals("none")) {
+            if (lastName == null) {
+                goodLastName = false;
                 System.out.println("ERROR! Please enter your last name!");
-            } else if (lastName.split(" ").length > 1) {
+            } else if (lastName.isEmpty()) {
+                goodLastName = false;
+                System.out.println("ERROR! Please enter your last name!");
+            } else if (lastName.contains(" ")) {
+                goodLastName = false;
                 System.out.println("ERROR! Only your last name with no spaces!");
+            } else {
+                goodLastName = true;
             }
 
-        } while (invalidLastName); // end of validating last name
+        } while (!goodLastName); // end of validating last name
 
         return lastName;
     }
 
+    public String changeUsername(Scanner sc) {
+        boolean goodUsername;
+        String username;
+
+        do {
+            System.out.println("Enter your username:");
+            username = sc.nextLine();
+
+            if (username == null) {
+                goodUsername = false;
+                System.out.println("ERROR! Please enter your username!");
+            } else if (username.contains(" ")) {
+                goodUsername = false;
+                System.out.println("ERROR! There should be no spaces in your username!");
+            } else {
+                goodUsername = true;
+            }
+
+        } while (!goodUsername);
+
+        return username;
+    }
 
     public String changePassword(Scanner sc) {
-        boolean invalidPassword;  // true if the password entered is invalid
-        String password;  // the password of the user
+        boolean goodPassword;
+        String password;
 
         do {
             System.out.println("Enter a password:");
             password = sc.nextLine();
-            invalidPassword = validatePassword(password);
 
-            if (invalidPassword) {
+            if (password.length() < 4) {
+                goodPassword = false;
                 System.out.println("ERROR! Your password must be at least 4 characters long!");
+            } else {
+                goodPassword = true;
             }
-        } while (invalidPassword);  // end of check password
+
+        } while (!goodPassword);
 
         return password;
     }
 
-
     public User createAccount(Scanner sc) {
-        File userFile;  // the file the user account info will be stored in
-        String email = "";  // the email the user enters
-        String firstName = "";  // the first name of the user
-        String lastName = "";  // the last name of the user
-        String bio = ""; // the bio of the user
-        String username = "";  // the username of the user
-        String password = "";  // the password of the user
-        User user;  // the user object to be returned
-
+        File userFile;
+        String email = "";
+        String firstName = "";
+        String lastName = "";
+        String bio = "";
+        String username = "";
+        String password = "";
+        User user;
         // getting user info
         firstName = changeFirstName(sc);
         lastName = changeLastName(sc);
@@ -314,15 +364,17 @@ public class User {
             bw.write(bio + "\n");
             bw.write(username + "\n");
             bw.write(password + "\n");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("File doesn't exist!");
         }
         System.out.println("Account created successfully");
         File allUsersFile = new File("All_User_Info.txt");
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(allUsersFile, true))) {
             bw.write(username + "\n");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Was unable to write to file!");
         }
 
         // Create a file for the user's messages
@@ -332,6 +384,7 @@ public class User {
                 userMessagesFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("File doesn't exist!");
             }
         }
 
@@ -342,6 +395,7 @@ public class User {
                 userFriendsFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("File doesn't exist!");
             }
         }
 
@@ -349,7 +403,6 @@ public class User {
         return user;
 
     }
-
 
     public User editAccount(Scanner sc) {
         boolean invalidOption; // true if menu option user inputs is invalid
@@ -405,7 +458,7 @@ public class User {
             } else if (editOption == 3) {
                 newBio = changeBio(sc);
                 newUser.setBio(newBio);
-            } else if (editOption == 4){
+            } else if (editOption == 4) {
                 newUsername = changeUsername(sc);
                 newUser.setUsername(newUsername);
             } else {
@@ -443,7 +496,7 @@ public class User {
 
         } while (editOption == 1);  // checking if user wants to continue to edit their account
 
-        File userFile = new File("User_" + email.split("@")[0] + ".txt");
+        File userFile = new File("User_" + username + ".txt");
 
         // writing account file
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, false))) {
@@ -487,7 +540,7 @@ public class User {
             if (this.getAccountFile().exists()) {
                 this.getAccountFile().delete();
             }
-
+            /*
             if (this instanceof Friends) {
                 Friends member = (Friends) this;
                 member.setMemberAppointmentsFile(new File("Member_" +
@@ -495,13 +548,12 @@ public class User {
                 if (member.getMemberAppointmentsFile().exists()) {
                     member.getMemberAppointmentsFile().delete();
                 }
-            }
+            } */
             System.out.println("Your account has been deleted");
         } else {
             System.out.println("Exiting without deleting");
         }
     }
-
 
     public User logIn(Scanner scan) {
         User user = new User();
@@ -564,7 +616,6 @@ public class User {
         return member;
 
     }
-
 
     public String toString() {
         return firstName + "\n"

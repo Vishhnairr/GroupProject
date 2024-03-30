@@ -36,6 +36,26 @@ public class MainMenu {
             stay = false;
         }
 
+        File allUsersFile1 = new File("All_User_Info.txt");
+        ArrayList<String> users1 = new ArrayList<>();
+        if (allUsersFile1.exists()) { // there are users to look at
+            String fileLine;
+            try (BufferedReader br = new BufferedReader(new FileReader(allUsersFile1))) {
+                fileLine = br.readLine();
+                while (fileLine != null && !fileLine.equals("\n") && !fileLine.equals("")) {
+                    users1.add(fileLine);
+                    fileLine = br.readLine();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (users1.size() < 2) {
+                stay = false;
+            }
+        } else {
+            stay = false;
+        }
+
         while (stay) {  // loops while user wants to do things
             if (user instanceof Friends) { // customer code
                 Friends person = (Friends) user;
@@ -302,6 +322,10 @@ public class MainMenu {
                     }
                 }
             }
+        }
+        if (users1.size() < 2) {
+            System.out.println("Sorry! BoilerTown cannot currently be used due to less than two users existing on"
+                    + " the platform." );
         }
         System.out.println("Goodbye! You have been logged out.");
     }

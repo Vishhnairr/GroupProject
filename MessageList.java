@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 //.
 
-public class Messages implements Message {
+public class MessageList implements Message {
     //The content of the message
     private String content;
 
@@ -13,7 +13,7 @@ public class Messages implements Message {
     //A user who receive this message;
     private User receiveUser;
 
-    public Messages(String content, User sendUser, User receiveUser) throws MessageException {
+    public MessageList(String content, User sendUser, User receiveUser) throws MessageException {
         if (sendUser == null) {
             throw new MessageException("Error! No send user!");
         }

@@ -359,6 +359,36 @@ public class Friends extends User {
             System.out.println("The profile file for " + selectedUserName + " does not exist.");
         }
     }
+    public boolean hasFriends(String username) {
+        boolean friends = true;
+        ArrayList<String> friendUsernames = new ArrayList<>();
+        File f = new File("User_" + username + "_Friends.txt");
+
+        if (f.exists()) {
+            try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+                String line;
+                while ((line = bfr.readLine()) != null) {
+                    // Check if the line indicates a confirmed friendship
+                    if (line.endsWith("is your friend!")) {
+                        // Extract the friend's username from the line and add it to the list
+                        String friendUsername = line.substring(0, line.indexOf(" is your friend!"));
+                        friendUsernames.add(friendUsername);
+                    }
+                }
+                if (friendUsernames.isEmpty()) {
+                    friends = false;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("User file doesn't exist.");
+                friends = false;
+            }
+        } else {
+            System.out.println("The friends file does not exist.");
+            friends = false;
+        }
+        return friends;
+    }
 }
 
 

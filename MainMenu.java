@@ -32,32 +32,15 @@ public class MainMenu {
             user = user.createAccount(scanner);
         } else if (userChoice == 2) {  // user logs in
             user = user.logIn(scanner);
+            System.out.println(stay);
         } else {  // user wants to exit
             stay = false;
         }
 
-        File allUsersFile1 = new File("All_User_Info.txt");
-        ArrayList<String> users1 = new ArrayList<>();
-        if (allUsersFile1.exists()) { // there are users to look at
-            String fileLine;
-            try (BufferedReader br = new BufferedReader(new FileReader(allUsersFile1))) {
-                fileLine = br.readLine();
-                while (fileLine != null && !fileLine.equals("\n") && !fileLine.equals("")) {
-                    users1.add(fileLine);
-                    fileLine = br.readLine();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (users1.size() < 2) {
-                stay = false;
-            }
-        } else {
-            stay = false;
-        }
+        User.checkMoreOneUser();
 
         while (stay) {  // loops while user wants to do things
-            if (user instanceof Friends) { // customer code
+            if (user instanceof Friends) { // user code
                 Friends person = (Friends) user;
                 int customerChoice;
                 System.out.println("What would you like to do?");
@@ -198,92 +181,96 @@ public class MainMenu {
                         }
                     }
                 } else if (customerChoice == 3) {  // View all your friends
-                    System.out.printf("%s's friends list:\n", user.getUsername());
-                    person.friendViewer(user.getUsername());
-                    System.out.println("What do you want to do?");
-                    System.out.println("""
-                            1. Message my friends
-                            2. View my friend requests
-                            3. Remove a friend
-                            4. Block a friend
-                            5. Exit""");
-
-                    customerChoice = scanner.nextInt();
-                    scanner.nextLine();
-
-                    if (customerChoice == 1) {  // message your friend
+                    if (person.hasFriends(user.getUsername())) {
                         System.out.printf("%s's friends list:\n", user.getUsername());
-                        ArrayList<String> friendUsernames = person.friendViewer(user.getUsername());
-                        boolean validUsername = false;
-                        do {
-                            System.out.println("Who do u want to message?"); // message mechanics implemented here and only here
-                            String selectedUserName = scanner.nextLine();
-                            if (friendUsernames.contains(selectedUserName)) {
-                                validUsername = true;
-                            } else {
-                                System.out.println("You can only select usernames that you are friends with.");
-                            }
-                        } while (!validUsername);
+                        person.friendViewer(user.getUsername());
                         System.out.println("What do you want to do?");
                         System.out.println("""
-                                        1. message stuff
-                                        2. Exit""");
+                                1. Message my friends
+                                2. View my friend requests
+                                3. Remove a friend
+                                4. Block a friend
+                                5. Exit""");
 
                         customerChoice = scanner.nextInt();
                         scanner.nextLine();
-                    } else if (customerChoice == 2) { // view friend request
-                        boolean hasFriendRequests = false;
-                        boolean approve = false;
-                        File userFile = new File("User_" + user.getUsername() + "_Friends.txt");
-                        try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
-                            String line;
-                            while ((line = br.readLine()) != null) {
-                                if (line.startsWith("Friend request from:")) {
-                                    System.out.println(line);
-                                    hasFriendRequests = true; // Set flag to true if a friend request line is found
+
+                        if (customerChoice == 1) {  // message your friend
+                            System.out.printf("%s's friends list:\n", user.getUsername());
+                            ArrayList<String> friendUsernames = person.friendViewer(user.getUsername());
+                            boolean validUsername = false;
+                            do {
+                                System.out.println("Who do u want to message?"); // message mechanics implemented here and only here
+                                String selectedUserName = scanner.nextLine();
+                                if (friendUsernames.contains(selectedUserName)) {
+                                    validUsername = true;
+                                } else {
+                                    System.out.println("You can only select usernames that you are friends with.");
                                 }
+                            } while (!validUsername);
+                            System.out.println("What do you want to do?");
+                            System.out.println("""
+                                    1. message stuff
+                                    2. Exit""");
+
+                            customerChoice = scanner.nextInt();
+                            scanner.nextLine();
+                        } else if (customerChoice == 2) { // view friend request
+                            boolean hasFriendRequests = false;
+                            boolean approve = false;
+                            File userFile = new File("User_" + user.getUsername() + "_Friends.txt");
+                            try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
+                                String line;
+                                while ((line = br.readLine()) != null) {
+                                    if (line.startsWith("Friend request from:")) {
+                                        System.out.println(line);
+                                        hasFriendRequests = true; // Set flag to true if a friend request line is found
+                                    }
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            if (!hasFriendRequests) {
+                                System.out.println("You have no friend requests at this time.");
+                            } else {
+                                System.out.println("Do you want to approve or decline a friend request? (approve/decline)");
+                                String action = scanner.nextLine().trim();
+                                if (!action.equals("approve") && !action.equals("decline")) {
+                                    System.out.println("Invalid action.");
+                                }
+                                System.out.println("Enter the username of the friend request:");
+                                String friendUsername = scanner.nextLine(); // needs validation
+                                if ("approve".equals(action)) {
+                                    approve = true;
+                                    person.updateFriendRequestStatus(friendUsername, user.getUsername(),
+                                            approve);
+                                }
+                                if ("decline".equals(action)) {
+                                    person.updateFriendRequestStatus(friendUsername, user.getUsername(),
+                                            approve);
+                                }
+                                System.out.printf("friend requested %sd\n", action);
+                            }
+                        } else if (customerChoice == 3) { // Remove a friend
+                            person.removeUser(scanner, user.getUsername());
+                        } else if (customerChoice == 4) { // block a friend
+                            System.out.printf("%s's friends list:\n", user.getUsername());
+                            ArrayList<String> friendUsernames = person.friendViewer(user.getUsername());
+                            System.out.println("Who do you want to block?");
+                            String selectedUserName = scanner.nextLine().trim();
+                            // Validate that the selected username is a friend
+                            if (friendUsernames.contains(selectedUserName)) {
+                                person.blockUser(selectedUserName, user.getUsername());
+                            } else {
+                                System.out.println("You can only select usernames that you are friends with.");
+                            }
                         }
-                        if (!hasFriendRequests) {
-                            System.out.println("You have no friend requests at this time.");
-                        } else {
-                            System.out.println("Do you want to approve or decline a friend request? (approve/decline)");
-                            String action = scanner.nextLine().trim();
-                            if (!action.equals("approve") && !action.equals("decline")) {
-                                System.out.println("Invalid action.");
-                            }
-                            System.out.println("Enter the username of the friend request:");
-                            String friendUsername = scanner.nextLine(); // needs validation
-                            if ("approve".equals(action)) {
-                                approve = true;
-                                person.updateFriendRequestStatus(friendUsername, user.getUsername(),
-                                        approve);
-                            }
-                            if ("decline".equals(action)) {
-                                person.updateFriendRequestStatus(friendUsername, user.getUsername(),
-                                        approve);
-                            }
-                            System.out.printf("friend requested %sd\n", action);
-                        }
-                    } else if (customerChoice == 3) { // Remove a friend
-                        person.removeUser(scanner, user.getUsername());
-                    } else if (customerChoice == 4) { // block a friend
-                        System.out.printf("%s's friends list:\n", user.getUsername());
-                        ArrayList<String> friendUsernames = person.friendViewer(user.getUsername());
-                        System.out.println("Who do you want to block?");
-                        String selectedUserName = scanner.nextLine().trim();
-                        // Validate that the selected username is a friend
-                        if (friendUsernames.contains(selectedUserName)) {
-                            person.blockUser(selectedUserName, user.getUsername());
-                        } else {
-                            System.out.println("You can only select usernames that you are friends with.");
-                        }
+                    } else {
+                        System.out.println("Sorry! You currently don't have any friends");
                     }
                 }
             }
-
+            System.out.println(stay);
             System.out.println("Do you want to continue?");
             System.out.println("""
                     1. Yes
@@ -309,23 +296,16 @@ public class MainMenu {
                     System.out.println("What kind of edits do you want to make to your account?");
                     System.out.println("""
                             1. edit your info
-                            2. delete your account
-                            3. Exit""");
+                            2. Exit""");
 
                     userChoice = scanner.nextInt();
                     scanner.nextLine();
 
                     if (userChoice == 1) {
                         user.editAccount(scanner);
-                    } else if (userChoice == 2) {
-                        user.deleteAccount(scanner);
                     }
                 }
             }
-        }
-        if (users1.size() < 2) {
-            System.out.println("Sorry! BoilerTown cannot currently be used due to less than two users existing on"
-                    + " the platform." );
         }
         System.out.println("Goodbye! You have been logged out.");
     }

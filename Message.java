@@ -1,5 +1,5 @@
 import java.util.Scanner;
-
+//
 public interface Message {
     String getContent();
     User getSendUser();

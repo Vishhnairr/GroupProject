@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public interface Message {
     String getContent();
     User getSendUser();
@@ -6,5 +8,8 @@ public interface Message {
     void setSendUser(User sendUser);
     void setReceiveUser(User receiveUser);
     String toString();
+    boolean checkReceiver();
+    boolean sendMessage();
+    boolean deleteMessage(Scanner message);
 
 }

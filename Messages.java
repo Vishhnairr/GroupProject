@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-//
+//.
 
 public class Messages implements Message {
     //The content of the message

@@ -7,7 +7,7 @@ public interface Message {
     void setSendUser(User sendUser);
     void setReceiveUser(String receiveUser);
     String toString();
-    boolean checkReceiver();
+//    boolean checkReceiver();
     boolean sendMessage();
     boolean deleteMessage(String message);
 

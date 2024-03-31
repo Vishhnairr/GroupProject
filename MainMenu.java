@@ -235,6 +235,7 @@ public class MainMenu {
                                     String line = bfr.readLine();
                                     while (line != null) {
                                         System.out.println(line);
+                                        line = bfr.readLine();
                                     }
                                 } catch (Exception e) {
                                     System.out.println("It seems that you don't have a chat with your friend.");

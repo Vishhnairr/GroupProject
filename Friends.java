@@ -4,14 +4,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Project 4 - Member
+ * Project 4 - Friends
  *
- * This class extends the User class and allows for a Customer
- * to make appointment requests, view all their approved appointments, cancel appointment requests, reschedule already
- * approved appointments to a different time on the same day. Every customer has an appointments file that store's
- * all their appointment info for each appointment/appointment request they have. This file is updated both when
- * a customer makes/edits an appointment request or reschedules an appointment request, or when a seller approves
- * or declines an appointment request or reschedules an appointment for the customer.
+ * This class extends the User class and allows for a user to make, accept, and decline
+ * friend requests, block other users, view their friends list, and remove friends from
+ * the list. The friends list is stored as a file associated with the user and is updated
+ * every time they perform one of the above actions.
  *
  */
 

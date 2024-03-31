@@ -1,5 +1,5 @@
 /**
- * Project 4 - ClientList
+ * Project 4 - ServerList
  *
  * This class allows for the server to connect to the client
  */

@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 //.
 
 public class MessageList implements Message {
@@ -11,15 +10,9 @@ public class MessageList implements Message {
     private User sendUser;
 
     //A user who receive this message;
-    private User receiveUser;
+    private String receiveUser;
 
-    public MessageList(String content, User sendUser, User receiveUser) throws MessageException {
-        if (sendUser == null) {
-            throw new MessageException("Error! No send user!");
-        }
-        if (receiveUser == null) {
-            throw new MessageException("Error! No receive user");
-        }
+    public MessageList(String content, User sendUser, String receiveUser){
         this.content = content;
         this.sendUser = sendUser;
         this.receiveUser = receiveUser;
@@ -33,7 +26,7 @@ public class MessageList implements Message {
         return sendUser;
     }
 
-    public User getReceiveUser() {
+    public String getReceiveUser() {
         return receiveUser;
     }
 
@@ -45,7 +38,7 @@ public class MessageList implements Message {
         this.sendUser = sendUser;
     }
 
-    public void setReceiveUser(User receiveUser) {
+    public void setReceiveUser(String receiveUser) {
         this.receiveUser = receiveUser;
     }
 
@@ -68,7 +61,7 @@ public class MessageList implements Message {
             }
 
             for (int i = 0; i < friendList.size(); i++) {
-                if (friendList.get(i).equals(receiveUser.getUsername())) {
+                if (friendList.get(i).equals(receiveUser)) {
                     return true;
                 }
             }
@@ -82,9 +75,9 @@ public class MessageList implements Message {
     public boolean sendMessage() {
         if (checkReceiver()) {
             try {
-                File messageHistorySender = new File(sendUser.getUsername() + "_" + receiveUser.getUsername());
-                File messageHistoryReceiver = new File (receiveUser.getUsername() + "_"
-                        + receiveUser.getUsername());
+                File messageHistorySender = new File(sendUser.getUsername() + "_" + receiveUser + ".txt");
+                File messageHistoryReceiver = new File (receiveUser + "_"
+                        + sendUser.getUsername() + ".txt");
 
                 FileOutputStream fosS = new FileOutputStream(messageHistorySender, true);
                 FileOutputStream fosR = new FileOutputStream(messageHistoryReceiver, true);
@@ -107,15 +100,14 @@ public class MessageList implements Message {
         return false;
     }
 
-    public boolean deleteMessage(Scanner message) {
-        String delete = message.nextLine();
+    public boolean deleteMessage(String delete) {
         if (checkReceiver()) {
             ArrayList<String> listOrigilnal = new ArrayList<>();
             ArrayList<String> listCopy = new ArrayList<>();
             try {
-                File messageHistorySender = new File(sendUser.getUsername() + "_" + receiveUser.getUsername());
-                File messageHistoryReceiver = new File (receiveUser.getUsername() + "_"
-                        + receiveUser.getUsername());
+                File messageHistorySender = new File(sendUser.getUsername() + "_" + receiveUser + ".txt");
+                File messageHistoryReceiver = new File (receiveUser + "_"
+                        + sendUser.getUsername() + ".txt");
 
                 FileReader frS = new FileReader(messageHistorySender);
                 BufferedReader bfrS = new BufferedReader(frS);

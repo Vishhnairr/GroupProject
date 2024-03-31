@@ -198,9 +198,10 @@ public class MainMenu {
                             System.out.printf("%s's friends list:\n", user.getUsername());
                             ArrayList<String> friendUsernames = person.friendViewer(user.getUsername());
                             boolean validUsername = false;
+                            String selectedUserName;
                             do {
                                 System.out.println("Who do u want to message?"); // message mechanics implemented here and only here
-                                String selectedUserName = scanner.nextLine();
+                                selectedUserName = scanner.nextLine();
                                 if (friendUsernames.contains(selectedUserName)) {
                                     validUsername = true;
                                 } else {
@@ -209,11 +210,47 @@ public class MainMenu {
                             } while (!validUsername);
                             System.out.println("What do you want to do?");
                             System.out.println("""
-                                    1. message stuff
-                                    2. Exit""");
+                                    1. Message stuff
+                                    2. Delete a message
+                                    3. Exit""");
 
                             customerChoice = scanner.nextInt();
                             scanner.nextLine();
+
+                            if (customerChoice == 1) {
+                                System.out.println("Please enter your message:");
+                                String message = scanner.nextLine();
+                                MessageList send = new MessageList(message, user, selectedUserName);
+                                if (send.sendMessage()) {
+                                    System.out.println("Successfully send!");
+                                } else {
+                                    System.out.println("Failed send...");
+                                }
+                            } else if (customerChoice == 2) {
+                                File file = new File(user.getUsername() + "_" + selectedUserName + ".txt");
+//                                ArrayList<String> list = new ArrayList<>();
+                                try {
+                                    FileReader fr = new FileReader(file);
+                                    BufferedReader bfr = new BufferedReader(fr);
+                                    String line = bfr.readLine();
+                                    while (line != null) {
+                                        System.out.println(line);
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("It seems that you don't have a chat with your friend.");
+                                }
+
+                                System.out.println("Please enter which message you want " +
+                                        "to delete (Enter the whole message):");
+                                String delete = scanner.nextLine();
+                                MessageList deleteIt = new MessageList(delete, user, selectedUserName);
+                                if (deleteIt.deleteMessage(delete)) {
+                                    System.out.println("Successfully delete!");
+                                } else {
+                                    System.out.println("Failed deltet...Please check if " +
+                                            "you had this message with your friend.");
+                                }
+                            }
                         } else {
                             System.out.println("Sorry! You currently don't have any friends");
                         }

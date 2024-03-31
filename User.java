@@ -6,6 +6,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
+ *
  * User
  *
  * This class creates a User with a first name, a last name, an email, a bio, a username

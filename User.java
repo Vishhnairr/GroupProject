@@ -236,7 +236,15 @@ public class User implements UserList {
                 }
             } while (!checker);
         } catch (IOException e) {
-            System.out.println("File doesn't exist!");
+            do {
+                System.out.println("Please enter your username:");
+                username = sc.nextLine();
+                if (username.length() > 40 || username.isEmpty()) { // checking if username is empty or longer than 40 characters
+                    checker = false;
+                } else {
+                    checker = true;
+                }
+            } while (!checker);
         }
         return username;
     }
@@ -360,7 +368,7 @@ public class User implements UserList {
         String lastName;
 
         do {
-            System.out.println("Enter your last name:");
+            System.out.println("Enter your new last name:");
             lastName = sc.nextLine();
 
             if (lastName == null) {
@@ -387,7 +395,7 @@ public class User implements UserList {
         String username;
 
         do {
-            System.out.println("Enter your username:");
+            System.out.println("Enter your new username:");
             username = sc.nextLine();
 
             if (username == null) {
@@ -411,7 +419,7 @@ public class User implements UserList {
         String password;
 
         do {
-            System.out.println("Enter a password:");
+            System.out.println("Enter a new password:");
             password = sc.nextLine();
 
             if (password.length() < 4) {
@@ -459,15 +467,6 @@ public class User implements UserList {
             System.out.println("Was unable to write to file!");
         }
 
-        File userMessagesFile = new File("User_" + username + "_messages.txt"); // creates file for specific user info
-        if (!userMessagesFile.exists()) {
-            try {
-                userMessagesFile.createNewFile();
-            } catch (IOException e) {
-                System.out.println("File doesn't exist!");
-            }
-        }
-
         File userFriendsFile = new File("User_" + username + "_Friends.txt"); // creates file with user's friends
         if (!userFriendsFile.exists()) {
             try {
@@ -477,7 +476,10 @@ public class User implements UserList {
             }
         }
 
-        return user;
+        Friends member = new Friends(user.getFirstName(), user.getLastName(), user.getEmail(), user.getBio(), user.getUsername(),
+                user.getPassword()); // creates new friends object
+
+        return member;
 
     }
 
@@ -509,7 +511,7 @@ public class User implements UserList {
                     editOption = Integer.parseInt(sc.nextLine());
                     // edge case where user doesn't enter an existing number
                     if (editOption != 1 && editOption != 2 && editOption != 3 && editOption != 4 && editOption != 5 &&
-                        editOption != 6) {
+                            editOption != 6) {
                         goodOption = false;
                         System.out.println("ERROR! Please only enter a number from the options below!");
                     }
@@ -720,4 +722,3 @@ public class User implements UserList {
     }
 
 }
-

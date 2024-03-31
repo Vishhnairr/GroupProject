@@ -409,7 +409,7 @@ public class MainMenu {
                     }
                 } while (userChoiceFinal == 2);
             }
-        } else {
+        } else { // if there aren't enough users, the program will close
             System.out.println("Sorry! BoilerTown cannot currently be used due to less than two users existing on"
                     + " the platform.");
         }

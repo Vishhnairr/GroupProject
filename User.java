@@ -1,7 +1,6 @@
 // imports here
 
 import java.io.*;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -10,25 +9,33 @@ import java.util.Scanner;
  * User
  *
  * This class creates a User with a first name, a last name, an email, a bio, a username
- * a password and a file that holds users.
+ * a password and a file that holds users. This method is able to check that every input is correct.
+ * It also holds the methods of creating a user, logging in to an account, and editing an account if
+ * the user desires. There is also a method to check the amount of users on a created file and to
+ * confirm there is more than one for the main method to use.
+ *
+ *  @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
+ *
+ *  @version March 31, 2024
  *
  */
 
-public class User {
-    private String firstName;
+public class User implements UserList {
+    private String firstName; // holds first name of User
 
-    private String lastName;
+    private String lastName; // holds last name of User
 
-    private String email;
+    private String email; // holds email of User
 
-    private String bio;
+    private String bio; // holds bio (description) of User
 
-    private String username;
+    private String username; // holds username of User
 
-    private String password;
+    private String password; // holds password of User
 
-    private File userFile;
+    private File userFile; // holds file with User's information
 
+    // empty constructor
     public User() {
         this.firstName = null;
         this.lastName = null;
@@ -39,6 +46,7 @@ public class User {
         this.userFile = null;
     }
 
+    // creates custom constructor
     public User(String firstName, String lastName, String email, String bio, String username,
                 String password) {
         this.firstName = firstName;
@@ -50,74 +58,89 @@ public class User {
         this.userFile = new File("User_" + this.username + ".txt");
     }
 
+    // returns first name
     public String getFirstName() {
         return this.firstName;
     }
 
+    // returns username name
     public String getUsername() {
         return this.username;
     }
 
+    // returns last name
     public String getLastName() {
         return this.lastName;
     }
 
+    // returns bio
     public String getBio() {
         return this.bio;
     }
 
+    // returns email
     public String getEmail() {
         return this.email;
     }
 
+    // returns password
     public String getPassword() {
         return this.password;
     }
 
+    // returns user file
     public File getAccountFile() {
         return this.userFile;
     }
 
+    // sets first name
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    // sets last name
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    // sets username
     public void setUsername(String username) {
         this.username = username;
     }
 
+    // sets email
     public void setEmail(String email) {
         this.email = email;
     }
 
+    // sets bio
     public void setBio(String bio) {
         this.bio = bio;
     }
 
+    // sets password
     public void setPassword(String password) {
         this.password = password;
     }
 
+    // sets user file
     public void setAccountFile() {
         this.userFile = new File("User_" + this.username + ".txt");
     }
 
+    // verifies first name according to limitations
     public String checkFirstName(Scanner sc) {
         boolean checker = true;
         String firstname = null;
         do {
             System.out.println("Please enter your first name:");
             firstname = sc.nextLine();
-            if (firstname == null || firstname.isEmpty()) {
+            if (firstname == null || firstname.isEmpty()) { // checking if first name is empty
                 checker = false;
-            } else if (firstname.contains(" ")) {
+            } else if (firstname.contains(" ")) { //checking if first name contains space
                 checker = false;
             } else {
-                for (int i = 0; i < firstname.length(); i++) {
+                for (int i = 0; i < firstname.length(); i++) { // checking if first name contains other characters (not letters)
                     if (!Character.isLetter(firstname.charAt(i))) {
                         checker = false;
                     }
@@ -127,6 +150,7 @@ public class User {
         return firstname;
     }
 
+    // verifies last name according to limitations
     public String checkLastName(Scanner sc) {
         boolean checker = true;
         String lastname = null;
@@ -134,12 +158,12 @@ public class User {
         do {
             System.out.println("Please enter your last name:");
             lastname = sc.nextLine();
-            if (lastname == null || lastname.isEmpty()) {
+            if (lastname == null || lastname.isEmpty()) { // checking if last name is empty
                 checker = false;
-            } else if (lastname.contains(" ")) {
+            } else if (lastname.contains(" ")) { //checking if last name contains space
                 checker = false;
             } else {
-                for (int i = 0; i < lastname.length(); i++) {
+                for (int i = 0; i < lastname.length(); i++) { // checking if last name contains other characters (not letters)
                     if (!Character.isLetter(lastname.charAt(i))) {
                         checker = false;
                         verify = 1;
@@ -153,13 +177,15 @@ public class User {
         return lastname;
     }
 
+    // verifies email name according to limitations
     public String checkEmail(Scanner sc) {
         boolean checker = true;
         String email = null;
         do {
             System.out.println("Please enter your email:");
             email = sc.nextLine();
-            if (!email.contains("@") || email.contains(" ")) {
+            if (!email.contains("@") || email.contains(" ") || email.charAt(email.length() - 4) != '.') {
+                // checking if email doesn't & have "@" or has a space or doesn't have a period 4 spots from end
                 checker = false;
             } else {
                 checker = true;
@@ -168,13 +194,14 @@ public class User {
         return email;
     }
 
+    // verifies bio according to limitations
     public String checkBio(Scanner sc) {
         boolean checker = true;
         String bio = null;
         do {
             System.out.println("Please enter your bio:");
             bio = sc.nextLine();
-            if (bio.length() > 40 || bio.isEmpty()) {
+            if (bio.length() > 40 || bio.isEmpty()) { // checking if bio is empty or over 40 characters long
                 checker = false;
             } else {
                 checker = true;
@@ -183,6 +210,7 @@ public class User {
         return bio;
     }
 
+    // verifies username according to limitations
     public String checkUsername(Scanner sc) {
         boolean checker = true;
         String username = null;
@@ -191,16 +219,16 @@ public class User {
         try {
             BufferedReader bfr = new BufferedReader(new FileReader(allUsersFile));
             String line = bfr.readLine();
-            while (line != null) {
+            while (line != null) { // reading all users in file
                 usernameList.add(line);
                 line = bfr.readLine();
             }
             do {
                 System.out.println("Please enter your username:");
                 username = sc.nextLine();
-                if (username.length() > 40 || username.isEmpty()) {
+                if (username.length() > 40 || username.isEmpty()) { // checking if username is empty or longer than 40 characters
                     checker = false;
-                } else if (usernameList.contains(username)) {
+                } else if (usernameList.contains(username)) { // checking if username is already taken by a user
                     checker = false;
                     System.out.println("This email is already taken! Please choose another.");
                 } else {
@@ -213,13 +241,14 @@ public class User {
         return username;
     }
 
+    // verifies password according to limitations
     public String checkPassword(Scanner sc) {
         boolean checker = true;
         String password = null;
         do {
             System.out.println("Please enter your password:");
             password = sc.nextLine();
-            if (password.length() < 4) {
+            if (password.length() < 4) { // checking that password length is under 4 characters
                 checker = false;
             } else {
                 checker = true;
@@ -228,11 +257,13 @@ public class User {
         return password;
     }
 
+    // verifies if account exists for User
     public boolean checkAccountExists(String username) {
-        File accountInfo2 = new File("User_" + username);
+        File accountInfo2 = new File("User_" + username + ".txt");
         return accountInfo2.exists();
     }
 
+    // changes email if User decides to do so
     public String changeEmail(Scanner sc) {
         boolean emailChecker;
         boolean existsEmail;
@@ -241,26 +272,16 @@ public class User {
         String email;
 
         do {
-            do {
-                System.out.println("Enter your email:");
-                emailOrig = sc.nextLine();
-                origExists = checkAccountExists(emailOrig);
-                if (!origExists) {
-                    System.out.println("This account does not exist.");
-                    System.out.println("Enter your email:");
-                }
-            } while (origExists);
-
-            System.out.println("Enter your new email:");
+            System.out.println("Enter your new email:"); // entering email user wants to replace it with
             email = sc.nextLine();
 
-            if (email == null) {
+            if (email == null) { // checking if user's response is null
                 emailChecker = false;
                 System.out.println("ERROR! Please enter an email!");
-            } else if (email.isEmpty()) {
+            } else if (email.isEmpty()) { // checking if user's response is empty
                 emailChecker = false;
-            } else if (email.split(" ").length > 1 || email.split("@").length != 2
-                    || email.split("@")[1].split("\\.").length != 2) {
+            } else if (!email.contains("@") || email.contains(" ") || email.charAt(email.length() - 4) != '.') {
+                // checking same qualities as earlier in the checkEmail method
                 emailChecker = false;
                 System.out.println("ERROR! the email you entered was incorrectly formatted.");
                 System.out.println("Please enter an email of the form: ___@___.___ with no spaces!");
@@ -279,6 +300,7 @@ public class User {
         return email;
     }
 
+    // changes bio if User decides to do so
     public String changeBio(Scanner sc) {
         boolean goodBio;
         String bio;
@@ -305,6 +327,7 @@ public class User {
         return bio;
     }
 
+    // changes first name if User decides to do so
     public String changeFirstName(Scanner sc) {
         boolean goodFirstName;
         String firstName;
@@ -331,6 +354,7 @@ public class User {
         return firstName;
     }
 
+    // changes last name if User decides to do so
     public String changeLastName(Scanner sc) {
         boolean goodLastName;
         String lastName;
@@ -357,6 +381,7 @@ public class User {
         return lastName;
     }
 
+    // changes username if User decides to do so
     public String changeUsername(Scanner sc) {
         boolean goodUsername;
         String username;
@@ -380,6 +405,7 @@ public class User {
         return username;
     }
 
+    // changes password if User decides to do so
     public String changePassword(Scanner sc) {
         boolean goodPassword;
         String password;
@@ -400,6 +426,7 @@ public class User {
         return password;
     }
 
+    // creates new account based on info from scanner in main method
     public User createAccount(Scanner sc) {
         String firstName = checkFirstName(sc);
         String lastName = checkLastName(sc);
@@ -425,14 +452,14 @@ public class User {
         }
         System.out.println("Account created successfully");
 
-        File allUsersFile = new File("All_User_Info.txt");
+        File allUsersFile = new File("All_User_Info.txt"); // creates file with all current existing users
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(allUsersFile, true))) {
             bw.write(username + "\n");
         } catch (IOException e) {
             System.out.println("Was unable to write to file!");
         }
 
-        File userMessagesFile = new File("User_" + username + "_messages.txt");
+        File userMessagesFile = new File("User_" + username + "_messages.txt"); // creates file for specific user info
         if (!userMessagesFile.exists()) {
             try {
                 userMessagesFile.createNewFile();
@@ -441,7 +468,7 @@ public class User {
             }
         }
 
-        File userFriendsFile = new File("User_" + username + "_Friends.txt");
+        File userFriendsFile = new File("User_" + username + "_Friends.txt"); // creates file with user's friends
         if (!userFriendsFile.exists()) {
             try {
                 userFriendsFile.createNewFile();
@@ -454,6 +481,7 @@ public class User {
 
     }
 
+    // edits existing account based on info from scanner in main method
     public User editAccount(Scanner sc) {
         boolean goodOption;
         int editOption;
@@ -465,7 +493,7 @@ public class User {
         String newPassword;
 
         User newUser = new User(this.getFirstName(), this.getLastName(), this.getEmail(), this.getBio(), this.getUsername(),
-                this.getPassword());
+                this.getPassword()); // creates current user
 
         do {
             do {
@@ -479,55 +507,51 @@ public class User {
 
                 try {
                     editOption = Integer.parseInt(sc.nextLine());
+                    // edge case where user doesn't enter an existing number
                     if (editOption != 1 && editOption != 2 && editOption != 3 && editOption != 4 && editOption != 5 &&
                         editOption != 6) {
                         goodOption = false;
                         System.out.println("ERROR! Please only enter a number from the options below!");
                     }
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException e) { // used when user doesn't input a number at all
                     goodOption = false;
                     System.out.println("ERROR! Please only enter a number from the options below!");
                 }
             } while (!goodOption);
 
+            // editOption variable will be checked before it can enter the switch statements
             switch (editOption) {
                 case 1: {
-                    newFirstName = changeFirstName(sc);
-                    newUser.setFirstName(newFirstName);
+                    newFirstName = changeFirstName(sc); // changes first name
+                    newUser.setFirstName(newFirstName); // sets new first name to permanent first name
                     break;
                 }
                 case 2: {
-                    newLastName = changeLastName(sc);
-                    newUser.setLastName(newLastName);
+                    newLastName = changeLastName(sc); // changes last name
+                    newUser.setLastName(newLastName); // sets new last name to permanent last name
                     break;
                 }
                 case 3: {
-                    newBio = changeBio(sc);
-                    newUser.setBio(newBio);
+                    newBio = changeBio(sc); // changes bio
+                    newUser.setBio(newBio); // sets new bio to permanent bio
                     break;
                 }
                 case 4: {
-                    newEmail = changeEmail(sc);
-                    newUser.setEmail(newEmail);
+                    newEmail = changeEmail(sc); // changes email
+                    newUser.setEmail(newEmail); // sets new email to permanent email
                     break;
                 }
                 case 5: {
-                    newUsername = changeUsername(sc);
-                    newUser.setUsername(newUsername);
+                    newUsername = changeUsername(sc); // changes username
+                    newUser.setUsername(newUsername); // sets new username to permanent username
                     break;
                 }
                 case 6: {
-                    newPassword = changePassword(sc);
-                    newUser.setPassword(newPassword);
+                    newPassword = changePassword(sc); // changes password
+                    newUser.setPassword(newPassword); // sets new password to permanent password
                     break;
                 }
-                default: {
-                    System.out.println("ERROR! Please only enter a number from the options below!");
-                    System.out.println("1. First name" + "\n" + "2. Last name" + "\n" + "3. Bio" + "\n" + "4. Email"
-                            + "\n" + "5. Username" + "\n" + "6. Password");
-                    editOption = Integer.parseInt(sc.nextLine());
-                    }
-                }
+            }
 
             do {
                 goodOption = true;
@@ -537,22 +561,22 @@ public class User {
 
                 try {
                     editOption = Integer.parseInt(sc.nextLine());
-                    if (editOption != 1 && editOption != 2) {
+                    if (editOption != 1 && editOption != 2) { // verifies number is either 1 or 2
                         goodOption = false;
                         System.out.println("ERROR! Please only enter a number from the options below!");
                     }
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException e) { // verifies input is a number
                     goodOption = false;
                     System.out.println("ERROR! Please only enter a number from the options below!");
                 }
-            } while (!goodOption);
+            } while (!goodOption); // loops until input is correct
 
 
-        } while (editOption == 1);
+        } while (editOption == 1); // repeats entire process if user wants to continue editing their account
 
-        File userFile = new File("User_" + username + ".txt");
+        File userFile = new File("User_" + username + ".txt"); // creates new file with new username
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, false))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, false))) { // writes new information to file
             bw.write(newUser.getFirstName() + "\n");
             bw.write(newUser.getLastName() + "\n");
             bw.write(newUser.getEmail() + "\n");
@@ -565,6 +589,7 @@ public class User {
         return newUser;
     }
 
+    // verifies login based on info from scanner in main method
     public User logIn(Scanner scan) {
         User user = new User();
         String[] read = new String[6];
@@ -574,16 +599,17 @@ public class User {
         boolean usernameCorrect = false;
         do {
             System.out.println("Please Enter your username.");
-            String username = scan.nextLine();
+            String username = scan.nextLine(); // verifies username exists
             File f = new File("User_" + username + ".txt");
-            if (f.exists()) {
+            if (f.exists()) { // verifies account exists
                 try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
                     for (int i = 0; i < 6; i++) {
-                        read[i] = bfr.readLine();
+                        read[i] = bfr.readLine(); // reads through all account information
                     }
                 } catch (IOException e) {
                     System.out.println("Error");
                 }
+                // splits up account information and sets this user to that information
                 user.setFirstName(read[0]);
                 user.setLastName(read[1]);
                 user.setEmail(read[2]);
@@ -593,12 +619,12 @@ public class User {
                 do {
                     System.out.println("Please enter your password.");
                     passwordInput = scan.nextLine();
-                    if (passwordInput.equals(read[5])) {
+                    if (passwordInput.equals(read[5])) { // making sure password input matches the password saves on file
                         System.out.println("Log in successful");
                         usernameCorrect = true;
                     } else {
                         System.out.println("Your password is incorrect");
-                        do {
+                        do { // loops password until it is entered correctly or the user quits
                             try {
                                 System.out.println("Please re-enter your password or exit\n1.Re-enter\n2.Exit");
                                 reEnterPasswordOption = Integer.parseInt(scan.nextLine());
@@ -608,56 +634,61 @@ public class User {
                                         break;
                                     }
                                     case 2: {
-                                        System.out.println("Thank you for using BoilerTown! Have a great day!");
                                         return null;
                                     }
-                                    default: {
+                                    default: { // what happens when number entered is not a 1 or 2
                                         System.out.println("Please choose one of the options!");
                                         System.out.println("Please re-enter your password or exit\n1.Re-enter\n2.Exit");
                                         reEnterPasswordOption = Integer.parseInt(scan.nextLine());
                                     }
                                 }
-                            } catch (InputMismatchException | NumberFormatException e) {
+                            } catch (InputMismatchException | NumberFormatException e) { // checking if what is entered is not a number
                                 System.out.println("Please choose one of the options!");
+                                System.out.println("Please re-enter your password or exit\n1.Re-enter\n2.Exit");
                             }
-                        } while (reEnterPasswordOption != 1 && reEnterPasswordOption != 2);
+                        } while (reEnterPasswordOption != 1 && reEnterPasswordOption != 2); // loops until number entered is an option
                     }
-                } while (!usernameCorrect);
+                } while (!usernameCorrect); // loops until password and username both exist in same account
             } else {
                 do {
                     try {
                         System.out.println("The username you entered is wrong, please re-enter it or create a new account.");
-                        System.out.println("1. Re-enter username\n2. Exit");
+                        System.out.println("1. Re-enter username\n2. Create Account\n3. Exit");
                         reEnterEmailOption = Integer.parseInt(scan.nextLine());
                         switch (reEnterEmailOption) {
-                            case 1: {
+                            case 1: { // makes program loop to enter username again
                                 usernameCorrect = false;
                                 break;
                             }
-                            case 2: {
-                                System.out.println("Thank you for using BoilerTown! Have a great day!");
+                            case 2: { // create a new account and exists this method
+                                createAccount(scan);
                                 return null;
                             }
-                            default: {
+                            case 3: { // ends program and exits
+                                return null;
+                            }
+                            default: { // what happens when 1, 2, or 3 is not entered
                                 System.out.println("Please print a valid number!");
                                 System.out.println("The username you entered is wrong, please re-enter it or create a new account.");
                                 System.out.println("1. Re-enter username\n2. Exit");
                                 reEnterEmailOption = Integer.parseInt(scan.nextLine());
                             }
                         }
-                    } catch (NumberFormatException e) {
+                    } catch (NumberFormatException e) { // what is entered when user doesn't enter a number
                         System.out.println("Please print a number!");
+                        System.out.println("1. Re-enter username\n2. Create Account\n3.Exit");
                     }
-                } while (reEnterEmailOption != 1);
+                } while (reEnterEmailOption != 1); // if user doesn't enter 1, the username input will not loop
             }
-        } while (!usernameCorrect);
+        } while (!usernameCorrect); // loops until username entered actually exists
 
         Friends member = new Friends(user.getFirstName(), user.getLastName(), user.getEmail(), user.getBio(), user.getUsername(),
-                user.getPassword());
+                user.getPassword()); // creates new friends object
 
         return member;
     }
 
+    // formats User's information in their own file
     public String toString() {
         return firstName + "\n"
                 + lastName + "\n"
@@ -667,6 +698,7 @@ public class User {
                 + password;
     }
 
+    // checks if more than one user exists on the "All_User_Info.txt" file
     public static boolean checkMoreOneUser() {
         File allUsersFile = new File("All_User_Info.txt");
         ArrayList<String> users = new ArrayList<>();
@@ -678,7 +710,7 @@ public class User {
                     users.add(fileLine.trim());
                     fileLine = br.readLine();
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 return false; // Consider the check failed in case of an exception
             }
             return users.size() > 1; // Return true if more than one user exists

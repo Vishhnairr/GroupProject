@@ -2,8 +2,9 @@ import java.util.*;
 import java.io.*;
 
 /**
+ *
  * MainMenu
- * <p>
+ * 
  * Holds all the functionality for users to interact with the system.
  * First a welcome message is displayed and then the user logs in or creates an account.
  * When a user logs in to their account the menu gives them different options.
@@ -13,7 +14,9 @@ import java.io.*;
  * program ends.
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
+ *
  * @version March 31, 2024
+ *
  */
 
 public class MainMenu {

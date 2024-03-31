@@ -86,7 +86,7 @@ public class MainMenu {
                             try {
                                 userChoice2 = Integer.parseInt(scanner.nextLine());
                                 switch (userChoice2) {
-                                    case 1: {  // looking at all the users
+                                    case 1: {  // searches through all users
                                         File allUsersFile = new File("All_User_Info.txt");
                                         if (!allUsersFile.exists()) {
                                             System.out.println("ERROR! no users have been created yet!");
@@ -108,7 +108,7 @@ public class MainMenu {
                                                 System.out.println(users.get(i));
                                             }
 
-                                            // get the store the user wants to change
+                                            // return the user the user wants to see
                                             String selectedUserName;
                                             boolean validUsername = true;
                                             do {
@@ -183,7 +183,7 @@ public class MainMenu {
                                                 System.out.println("Unable to find file!");
                                             }
 
-                                            // get the store the user wants to change
+                                            // return the user that the user chooses
                                             String selectedUserName;
                                             boolean validUsername = true;
                                             do {
@@ -211,7 +211,7 @@ public class MainMenu {
                                                 userChoice3 = Integer.parseInt(scanner.nextLine());
                                                 try {
                                                     switch (userChoice3) {
-                                                        case 1: {  // looking up a bio for a user
+                                                        case 1: {  // looking up information of a user
                                                             person.viewProfile(selectedUserName);
                                                             break;
                                                         }

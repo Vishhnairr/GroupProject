@@ -1,7 +1,7 @@
 # CS 180 GroupProject
 ## Group members
 
-Alexia Gil, Lisa Luo, Zixian Liu, Viswanath Nair
+Alexia Gil, Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson
 
 ## Instructions
 

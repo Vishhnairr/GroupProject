@@ -5,12 +5,11 @@ import java.io.*;
  * Project 4 - MainMenu
  * <p>
  * Holds all the functionality for users to interact with the system. First a welcome
- * messages is displayed and then the user logs in or creates an account.
- * Then depending on what user type the user is the menu gives them different options. The menu allows the user
+ * message is displayed and then the user logs in or creates an account.
+ * When a user logs in to their account the menu gives them different options. The menu allows the user
  * to loop through and perform as many actions as they want, and then when they are done they exit. Once they exit,
  * the menu prompts them if they want to make any edits to their account before they log out, and they can make as
- * many edits as they like or delete their account. After the user is done editing, a goodbye message is displayed
- * and the program ends.
+ * many edits as they like. After the user is done editing, a goodbye message is displayed and the program ends.
  */
 
 public class MainMenu {

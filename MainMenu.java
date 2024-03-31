@@ -218,7 +218,7 @@ public class MainMenu {
                             scanner.nextLine();
 
                             if (customerChoice == 1) {
-                                System.out.println("Please enter your message:");
+                                System.out.println("Please enter your message:"); //Enter message
                                 String message = scanner.nextLine();
                                 MessageList send = new MessageList(message, user, selectedUserName);
                                 if (send.sendMessage()) {

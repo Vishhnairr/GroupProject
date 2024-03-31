@@ -10,7 +10,7 @@ import java.lang.reflect.Modifier;
 /**
  * A framework to run public test cases for phase 1, Team Project.
  *
- * <p>Purdue University -- CS18000 -- Spring 2024</p>
+ * <p>Purdue University -- CS18000 -- Spring 2024
  *
  * @author J Morris Purdue CS
  *

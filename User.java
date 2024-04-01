@@ -132,27 +132,19 @@ public class User implements UserList {
     // verifies first name according to limitations
     public String checkFirstName(Scanner sc) {
         boolean checker = true;
-        System.out.println("Please enter your first name:");
-        String firstname = sc.nextLine();
+        String firstname = null;
         do {
-            checker = true;
+            System.out.println("Please enter your first name:");
+            firstname = sc.nextLine();
             if (firstname == null || firstname.isEmpty()) { // checking if first name is empty
                 checker = false;
-                System.out.println("Your first name was invalid! Please enter your first name:");
-                firstname = sc.nextLine();
             } else if (firstname.contains(" ")) { //checking if first name contains space
                 checker = false;
-                System.out.println("Your first name was invalid! Please enter your first name:");
-                firstname = sc.nextLine();
             } else {
                 for (int i = 0; i < firstname.length(); i++) { // checking if first name contains other characters (not letters)
                     if (!Character.isLetter(firstname.charAt(i))) {
                         checker = false;
                     }
-                }
-                if (!checker) {
-                    System.out.println("Your first name was invalid! Please enter your first name:");
-                    firstname = sc.nextLine();
                 }
             }
         } while (!checker);
@@ -162,27 +154,24 @@ public class User implements UserList {
     // verifies last name according to limitations
     public String checkLastName(Scanner sc) {
         boolean checker = true;
-        System.out.println("Please enter your last name:");
-        String lastname = sc.nextLine();
+        String lastname = null;
+        int verify = 0;
         do {
-            checker = true;
+            System.out.println("Please enter your last name:");
+            lastname = sc.nextLine();
             if (lastname == null || lastname.isEmpty()) { // checking if last name is empty
                 checker = false;
-                System.out.println("The last name you entered was invalid! Please enter your last name:");
-                lastname = sc.nextLine();
             } else if (lastname.contains(" ")) { //checking if last name contains space
                 checker = false;
-                System.out.println("The last name you entered was invalid! Please enter your last name:");
-                lastname = sc.nextLine();
             } else {
                 for (int i = 0; i < lastname.length(); i++) { // checking if last name contains other characters (not letters)
                     if (!Character.isLetter(lastname.charAt(i))) {
                         checker = false;
+                        verify = 1;
                     }
                 }
-                if (!checker) {
-                    System.out.println("The last name you entered was invalid! Please enter your last name:");
-                    lastname = sc.nextLine();
+                if (verify != 1) {
+                    checker = true;
                 }
             }
         } while (!checker);
@@ -192,15 +181,15 @@ public class User implements UserList {
     // verifies email name according to limitations
     public String checkEmail(Scanner sc) {
         boolean checker = true;
-        System.out.println("Please enter your email:");
-        String email = sc.nextLine();
+        String email = null;
         do {
-            checker = true;
+            System.out.println("Please enter your email:");
+            email = sc.nextLine();
             if (!email.contains("@") || email.contains(" ") || email.charAt(email.length() - 4) != '.') {
                 // checking if email doesn't & have "@" or has a space or doesn't have a period 4 spots from end
                 checker = false;
-                System.out.println("Your email was invalid! Please enter your email:");
-                email = sc.nextLine();
+            } else {
+                checker = true;
             }
         } while (!checker);
         return email;
@@ -209,14 +198,14 @@ public class User implements UserList {
     // verifies bio according to limitations
     public String checkBio(Scanner sc) {
         boolean checker = true;
-        System.out.println("Please enter your bio:");
-        String bio = sc.nextLine();
+        String bio = null;
         do {
-            checker = true;
+            System.out.println("Please enter your bio:");
+            bio = sc.nextLine();
             if (bio.length() > 40 || bio.isEmpty()) { // checking if bio is empty or over 40 characters long
                 checker = false;
-                System.out.println("Please enter your bio:");
-                bio = sc.nextLine();
+            } else {
+                checker = true;
             }
         } while (!checker);
         return bio;
@@ -225,10 +214,9 @@ public class User implements UserList {
     // verifies username according to limitations
     public String checkUsername(Scanner sc) {
         boolean checker = true;
+        String username = null;
         File allUsersFile = new File("All_User_Info.txt");
         ArrayList<String> usernameList = new ArrayList<>();
-        System.out.println("Please enter your username:");
-        String username = sc.nextLine();
         try {
             BufferedReader bfr = new BufferedReader(new FileReader(allUsersFile));
             String line = bfr.readLine();
@@ -237,18 +225,20 @@ public class User implements UserList {
                 line = bfr.readLine();
             }
             do {
-                checker = true;
+                System.out.println("Please enter your username:");
+                username = sc.nextLine();
                 if (username.length() > 40 || username.isEmpty()) { // checking if username is empty or longer than 40 characters
                     checker = false;
-                    System.out.println("The username you entered was invalid! Please enter your username:");
                 } else if (usernameList.contains(username)) { // checking if username is already taken by a user
                     checker = false;
                     System.out.println("This email is already taken! Please choose another.");
+                } else {
+                    checker = true;
                 }
             } while (!checker);
         } catch (IOException e) {
             do {
-                System.out.println("The username you entered was invalid! Please enter your username:");
+                System.out.println("Please enter your username:");
                 username = sc.nextLine();
                 if (username.length() > 40 || username.isEmpty()) { // checking if username is empty or longer than 40 characters
                     checker = false;
@@ -263,13 +253,14 @@ public class User implements UserList {
     // verifies password according to limitations
     public String checkPassword(Scanner sc) {
         boolean checker = true;
-        System.out.println("Please enter your password:");
-        String password = sc.nextLine();
+        String password = null;
         do {
-            checker = true;
+            System.out.println("Please enter your password:");
+            password = sc.nextLine();
             if (password.length() < 4) { // checking that password length is under 4 characters
                 checker = false;
-                System.out.println("The password you entered was invalid! Please enter your password:");
+            } else {
+                checker = true;
             }
         } while (!checker);
         return password;

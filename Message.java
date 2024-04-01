@@ -1,4 +1,7 @@
 //.
+
+import java.util.ArrayList;
+
 /**
  * 
  * Message Interface
@@ -24,5 +27,6 @@ public interface Message {
     String toString();
     boolean sendMessage();
     boolean deleteMessage(String message);
+    ArrayList<String> viewMessageHistory();
 
 }

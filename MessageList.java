@@ -1,3 +1,5 @@
+import org.junit.Assert;
+
 import java.io.*;
 import java.util.ArrayList;
 //.
@@ -60,31 +62,6 @@ public class MessageList implements Message {
         String a = "%s: %s";
         return String.format(a, sendUser.getUsername(), content);
     }
-
-//    public boolean checkReceiver() {
-//        ArrayList<String> friendList = new ArrayList<>();
-//        try {
-//            BufferedReader bfr = new BufferedReader(new FileReader(
-//                    new File("User_" + sendUser.getUsername() + "_Friends.txt")));
-//
-//            String line = bfr.readLine();
-//
-//            while (line != null) {
-//                String[] splits = line.split(" ");
-//                friendList.add(splits[0]);
-//            }
-//
-//            for (int i = 0; i < friendList.size(); i++) {
-//                if (friendList.get(i).equals(receiveUser)) {
-//                    return true;
-//                }
-//            }
-//        } catch (Exception e) {
-//            return false;
-//        }
-//
-//        return false;
-//    }
 
     public boolean sendMessage() {
         try {
@@ -156,4 +133,28 @@ public class MessageList implements Message {
             return false;
         }
     }
+
+    public ArrayList<String> viewMessageHistory() {
+        ArrayList<String> list = new ArrayList<>();
+        String [] history;
+        try {
+            File messageHistorySender = new File(sendUser.getUsername() + "_" + receiveUser + ".txt");
+            FileReader frS = new FileReader(messageHistorySender);
+            BufferedReader bfrS = new BufferedReader(frS);
+
+            String line = bfrS.readLine();
+
+            while (line != null) {
+                list.add(line);
+                line = bfrS.readLine();
+            }
+
+            bfrS.close();
+//            history = list.toArray(new String[list.size()]);
+        } catch (Exception e) {
+            return list;
+        }
+        return list;
+    }
+
 }

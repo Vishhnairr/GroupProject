@@ -4,6 +4,9 @@ import org.junit.Test;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+/**
+ * A test case formessage.
+ */
 public class TestMessage {
     @Test
     public void testMessageConstructor() {

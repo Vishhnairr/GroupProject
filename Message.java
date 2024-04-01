@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * a file for both the sender and the recipient that contains the message history of the two
  * users, and delete messages in the message history.
  *
- * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
+ * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13.
  *
  * @version March 31, 2024
  *

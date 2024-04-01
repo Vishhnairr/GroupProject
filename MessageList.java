@@ -134,6 +134,7 @@ public class MessageList implements Message {
         }
     }
 
+    //View users message history
     public ArrayList<String> viewMessageHistory() {
         ArrayList<String> list = new ArrayList<>();
         String [] history;

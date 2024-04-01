@@ -1,7 +1,6 @@
 // imports
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Friends
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
  * @version March 31, 2024
- * 
+ *
  */
 
 public class Friends extends User {
@@ -393,10 +392,3 @@ public class Friends extends User {
         return friends;
     }
 }
-
-
-
-
-
-
-

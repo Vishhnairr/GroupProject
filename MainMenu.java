@@ -4,7 +4,7 @@ import java.io.*;
 /**
  *
  * MainMenu
- * 
+ *
  * Holds all the functionality for users to interact with the system.
  * First a welcome message is displayed and then the user logs in or creates an account.
  * When a user logs in to their account the menu gives them different options.
@@ -86,9 +86,8 @@ public class MainMenu {
                             do {
                                 try {
                                     System.out.println("What would you like to do?");
-                                    System.out.println("1. View all BoilerTown users" + "\n" + "2. Search BoilerTown " +
-                                            "users" + "\n" + "3. View/Interact with your friends" + "\n" + "4. Edit " +
-                                            "Account" + "\n" + "5. Exit");
+                                    System.out.println("1. View all BoilerTown users" + "\n" + "2. Search BoilerTown users" + "\n" +
+                                            "3. View/Interact with your friends" + "\n" + "4. Edit Account" + "\n" + "5. Exit");
                                     userChoice2 = Integer.parseInt(scanner.nextLine());
                                     switch (userChoice2) {
                                         case 1: {  // searches through all users
@@ -98,11 +97,9 @@ public class MainMenu {
                                             } else {  // there are users to look at
                                                 ArrayList<String> users = new ArrayList<>();
                                                 String fileLine;
-                                                try (BufferedReader br = new BufferedReader
-                                                        (new FileReader(allUsersFile))) {
+                                                try (BufferedReader br = new BufferedReader(new FileReader(allUsersFile))) {
                                                     fileLine = br.readLine();
-                                                    while (fileLine != null && !fileLine.equals("\n") &&
-                                                            !fileLine.isEmpty()) {
+                                                    while (fileLine != null && !fileLine.equals("\n") && !fileLine.equals("")) {
                                                         users.add(fileLine);
                                                         fileLine = br.readLine();
                                                     }
@@ -119,19 +116,16 @@ public class MainMenu {
                                                 String selectedUserName;
                                                 boolean validUsername = true;
                                                 do {
-                                                    System.out.println("Please enter the name of the user you want " +
-                                                            "to look into:");
+                                                    System.out.println("Please enter the name of the user you want to look into:");
 
                                                     selectedUserName = scanner.nextLine();
 
                                                     if (!users.contains(selectedUserName)) {
                                                         validUsername = false;
-                                                        System.out.println("ERROR! The username you entered is " +
-                                                                "not a current user!");
+                                                        System.out.println("ERROR! The username you entered is not a current user!");
                                                     } else if (user.getUsername().equals(selectedUserName)) {
                                                         validUsername = false;
-                                                        System.out.println("You can't enter your own username! " +
-                                                                "Please put another username.");
+                                                        System.out.println("You can't enter your own username! Please put another username.");
                                                     } else {
                                                         validUsername = true;
                                                     }
@@ -142,8 +136,7 @@ public class MainMenu {
                                                 do {
                                                     try {
                                                         System.out.println("What do you want to do?");
-                                                        System.out.println("1. View " + selectedUserName + "'s Profile"
-                                                                + "\n" + "2. Make a " +
+                                                        System.out.println("1. View " + selectedUserName + "'s Profile" + "\n" + "2. Make a " +
                                                                 "friend request" + "\n" + "3. Exit");
                                                         userChoice3 = Integer.parseInt(scanner.nextLine());
                                                         switch (userChoice3) {
@@ -152,20 +145,14 @@ public class MainMenu {
                                                                 break;
                                                             }
                                                             case 2: { // make a friend request
-                                                                File targetUserFile = new File("User_" +
-                                                                        selectedUserName + "_Friends.txt");
+                                                                File targetUserFile = new File("User_" + selectedUserName + "_Friends.txt");
                                                                 if (targetUserFile.exists()) {
-                                                                    Friends targetUser = new Friends(); // You might
-                                                                    // want to load this user's details if necessary
-                                                                    targetUser.setUsername(selectedUserName); // Set the
-                                                                    // username of the target user
-                                                                    // Send the friend request using the method from
-                                                                    // Friends class
-                                                                    person.makeFriendRequest(scanner, selectedUserName,
-                                                                            user.getUsername());
+                                                                    Friends targetUser = new Friends(); // You might want to load this user's details if necessary
+                                                                    targetUser.setUsername(selectedUserName); // Set the username of the target user
+                                                                    // Send the friend request using the method from Friends class
+                                                                    person.makeFriendRequest(scanner, selectedUserName, user.getUsername());
                                                                 } else {
-                                                                    System.out.println(selectedUserName + " does not " +
-                                                                            "exist or has blocked friend requests.");
+                                                                    System.out.println(selectedUserName + " does not exist or has blocked friend requests.");
                                                                 }
                                                                 break;
                                                             }
@@ -190,11 +177,9 @@ public class MainMenu {
                                             } else {  // there are users to look at
                                                 ArrayList<String> users = new ArrayList<>();
                                                 String fileLine;
-                                                try (BufferedReader br = new BufferedReader(new
-                                                        FileReader(allUsersFile))) {
+                                                try (BufferedReader br = new BufferedReader(new FileReader(allUsersFile))) {
                                                     fileLine = br.readLine();
-                                                    while (fileLine != null && !fileLine.equals("\n") &&
-                                                            !fileLine.isEmpty()) {
+                                                    while (fileLine != null && !fileLine.equals("\n") && !fileLine.equals("")) {
                                                         users.add(fileLine);
                                                         fileLine = br.readLine();
                                                     }
@@ -206,19 +191,16 @@ public class MainMenu {
                                                 String selectedUserName;
                                                 boolean validUsername = true;
                                                 do {
-                                                    System.out.println("Please enter the name of the user you want " +
-                                                            "to look into:");
+                                                    System.out.println("Please enter the name of the user you want to look into:");
 
                                                     selectedUserName = scanner.nextLine();
 
                                                     if (!users.contains(selectedUserName)) {
                                                         validUsername = false;
-                                                        System.out.println("ERROR! The username you entered is not " +
-                                                                "a current user!");
+                                                        System.out.println("ERROR! The username you entered is not a current user!");
                                                     } else if (user.getUsername().equals(selectedUserName)) {
                                                         validUsername = false;
-                                                        System.out.println("You can't enter your own username! " +
-                                                                "Please put another username.");
+                                                        System.out.println("You can't enter your own username! Please put another username.");
                                                     } else {
                                                         validUsername = true;
                                                     }
@@ -238,20 +220,14 @@ public class MainMenu {
                                                                 break;
                                                             }
                                                             case 2: { // make a friend request
-                                                                File targetUserFile = new File("User_" +
-                                                                        selectedUserName + "_Friends.txt");
+                                                                File targetUserFile = new File("User_" + selectedUserName + "_Friends.txt");
                                                                 if (targetUserFile.exists()) {
-                                                                    Friends targetUser = new Friends(); // You might
-                                                                    // want to load this user's details if necessary
-                                                                    targetUser.setUsername(selectedUserName); // Set the
-                                                                    // username of the target user
-                                                                    // Send the friend request using the method from
-                                                                    // Friends class
-                                                                    person.makeFriendRequest(scanner, selectedUserName,
-                                                                            user.getUsername());
+                                                                    Friends targetUser = new Friends(); // You might want to load this user's details if necessary
+                                                                    targetUser.setUsername(selectedUserName); // Set the username of the target user
+                                                                    // Send the friend request using the method from Friends class
+                                                                    person.makeFriendRequest(scanner, selectedUserName, user.getUsername());
                                                                 } else {
-                                                                    System.out.println(selectedUserName + " does not " +
-                                                                            "exist or has blocked friend requests.");
+                                                                    System.out.println(selectedUserName + " does not exist or has blocked friend requests.");
                                                                 }
                                                                 break;
                                                             }
@@ -262,9 +238,8 @@ public class MainMenu {
                                                             default: {
                                                                 System.out.println("Please enter a valid number!");
                                                                 System.out.println("What do you want to do?");
-                                                                System.out.println("1. View " + selectedUserName +
-                                                                        "'s Profile" + "\n" + "2. Make a friend request"
-                                                                        + "\n" + "3. Exit");
+                                                                System.out.println("1. View " + selectedUserName + "'s Profile" + "\n" +
+                                                                        "2. Make a friend request" + "\n" + "3. Exit");
                                                                 userChoice3 = scanner.nextInt();
                                                                 scanner.nextLine();
                                                             }
@@ -272,8 +247,8 @@ public class MainMenu {
                                                     } catch (InputMismatchException e) {
                                                         System.out.println("Please enter a number!");
                                                         System.out.println("What do you want to do?");
-                                                        System.out.println("1. View " + selectedUserName + "'s Profile"
-                                                                + "\n" + "2. Make a friend request" + "\n" + "3. Exit");
+                                                        System.out.println("1. View " + selectedUserName + "'s Profile" + "\n" +
+                                                                "2. Make a friend request" + "\n" + "3. Exit");
                                                         userChoice3 = scanner.nextInt();
                                                         scanner.nextLine();
                                                     }
@@ -286,9 +261,8 @@ public class MainMenu {
                                             System.out.printf("%s's friends list:\n", user.getUsername());
                                             person.friendViewer(user.getUsername());
                                             System.out.println("What do you want to do?");
-                                            System.out.println("1. Message my friends" + "\n" + "2. View my friend " +
-                                                    "requests" + "\n" + "3. Remove a friend" + "\n" + "4. Block " +
-                                                    "a friend" + "\n" + "5. Exit");
+                                            System.out.println("1. Message my friends" + "\n" + "2. View my friend requests" + "\n"
+                                                    + "3. Remove a friend" + "\n" + "4. Block a friend" + "\n" + "5. Exit");
 
                                             int userChoice3 = 0;
 
@@ -298,101 +272,61 @@ public class MainMenu {
                                                     switch (userChoice3) {
                                                         case 1: {  // message your friend
                                                             if (person.hasFriends(user.getUsername())) {
-                                                                System.out.printf("%s's friends list:\n",
-                                                                        user.getUsername());
-                                                                ArrayList<String> friendUsernames = person.friendViewer
-                                                                        (user.getUsername());
+                                                                System.out.printf("%s's friends list:\n", user.getUsername());
+                                                                ArrayList<String> friendUsernames = person.friendViewer(user.getUsername());
                                                                 boolean validUsername = false;
                                                                 String selectedUserName;
                                                                 do {
-                                                                    System.out.println("Who do you want to message?");
-                                                                    // message mechanics implemented here and only here
+                                                                    System.out.println("Who do u want to message?"); // message mechanics implemented here and only here
                                                                     selectedUserName = scanner.nextLine();
                                                                     if (friendUsernames.contains(selectedUserName)) {
                                                                         validUsername = true;
                                                                     } else {
-                                                                        System.out.println("You can only select " +
-                                                                                "usernames that you are friends with.");
+                                                                        System.out.println("You can only select usernames that you are friends with.");
                                                                     }
                                                                 } while (!validUsername);
+                                                                System.out.println("What do you want to do?");
+                                                                System.out.println("1. Message stuff" + "\n" + "2. Delete a message"  +
+                                                                        "\n" + "3. Exit");
 
-                                                                int userChoice4 = 0;
-                                                                do {
-                                                                    try {
-                                                                        System.out.println("What do you want to do?");
-                                                                        System.out.println("1. Message Stuff" + "\n" +
-                                                                                "2. Delete a message" + "\n" +
-                                                                                "3. Exit");
-                                                                        userChoice4 = Integer.parseInt(scanner.nextLine());
-                                                                        switch (userChoice4) {
-                                                                            case 1: {
-                                                                                System.out.println("Please enter your " +
-                                                                                        "message:"); //Enter message
-                                                                                String message = scanner.nextLine();
-                                                                                MessageList send = new MessageList
-                                                                                        (message, user, selectedUserName);
-                                                                                if (send.sendMessage()) {
-                                                                                    System.out.println("Successfully send!");
-                                                                                } else {
-                                                                                    System.out.println("Failed send...");
-                                                                                }
-                                                                                break;
-                                                                            }
-                                                                            case 2: {
-                                                                                File file = new File(
-                                                                                        user.getUsername() +
-                                                                                                "_" + selectedUserName +
-                                                                                                ".txt");
-//
-                                                                                try {
-                                                                                    FileReader fr = new FileReader(file);
-                                                                                    BufferedReader bfr = new BufferedReader(fr);
-                                                                                    String line = bfr.readLine();
-                                                                                    while (line != null) {
-                                                                                        System.out.println(line);
-                                                                                        line = bfr.readLine();
-                                                                                    }
-                                                                                } catch (Exception e) {
-                                                                                    System.out.println("It seems " +
-                                                                                            "that you don't have a " +
-                                                                                            "chat with your friend.");
-                                                                                }
+                                                                int userChoice4 = scanner.nextInt();
+                                                                scanner.nextLine();
 
-                                                                                System.out.println("Please enter which " +
-                                                                                        "message you want " + "to delete " +
-                                                                                        "(Enter the whole message):");
-                                                                                String delete = scanner.nextLine();
-                                                                                MessageList deleteIt = new MessageList
-                                                                                        (delete, user, selectedUserName);
-                                                                                if (deleteIt.deleteMessage(delete)) {
-                                                                                    System.out.println("Successfully delete!");
-                                                                                } else {
-                                                                                    System.out.println("Failed delete..." +
-                                                                                            "Please check if " + "you " +
-                                                                                            "had this message with " +
-                                                                                            "your friend.");
-                                                                                }
-                                                                                break;
-                                                                            }
-                                                                            case 3: {
-                                                                                stay = false;
-                                                                                break;
-                                                                            }
-                                                                            default: {
-                                                                                System.out.println("Please enter a valid " +
-                                                                                        "number!");
-                                                                                System.out.println("What do you want to " +
-                                                                                        "do?");
-                                                                                System.out.println("1. Message Stuff"
-                                                                                        + "\n" + "2. Delete a message" +
-                                                                                        "\n" + "3. Exit");
-                                                                                userChoice4 = Integer.parseInt(scanner.nextLine());
-                                                                            }
-                                                                        }
-                                                                    } catch (NumberFormatException e) {
-                                                                        System.out.println("Please enter a valid number!");
+                                                                if (userChoice4 == 1) {
+                                                                    System.out.println("Please enter your message:"); //Enter message
+                                                                    String message = scanner.nextLine();
+                                                                    MessageList send = new MessageList(message, user, selectedUserName);
+                                                                    if (send.sendMessage()) {
+                                                                        System.out.println("Successfully send!");
+                                                                    } else {
+                                                                        System.out.println("Failed send...");
                                                                     }
-                                                                } while (userChoice4 != 1 && userChoice4 != 2 && userChoice4 != 3);
+                                                                } else if (userChoice4 == 2) {
+                                                                    File file = new File(user.getUsername() + "_" + selectedUserName + ".txt");
+//
+                                                                    try {
+                                                                        FileReader fr = new FileReader(file);
+                                                                        BufferedReader bfr = new BufferedReader(fr);
+                                                                        String line = bfr.readLine();
+                                                                        while (line != null) {
+                                                                            System.out.println(line);
+                                                                            line = bfr.readLine();
+                                                                        }
+                                                                    } catch (Exception e) {
+                                                                        System.out.println("It seems that you don't have a chat with your friend.");
+                                                                    }
+
+                                                                    System.out.println("Please enter which message you want " +
+                                                                            "to delete (Enter the whole message):");
+                                                                    String delete = scanner.nextLine();
+                                                                    MessageList deleteIt = new MessageList(delete, user, selectedUserName);
+                                                                    if (deleteIt.deleteMessage(delete)) {
+                                                                        System.out.println("Successfully delete!");
+                                                                    } else {
+                                                                        System.out.println("Failed delete...Please check if " +
+                                                                                "you had this message with your friend.");
+                                                                    }
+                                                                }
                                                             } else {
                                                                 System.out.println("Sorry! You currently don't have any friends");
                                                             }
@@ -401,41 +335,36 @@ public class MainMenu {
                                                         case 2: { // view friend request
                                                             boolean hasFriendRequests = false;
                                                             boolean approve = false;
-                                                            File userFile = new File("User_" +
-                                                                    user.getUsername() + "_Friends.txt");
+                                                            File userFile = new File("User_" + user.getUsername() + "_Friends.txt");
                                                             try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
                                                                 String line;
                                                                 while ((line = br.readLine()) != null) {
                                                                     if (line.startsWith("Friend request from:")) {
                                                                         System.out.println(line);
-                                                                        hasFriendRequests = true;
-                                                                        // Set flag to true if a friend request line is found
+                                                                        hasFriendRequests = true; // Set flag to true if a friend request line is found
                                                                     }
                                                                 }
                                                             } catch (IOException e) {
-                                                                System.out.println("File not found!");
+                                                                e.printStackTrace();
                                                             }
                                                             if (!hasFriendRequests) {
                                                                 System.out.println("You have no friend requests at this time.");
                                                             } else {
-                                                                System.out.println("Do you want to approve or decline " +
-                                                                        "a friend request? (approve/decline)");
+                                                                System.out.println("Do you want to approve or decline a friend request? (approve/decline)");
                                                                 String action = scanner.nextLine().trim();
                                                                 if (!action.equals("approve") && !action.equals("decline")) {
                                                                     System.out.println("Invalid action.");
                                                                 }
-                                                                System.out.println("Enter the username of the friend " +
-                                                                        "request:");
-                                                                String friendUsername = scanner.nextLine();
-                                                                // needs validation
+                                                                System.out.println("Enter the username of the friend request:");
+                                                                String friendUsername = scanner.nextLine(); // needs validation
                                                                 if ("approve".equals(action)) {
                                                                     approve = true;
-                                                                    person.updateFriendRequestStatus(friendUsername,
-                                                                            user.getUsername(), approve);
+                                                                    person.updateFriendRequestStatus(friendUsername, user.getUsername(),
+                                                                            approve);
                                                                 }
                                                                 if ("decline".equals(action)) {
-                                                                    person.updateFriendRequestStatus(friendUsername,
-                                                                            user.getUsername(), approve);
+                                                                    person.updateFriendRequestStatus(friendUsername, user.getUsername(),
+                                                                            approve);
                                                                 }
                                                                 System.out.printf("friend requested %sd\n", action);
                                                             }
@@ -445,8 +374,7 @@ public class MainMenu {
                                                             if (person.hasFriends(user.getUsername())) {
                                                                 person.removeUser(scanner, user.getUsername());
                                                             } else {
-                                                                System.out.println("Sorry! You currently don't have " +
-                                                                        "any friends");
+                                                                System.out.println("Sorry! You currently don't have any friends");
                                                             }
                                                             break;
                                                         }
@@ -460,12 +388,10 @@ public class MainMenu {
                                                                 if (friendUsernames.contains(selectedUserName)) {
                                                                     person.blockUser(selectedUserName, user.getUsername());
                                                                 } else {
-                                                                    System.out.println("You can only select usernames " +
-                                                                            "that you are friends with.");
+                                                                    System.out.println("You can only select usernames that you are friends with.");
                                                                 }
                                                             } else {
-                                                                System.out.println("Sorry! You currently don't have " +
-                                                                        "any friends");
+                                                                System.out.println("Sorry! You currently don't have any friends");
                                                             }
                                                             break;
                                                         }
@@ -476,18 +402,16 @@ public class MainMenu {
                                                         default: {
                                                             System.out.println("Please enter a valid number!");
                                                             System.out.println("What do you want to do?");
-                                                            System.out.println("1. Message my friends" + "\n" + "2. " +
-                                                                    "View my friend requests" + "\n" + "3. Remove a " +
-                                                                    "friend" + "\n" + "4. Block a friend" + "\n" +
-                                                                    "5. Exit");
+                                                            System.out.println("1. Message my friends" + "\n" + "2. View my friend requests" + "\n"
+                                                                    + "3. Remove a friend" + "\n" + "4. Block a friend" + "\n" + "5. Exit");
                                                             userChoice3 = Integer.parseInt(scanner.nextLine());
                                                         }
                                                     }
                                                 } catch (NumberFormatException e) {
                                                     System.out.println("Please enter a number!");
                                                 }
-                                            } while (userChoice3 != 1 && userChoice3 != 2 && userChoice3 != 3 &&
-                                                    userChoice3 != 4 && userChoice3 != 5);
+                                            } while (userChoice3 != 1 && userChoice3 != 2 && userChoice3 != 3 && userChoice3 != 4
+                                                    && userChoice3 != 5);
                                             break;
                                         }
                                         case 4: {
@@ -501,9 +425,8 @@ public class MainMenu {
                                         default: {
                                             System.out.println("Please enter a valid number!");
                                             System.out.println("What would you like to do?");
-                                            System.out.println("1. View all BoilerTown users" + "\n" + "2. Search " +
-                                                    "BoilerTown users" + "\n" + "3. View/Interact with your friends" +
-                                                    "\n" + "4. Edit Account" + "\n" + "5. Exit");
+                                            System.out.println("1. View all BoilerTown users" + "\n" + "2. Search BoilerTown users" + "\n" +
+                                                    "3. View/Interact with your friends" + "\n" + "4. Edit Account" + "\n" + "5. Exit");
                                             userChoice2 = scanner.nextInt();
                                             scanner.nextLine();
                                         }

@@ -214,7 +214,6 @@ public class User implements UserList {
         } catch (IOException e) {
             System.out.println("File doesn't exist!");
         }
-        System.out.println("Account created successfully");
 
         File allUsersFile = new File("All_User_Info.txt");
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(allUsersFile, true))) {

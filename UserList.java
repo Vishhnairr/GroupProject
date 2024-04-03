@@ -1,8 +1,4 @@
 import java.io.*;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 /**
  * UserList
@@ -41,37 +37,25 @@ public interface UserList {
 
     void setAccountFile();
 
-    String checkFirstName(Scanner sc);
-
-    String checkLastName(Scanner sc);
-
-    String checkEmail(Scanner sc);
-
-    String checkBio(Scanner sc);
-
-    String checkUsername(Scanner sc);
-
-    String checkPassword(Scanner sc);
-
     boolean checkAccountExists(String username);
 
-    String changeEmail(Scanner sc);
+    boolean checkEmail(String email);
 
-    String changeBio(Scanner sc);
+    boolean checkBio(String bio);
 
-    String changeFirstName(Scanner sc);
+    boolean checkFirstName(String firstName);
 
-    String changeLastName(Scanner sc);
+    boolean checkLastName(String lastName);
 
-    String changeUsername(Scanner sc);
+    boolean checkUsername(String username);
 
-    String changePassword(Scanner sc);
+    boolean checkPassword(String password);
 
-    User createAccount(Scanner sc);
+    User createAccount(String firstName, String lastName, String email, String bio, String username, String password);
 
-    User editAccount(Scanner sc);
+    User editAccount(int editOption, String newValue);
 
-    User logIn(Scanner scan);
+    User logIn(String username, String passwordInput);
 
     String toString();
 
@@ -80,5 +64,3 @@ public interface UserList {
     }
 
 }
-
-

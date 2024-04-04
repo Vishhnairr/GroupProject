@@ -145,7 +145,7 @@ public class User implements UserList {
         return true;
     }
 
-    // changes bio if User decides to do so
+    // checks bio if User decides to do so
     public boolean checkBio(String bio) {
         if (bio == null) {
             System.out.println("ERROR! Please make sure your bio is between 20 to 40 characters!");
@@ -161,7 +161,7 @@ public class User implements UserList {
         }
     }
 
-    // changes first name if User decides to do so
+    // checks first name if User decides to do so
     public boolean checkFirstName(String firstName) {
         if (firstName == null || firstName.isEmpty() || firstName.contains(" ")) {
             System.out.println("ERROR! Please enter your first name correctly, without spaces!");
@@ -170,7 +170,7 @@ public class User implements UserList {
         return true;
     }
 
-    // changes last name if User decides to do so
+    // checks last name if User decides to do so
     public boolean checkLastName(String lastName) {
         if (lastName == null || lastName.isEmpty() || lastName.contains(" ")) {
             System.out.println("ERROR! Please enter your last name correctly, without spaces!");
@@ -179,7 +179,7 @@ public class User implements UserList {
         return true;
     }
 
-    // changes username if User decides to do so
+    // checks username if User decides to do so
     public boolean checkUsername(String username) {
         if (username == null || username.isEmpty() || username.contains(" ")) {
             System.out.println("ERROR! There should be no spaces in your username!");
@@ -188,7 +188,7 @@ public class User implements UserList {
         return true;
     }
 
-    // changes password if User decides to do so
+    // checks password if User decides to do so
     public boolean checkPassword(String password) {
         if (password.length() < 4) {
             System.out.println("ERROR! Your password must be at least 4 characters long!");

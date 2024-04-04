@@ -132,7 +132,7 @@ public class User implements UserList {
         return accountInfo2.exists();
     }
 
-    // changes email if User decides to do so
+    // checks email if User decides to do so
     public boolean checkEmail(String email) {
         if (email == null || email.isEmpty() || !email.contains("@") || email.contains(" ") || email.charAt(email.length() - 4) != '.') {
             System.out.println("ERROR! the email you entered was incorrectly formatted.");

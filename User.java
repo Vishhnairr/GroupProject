@@ -138,9 +138,6 @@ public class User implements UserList {
             System.out.println("ERROR! the email you entered was incorrectly formatted.");
             System.out.println("Please enter an email of the form: ___@___.___ with no spaces!");
             return false;
-        } else if (checkAccountExists(email)) { // Assuming `checkAccountExists` is a method you have defined to check if an account with the email already exists.
-            System.out.println("ERROR! An account with this email already exists!");
-            return false;
         }
         return true;
     }

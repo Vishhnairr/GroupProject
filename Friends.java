@@ -137,30 +137,6 @@ public class Friends extends User {
     }
 
 
-    public void handleFriendRequest(Scanner scanner, User user) {
-        System.out.println("Do you want to approve or decline a friend request? (approve/decline)");
-        String action = scanner.nextLine().trim();
-
-        if (!action.equals("approve") && !action.equals("decline")) {
-            System.out.println("Invalid action.");
-            return;
-        }
-
-        System.out.println("Enter the username of the friend request:");
-        String friendUsername = scanner.nextLine();
-
-
-        File userFile = new File("User_" + user.getUsername() + "_Friends.txt");
-        File friendsFile = new File("User_" + friendUsername + "_Friends.txt");
-
-
-        if (action.equals("approve")) {
-            updateFriendRequestStatus(friendUsername, user.getUsername(), true);
-        } else if (action.equals("decline")) {
-            updateFriendRequestStatus(friendUsername, user.getUsername(),false);
-        }
-    }
-
     public void updateFriendRequestStatus(String friendUsername, String username, boolean approve) {
         File sentRequestFile = new File("User_" + friendUsername + "_Friends.txt");
         File acceptingRequestFile = new File("User_" + username + "_Friends.txt");

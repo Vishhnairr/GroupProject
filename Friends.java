@@ -39,14 +39,12 @@ public class Friends extends User {
     /**
      * Sends a friend request to another user.
      *
-     * @param scanner        The Scanner object for user input.
+     * @param message        The message the user wants to send.
      * @param friendUsername The username of the user recieving the friend request.
      * @param username       The username of the user sending the friend request.
      */
 
-    public void makeFriendRequest(Scanner scanner, String friendUsername, String username) {
-        System.out.printf("What would you like to say to %s?\n", friendUsername);
-        String message = scanner.nextLine();
+    public void makeFriendRequest(String message, String friendUsername, String username) {
 
         File friendsFile = new File("User_" + friendUsername + "_Friends.txt");
         File userFile = new File("User_" + username + "_Friends.txt");
@@ -194,7 +192,7 @@ public class Friends extends User {
         }
     }
 
-    public void removeUser(Scanner scanner, String username) {
+    public void removeUser(String username, String removeUsername) {
         File userFile = new File("User_" + username + "_Friends.txt");
         List<String> lines = new ArrayList<>();
         List<String> friendUsernames = new ArrayList<>();
@@ -206,7 +204,6 @@ public class Friends extends User {
                 lines.add(line);
                 if (line.endsWith("is your friend!")) {
                     friendUsernames.add(line.substring(0, line.indexOf(" is your friend!")));
-                    System.out.println(line);
                 }
             }
         } catch (IOException e) {
@@ -215,31 +212,29 @@ public class Friends extends User {
             return;
         }
 
-        // Ask the user which friend they would like to remove
-        System.out.println("Enter the username of the friend you wish to remove:");
-        String friendToRemove = scanner.nextLine().trim();
-
         // Validate the entered username
-        if (!friendUsernames.contains(friendToRemove)) {
+        if (!friendUsernames.contains(removeUsername)) {
             System.out.println("The entered username is not in your friends list.");
             return;
         }
+
         List<String> friendLines = new ArrayList<>();
-        File friendFile = new File("User_" + friendToRemove + "_Friends.txt");
+        File friendFile = new File("User_" + removeUsername + "_Friends.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(friendFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 friendLines.add(line);
             }
         } catch (IOException e) {
-            System.out.println("An error occurred while reading the user's file.");
+            System.out.println("An error occurred while reading the friend's file.");
             e.printStackTrace();
             return;
         }
-        // Remove the friend from the list
-        lines.removeIf(line -> line.equals(friendToRemove + " is your friend!"));
 
-        // Rewrite the file without the removed friend
+        // Remove the friend from the user's list
+        lines.removeIf(line -> line.equals(removeUsername + " is your friend!"));
+
+        // Rewrite the user's file without the removed friend
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(userFile, false))) {
             for (String line : lines) {
                 writer.write(line);
@@ -250,20 +245,21 @@ public class Friends extends User {
             e.printStackTrace();
         }
 
+        // Remove the user from the friend's list
         friendLines.removeIf(line -> line.equals(username + " is your friend!"));
 
-        // Rewrite the file without the removed friend
+        // Rewrite the friend's file without the user
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(friendFile, false))) {
             for (String line : friendLines) {
                 writer.write(line);
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println("An error occurred while writing to the user's file.");
+            System.out.println("An error occurred while writing to the friend's file.");
             e.printStackTrace();
         }
 
-        System.out.printf("User %s has been successfully removed from your friends list.\n", friendToRemove);
+        System.out.printf("User %s has been successfully removed from your friends list.\n", removeUsername);
     }
     public ArrayList<String> friendViewer(String username) {
         ArrayList<String> friendUsernames = new ArrayList<>();

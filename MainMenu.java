@@ -240,7 +240,10 @@ public class MainMenu {
                                                                 // the username of the target user
                                                                 // Send the friend request using the method
                                                                 // from Friends class
-                                                                person.makeFriendRequest(scanner, selectedUserName,
+                                                                System.out.printf("What would you like to say to %s?\n",
+                                                                        selectedUserName);
+                                                                String message = scanner.nextLine();
+                                                                person.makeFriendRequest(message, selectedUserName,
                                                                         user.getUsername());
                                                             } else {
                                                                 System.out.println(selectedUserName +
@@ -327,7 +330,10 @@ public class MainMenu {
                                                                 // the username of the target user
                                                                 // Send the friend request using the method from
                                                                 // Friends class
-                                                                person.makeFriendRequest(scanner, selectedUserName,
+                                                                System.out.printf("What would you like to say to %s?\n",
+                                                                        selectedUserName);
+                                                                String message = scanner.nextLine();
+                                                                person.makeFriendRequest(message, selectedUserName,
                                                                         user.getUsername());
                                                             } else {
                                                                 System.out.println(selectedUserName + " does not " +
@@ -504,10 +510,12 @@ public class MainMenu {
                                                     }
                                                     case 3: { // Remove a friend
                                                         if (person.hasFriends(user.getUsername())) {
-                                                            person.removeUser(scanner, user.getUsername());
+                                                            person.friendViewer(user.getUsername());
+                                                            System.out.println("Enter the username of the friend you wish to remove:");
+                                                            String removeUsername = scanner.nextLine().trim();
+                                                            person.removeUser(user.getUsername(), removeUsername);
                                                         } else {
-                                                            System.out.println
-                                                                    ("Sorry! You currently don't have any friends");
+                                                            System.out.println("Sorry! You currently don't have any friends.");
                                                         }
                                                         break;
                                                     }

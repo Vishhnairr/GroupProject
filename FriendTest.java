@@ -7,13 +7,16 @@ import java.io.*;
 public class FriendTest {
 
     private Friends friends;
+
+    private final String message = "hey";
     private final String username = "testUser";
     private final String friendUsername = "friendUser";
     private final String blockedUsername = "blockedUser";
 
     @Before
     public void setUp() {
-        friends = new Friends("Test", "User", "test@example.com", "This is a bio", username, "password123");
+        friends = new Friends("Test", "User", "test@example.com",
+                "This is a bio", username, "password123");
 
         new File("User_" + username + "_Friends.txt").delete();
         new File("User_" + friendUsername + "_Friends.txt").delete();
@@ -27,7 +30,7 @@ public class FriendTest {
         Scanner scanner = new Scanner(System.in);
 
 
-        friends.makeFriendRequest(scanner, friendUsername, username);
+        friends.makeFriendRequest(message, friendUsername, username);
 
         File friendFile = new File("User_" + friendUsername + "_Friends.txt");
         Assert.assertTrue("Friend request file does not exist", friendFile.exists());
@@ -83,9 +86,12 @@ public class FriendTest {
         writer.write(blockedUsername + " is your friend!\n");
         writer.close();
         ArrayList<String> friendsList = friends.friendViewer(username);
-        Assert.assertTrue("The friends list should contain " + friendUsername + ".", friendsList.contains(friendUsername));
-        Assert.assertTrue("The friends list should contain " + blockedUsername + ".", friendsList.contains(blockedUsername));
-        Assert.assertEquals("The friends list should contain exactly 2 friends.", 2, friendsList.size());
+        Assert.assertTrue("The friends list should contain " + friendUsername +
+                ".", friendsList.contains(friendUsername));
+        Assert.assertTrue("The friends list should contain " + blockedUsername +
+                ".", friendsList.contains(blockedUsername));
+        Assert.assertEquals("The friends list should contain exactly 2 friends.", 2,
+                friendsList.size());
     }
     @Test
     public void testHasFriends() throws IOException {

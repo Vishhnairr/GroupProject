@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class Clients {
@@ -261,7 +262,7 @@ public class Clients {
                                                         "\n" + "3. View/Interact with your friends" + "\n" + "4. Edit Account" +
                                                         "\n" + "5. Exit", "Database Searcher",
                                                 JOptionPane.QUESTION_MESSAGE));
-                                        writer.write(userChoice2);
+                                        writer.write(String.valueOf(userChoice2));
                                         writer.println();
                                         writer.flush();
                                         switch (userChoice2) {
@@ -276,7 +277,8 @@ public class Clients {
                                                             "Database Searcher", JOptionPane.ERROR_MESSAGE);
                                                 } else {  // there are users to look at
                                                     String usersConvert = reader.readLine();
-                                                    String[] users = usersConvert.split(",");
+                                                    usersConvert = usersConvert.substring(1, usersConvert.length() - 1);
+                                                    String[] users = usersConvert.split(", ");
 
                                                     if (usersConvert.isEmpty()) {
                                                         JOptionPane.showMessageDialog(null,
@@ -284,38 +286,89 @@ public class Clients {
                                                                 "Database Searcher", JOptionPane.ERROR_MESSAGE);
                                                     }
 
-                                                    String selectedUserName = (String) JOptionPane.showInputDialog(
-                                                            null,
-                                                            "List of all BoilerTown Users:",
-                                                            "Database Searcher", JOptionPane.PLAIN_MESSAGE,
-                                                            null, users, null);
-                                                    writer.write(selectedUserName);
-                                                    writer.println();
-                                                    writer.flush();
+                                                    boolean cont;
+                                                    String selectedUserName;
+                                                    do {
+                                                        selectedUserName = (String) JOptionPane.showInputDialog(
+                                                                null,
+                                                                "List of all BoilerTown Users:",
+                                                                "Database Searcher", JOptionPane.PLAIN_MESSAGE,
+                                                                null, users, null);
+                                                        writer.write(selectedUserName);
+                                                        writer.println();
+                                                        writer.flush();
+
+                                                        cont = Boolean.parseBoolean(reader.readLine());
+                                                        if (!cont) {
+                                                            JOptionPane.showMessageDialog(null,
+                                                                    "You can't enter your own username! Please" +
+                                                                            " put another username.",
+                                                                    "Database Searcher", JOptionPane.ERROR_MESSAGE);
+                                                        }
+                                                    } while (!cont);
 
                                                     int userChoice3 = 0;
 
                                                     do {
                                                         try {
-
-                                                            System.out.println("What do you want to do?");
-                                                            System.out.println("1. View " + selectedUserName +
-                                                                    "'s Profile" + "\n" + "2. Make a " +
-                                                                    "friend request" + "\n" + "3. Exit");
                                                             userChoice3 = Integer.parseInt(JOptionPane.
                                                                     showInputDialog(null,
                                                                             "What do you want to do?" + "\n" +
                                                                                     "1. View " + selectedUserName + "'s " +
                                                                                     "Profile" + "\n" + "2. Make a friend" +
-                                                                                    "request" + "\n" + "3. Exit",
+                                                                                    " request" + "\n" + "3. Exit",
                                                                             "Database Searcher",
                                                                             JOptionPane.QUESTION_MESSAGE));
-                                                            writer.write(userChoice3);
+                                                            writer.write(String.valueOf(userChoice3));
                                                             writer.println();
                                                             writer.flush();
                                                             switch (userChoice3) {
                                                                 case 1: {  // looking up a bio for a user
-                                                                    //person.viewProfile(selectedUserName);
+                                                                    boolean userExists = Boolean.parseBoolean(reader.readLine());
+                                                                    writer.write("SUCCESS");
+                                                                    writer.println();
+                                                                    writer.flush();
+
+                                                                    String firstName = "";
+                                                                    String lastName = "";
+                                                                    String bio = "";
+                                                                    String username = "";
+                                                                    if (userExists) {
+                                                                        firstName = reader.readLine();
+                                                                        writer.write(firstName);
+                                                                        writer.println();
+                                                                        writer.flush();
+
+                                                                        lastName = reader.readLine();
+                                                                        writer.write(lastName);
+                                                                        writer.println();
+                                                                        writer.flush();
+
+                                                                        bio = reader.readLine();
+                                                                        writer.write(bio);
+                                                                        writer.println();
+                                                                        writer.flush();
+
+                                                                        username = reader.readLine();
+                                                                        writer.write(username);
+                                                                        writer.println();
+                                                                        writer.flush();
+
+                                                                        JOptionPane.showMessageDialog(null,
+                                                                                selectedUserName + "'s Profile" +
+                                                                                        "\n" + "Name: " + firstName +
+                                                                                        " " + lastName + "\n" +
+                                                                                        "Username: " + username + "\n" +
+                                                                                        "Bio: " + bio,
+                                                                                "Database Searcher",
+                                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                                    } else {
+                                                                        JOptionPane.showMessageDialog(null,
+                                                                                "The profile file for" +
+                                                                                        selectedUserName + " does not exist.",
+                                                                                "Database Searcher", JOptionPane.ERROR_MESSAGE);
+                                                                    }
+
                                                                     break;
                                                                 }
                                                                 case 2: { // make a friend request

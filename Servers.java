@@ -9,7 +9,6 @@ public class Servers {
 
     public static void main(String[] args) {
         // start
-        //Scanner scanner = new Scanner(System.in);
         boolean stay = true;
         boolean newAccount = false;
         User user = new User();
@@ -33,68 +32,105 @@ public class Servers {
                             String firstName, lastName, email, bio, username, password;
                             boolean isValid;
 
+                            writer.write(userChoice);
+                            writer.println();
+                            writer.flush();
+
                             // First Name
                             do {
                                 firstName = reader.readLine();
                                 isValid = user.checkFirstName(firstName);
+                                writer.write(String.valueOf(isValid));
+                                writer.println();
+                                writer.flush();
                             } while (!isValid);
 
                             // Last Name
                             do {
                                 lastName = reader.readLine();
                                 isValid = user.checkLastName(lastName);
+                                writer.write(String.valueOf(isValid));
+                                writer.println();
+                                writer.flush();
                             } while (!isValid);
 
                             // Email
                             do {
                                 email = reader.readLine();
                                 isValid = user.checkEmail(email);
+                                writer.write(String.valueOf(isValid));
+                                writer.println();
+                                writer.flush();
                             } while (!isValid);
 
                             // Bio
                             do {
                                 bio = reader.readLine();
                                 isValid = user.checkBio(bio);
+                                writer.write(String.valueOf(isValid));
+                                writer.println();
+                                writer.flush();
                             } while (!isValid);
 
                             // Username
                             do {
                                 username = reader.readLine();
                                 isValid = user.checkUsername(username);
+                                writer.write(String.valueOf(isValid));
+                                writer.println();
+                                writer.flush();
                             } while (!isValid);
 
                             // Password
                             do {
                                 password = reader.readLine();
                                 isValid = user.checkPassword(password);
+                                writer.write(String.valueOf(isValid));
+                                writer.println();
+                                writer.flush();
                             } while (!isValid);
-
+                            reader.readLine();
                             user = user.createAccount(firstName, lastName, email, bio, username, password);
                             newAccount = true;
                             break;
                         }
                         case "2": {  // User logs in
                             File allUsersFile = new File("All_User_Info.txt");
+                            boolean userLogCheck = allUsersFile.exists();
+                            writer.write(String.valueOf(userLogCheck));
+                            writer.println();
+                            writer.flush();
+
                             if (allUsersFile.exists()) {
                                 User loggedInUser = null;
                                 boolean isLoggedIn = false;
                                 while (!isLoggedIn) {
                                     String username = reader.readLine();
+                                    writer.write("YES");
+                                    writer.println();
+                                    writer.flush();
 
                                     String password = reader.readLine();
 
                                     loggedInUser = user.logIn(username, password);  // Assuming 'user' is an instance capable of logging in
-                                    writer.write(String.valueOf(loggedInUser));
-                                    writer.println();
-                                    writer.flush();
                                     if (loggedInUser != null) {
                                         isLoggedIn = true;
                                         user = loggedInUser;
+                                    }
+                                    writer.write(String.valueOf(isLoggedIn));
+                                    writer.println();
+                                    writer.flush();
+                                    String checker = reader.readLine();
+                                    if (checker.equals("YES")) {
+                                        writer.write(user.getUsername());
+                                        writer.println();
+                                        writer.flush();
                                     }
                                 }
                             } else {
                                 stay = false; // 'stay' controls whether to continue in the main loop
                             }
+                            reader.readLine();
                             break;
                         }
                         case "3": {  // user wants to exit
@@ -109,14 +145,29 @@ public class Servers {
                     userChoice = reader.readLine();
                 }
             } while (!userChoice.equals("1") && !userChoice.equals("2") && !userChoice.equals("3"));
+
+            boolean multiple = User.checkMoreOneUser();
+            writer.write(String.valueOf(multiple));
+            writer.println();
+            writer.flush();
+            reader.readLine();
+
             if (!User.checkMoreOneUser()) {
                 stay = false;
             }
 
+            writer.write(String.valueOf(newAccount));
+            writer.println();
+            writer.flush();
+            reader.readLine();
             if (!newAccount) {
 
                 while (stay) {  // loops while user wants to do things
                     do {
+                        boolean instance = user instanceof Friends;
+                        writer.write(String.valueOf(instance));
+                        writer.println();
+                        writer.flush();
                         if (user instanceof Friends) { // user code
                             Friends person = (Friends) user;
 
@@ -126,9 +177,12 @@ public class Servers {
                                     switch (userChoice2) {
                                         case 1: {  // searches through all users
                                             File allUsersFile = new File("All_User_Info.txt");
-                                            if (!allUsersFile.exists()) {
-                                                System.out.println("ERROR! no users have been created yet!");
-                                            } else {  // there are users to look at
+                                            boolean allUsers = allUsersFile.exists();
+                                            writer.write(String.valueOf(allUsers));
+                                            writer.println();
+                                            writer.flush();
+                                            reader.readLine();
+                                            if (allUsers) {  // there are users to look at
                                                 ArrayList<String> users = new ArrayList<>();
                                                 String[] usersFinal = null;
                                                 String fileLine;
@@ -142,6 +196,8 @@ public class Servers {
                                                     }
                                                     usersFinal = new String[users.size()];
                                                     users.toArray(usersFinal);
+                                                    System.out.println(Arrays.toString(usersFinal));
+
                                                     writer.write(Arrays.toString(usersFinal));
                                                     writer.println();
                                                     writer.flush();

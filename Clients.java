@@ -31,9 +31,15 @@ public class Clients {
                                     "like to create an account " +
                                     "or log-in?" + "\n" + "1. Create an account" + "\n" + "2. Log-in" + "\n" + "3. Exit",
                             "Database Searcher", JOptionPane.QUESTION_MESSAGE));
-                    writer.write(userChoice);
-                    writer.println();
-                    writer.flush();
+                    if (userChoice != 1 && userChoice != 2 && userChoice != 3) {
+                        JOptionPane.showMessageDialog(null, "Please enter a valid number!",
+                                "Database Searcher", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        String userChoiceSend = String.valueOf(userChoice);
+                        writer.write(userChoiceSend);
+                        writer.println();
+                        writer.flush();
+                    }
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Please enter a number!",
                             "Database Searcher", JOptionPane.ERROR_MESSAGE);
@@ -47,6 +53,8 @@ public class Clients {
                             case 1: {  // user creates account
                                 String firstName, lastName, email, bio, username, password;
                                 boolean isValid;
+
+                                userChoice = Integer.parseInt(reader.readLine());
 
                                 // First Name
                                 do {
@@ -148,45 +156,55 @@ public class Clients {
                                 JOptionPane.showMessageDialog(null, "Account created " +
                                                 "successfully!", "Database Searcher",
                                         JOptionPane.INFORMATION_MESSAGE);
+                                writer.write("SUCCESS");
+                                writer.println();
+                                writer.flush();
                                 break;
                             }
                             case 2: {  // User logs in
-                                File allUsersFile = new File("All_User_Info.txt");
-                                if (allUsersFile.exists()) {
-                                    boolean isLoggedIn = false;
-                                    String checker = null;
-                                    while (!isLoggedIn) {
+                                boolean allUsers = Boolean.parseBoolean(reader.readLine());
+                                boolean checker = false;
+                                if (allUsers) {
+                                    do {
                                         String username = JOptionPane.showInputDialog(null,
                                                 "Enter your username: ", "Database Searcher",
                                                 JOptionPane.QUESTION_MESSAGE);
                                         writer.write(username);
                                         writer.println();
                                         writer.flush();
+                                        String returner = reader.readLine();
+                                        if (returner.equals("YES")) {
+                                            String password = JOptionPane.showInputDialog(null,
+                                                    "Enter your password: ", "Database Searcher",
+                                                    JOptionPane.QUESTION_MESSAGE);
+                                            writer.write(password);
+                                            writer.println();
+                                            writer.flush();
 
-                                        String password = JOptionPane.showInputDialog(null,
-                                                "Enter your password: ", "Database Searcher",
-                                                JOptionPane.QUESTION_MESSAGE);
-                                        writer.write(password);
-                                        writer.println();
-                                        writer.flush();
-
-                                        checker = reader.readLine();  // Assuming 'user' is an instance capable of logging in
-                                        if (checker != null) {
-                                            JOptionPane.showMessageDialog(null, "Welcome back" +
-                                                    user.getUsername() + "!", "Database " +
-                                                    "Searcher", JOptionPane.INFORMATION_MESSAGE);
-                                        } else {
-                                            JOptionPane.showMessageDialog(null, "Invalid " +
-                                                    "username or password. Please try again.", "Database " +
-                                                    "Searcher", JOptionPane.ERROR_MESSAGE);
+                                            checker = Boolean.parseBoolean(reader.readLine());
+                                            if (checker) {
+                                                writer.write("YES");
+                                                writer.println();
+                                                writer.flush();
+                                                JOptionPane.showMessageDialog(null, "Welcome " +
+                                                        "back " + reader.readLine() + "!", "Database " +
+                                                        "Searcher", JOptionPane.INFORMATION_MESSAGE);
+                                            } else {
+                                                JOptionPane.showMessageDialog(null, "Invalid " +
+                                                        "username or password. Please try again.", "Database " +
+                                                        "Searcher", JOptionPane.ERROR_MESSAGE);
+                                            }
                                         }
-                                    }
+                                    } while(!checker);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "User database " +
                                             "not found. Please exit program and create an account", "Database " +
                                             "Searcher", JOptionPane.ERROR_MESSAGE);
                                     stay = false; // 'stay' controls whether to continue in the main loop
                                 }
+                                writer.write("SUCCESS");
+                                writer.println();
+                                writer.flush();
                                 break;
                             }
                             default: {
@@ -214,26 +232,29 @@ public class Clients {
                         writer.flush();
                     }
                 } while (userChoice != 1 && userChoice != 2 && userChoice != 3);
-                if (!User.checkMoreOneUser()) {
+
+                boolean multiple = Boolean.parseBoolean(reader.readLine());
+                writer.write(String.valueOf(multiple));
+                writer.println();
+                writer.flush();
+                if (!multiple) {
                     JOptionPane.showMessageDialog(null, "Sorry! BoilerTown cannot currently " +
                                     "be used due to less than two users existing on the platform.",
                             "Database Searcher", JOptionPane.INFORMATION_MESSAGE);
                     stay = false;
                 }
 
+                newAccount = Boolean.parseBoolean(reader.readLine());
+                writer.write(String.valueOf(newAccount));
+                writer.println();
+                writer.flush();
                 if (!newAccount) {
                     while (stay) {  // loops while user wants to do things
                         do {
-                            if (user instanceof Friends) { // user code
-                                Friends person = (Friends) user;
-
+                            boolean userFriends = Boolean.parseBoolean(reader.readLine());
+                            if (userFriends) { // user code
                                 do {
                                     try {
-                                        System.out.println("What would you like to do?");
-                                        System.out.println("1. View all BoilerTown users" + "\n" +
-                                                "2. Search BoilerTown users" + "\n" +
-                                                "3. View/Interact with your friends" + "\n" +
-                                                "4. Edit Account" + "\n" + "5. Exit");
                                         userChoice2 = Integer.parseInt(JOptionPane.showInputDialog(null,
                                                 "What would you like to do?" + "\n" + "1. View all " +
                                                         "BoilerTown users " + "\n" + "2. Search BoilerTown users" +
@@ -245,8 +266,11 @@ public class Clients {
                                         writer.flush();
                                         switch (userChoice2) {
                                             case 1: {  // searches through all users
-                                                File allUsersFile = new File("All_User_Info.txt");
-                                                if (!allUsersFile.exists()) {
+                                                boolean allUsers = Boolean.parseBoolean(reader.readLine());
+                                                writer.write(String.valueOf(allUsers));
+                                                writer.println();
+                                                writer.flush();
+                                                if (!allUsers) {
                                                     JOptionPane.showMessageDialog(null,
                                                             "ERROR! no users have been created yet!",
                                                             "Database Searcher", JOptionPane.ERROR_MESSAGE);
@@ -254,7 +278,7 @@ public class Clients {
                                                     String usersConvert = reader.readLine();
                                                     String[] users = usersConvert.split(",");
 
-                                                    if (users == null) {
+                                                    if (usersConvert.isEmpty()) {
                                                         JOptionPane.showMessageDialog(null,
                                                                 "File cannot be found!",
                                                                 "Database Searcher", JOptionPane.ERROR_MESSAGE);
@@ -291,7 +315,7 @@ public class Clients {
                                                             writer.flush();
                                                             switch (userChoice3) {
                                                                 case 1: {  // looking up a bio for a user
-                                                                    person.viewProfile(selectedUserName);
+                                                                    //person.viewProfile(selectedUserName);
                                                                     break;
                                                                 }
                                                                 case 2: { // make a friend request
@@ -460,7 +484,7 @@ public class Clients {
                                                         user.getUsername() + "'s friends list:",
                                                         "Database Searcher",
                                                         JOptionPane.INFORMATION_MESSAGE);
-                                                person.friendViewer(user.getUsername());
+                                                //person.friendViewer(user.getUsername());
 
                                                 int userChoice3 = 0;
 
@@ -477,11 +501,11 @@ public class Clients {
                                                                         JOptionPane.QUESTION_MESSAGE));
                                                         switch (userChoice3) {
                                                             case 1: {  // message your friend
-                                                                if (person.hasFriends(user.getUsername())) {
+                                                                if (userChoice3 == 1) {//person.hasFriends(user.getUsername())) {
                                                                     System.out.printf("%s's friends list:\n",
                                                                             user.getUsername());
-                                                                    ArrayList<String> friendUsernames =
-                                                                            person.friendViewer(user.getUsername());
+                                                                    //ArrayList<String> friendUsernames =
+                                                                            //person.friendViewer(user.getUsername());
                                                                     boolean validUsername = false;
                                                                     String selectedUserName;
                                                                     do {
@@ -909,7 +933,9 @@ public class Clients {
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.print("");
+        } catch (NullPointerException e) {
+            System.out.print("");
         }
     }
 

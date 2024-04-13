@@ -31,6 +31,16 @@ public class User implements UserList {
 
     private File userFile; // holds file with User's information
 
+    private File friends; // the friend list of user
+
+    private File block; // the block users list of this user
+
+    private File friendRequest; // the file of friends requests
+
+    private boolean profileView; // if the user's profile is public or private
+
+    private boolean messageCheck; // if the user want to receive the message from public or friends only
+
     // empty constructor
     public User() {
         this.firstName = null;
@@ -40,18 +50,28 @@ public class User implements UserList {
         this.username = null;
         this.password = null;
         this.userFile = null;
+        this.friends = null;
+        this.block = null;
+        this.friendRequest = null;
+        this.profileView = false;
+        this.messageCheck = false;
     }
 
     // creates custom constructor
     public User(String firstName, String lastName, String email, String bio, String username,
-                String password) {
+                String password, boolean profile, boolean message) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.bio = bio;
         this.username = username;
         this.password = password;
-        this.userFile = new File("User_" + this.username + ".txt");
+        this.userFile = null;
+        this.friends = null;
+        this.block = null;
+        this.friendRequest = null;
+        this.profileView = profile;
+        this.messageCheck = message;
     }
 
     // returns first name
@@ -84,260 +104,404 @@ public class User implements UserList {
         return this.password;
     }
 
-    // returns user file
-    public File getAccountFile() {
+    // returns the file of user
+    public File getUserFile() {
         return this.userFile;
     }
 
+    // returns the friends list of the user
+    public File getFriends() {
+        return this.friends;
+    }
+
+    // returns the blocking users of this user
+    public File getBlock() {
+        return this.block;
+    }
+
+    public File getFriendRequest() {
+        return this.friendRequest;
+    }
+
+    public boolean getProfileView() {
+        return this.profileView;
+    }
+
+    public boolean getMessageCheck() {
+        return  this.messageCheck;
+    }
+
     // sets first name
-    public void setFirstName(String firstName) {
+    public boolean setFirstName(String firstName) {
+        if (firstName == null || firstName.isEmpty() || firstName.contains(" ")) {
+            return false;
+        }
         this.firstName = firstName;
+
+        this.setAccountFile();
+        return true;
     }
 
     // sets last name
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    // sets username
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    // sets email
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    // sets bio
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    // sets password
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    // sets user file
-    public void setAccountFile() {
-        this.userFile = new File("User_" + this.username + ".txt");
-    }
-
-    // verifies first name according to limitations
-
-    // verifies if account exists for User
-    public boolean checkAccountExists(String username) {
-        File accountInfo2 = new File("User_" + username + ".txt");
-        return accountInfo2.exists();
-    }
-
-    // checks email if User decides to do so
-    public boolean checkEmail(String email) {
-        if (email == null || email.isEmpty() || !email.contains("@") || email.contains(" ") || email.charAt(email.length() - 4) != '.') {
-            System.out.println("ERROR! the email you entered was incorrectly formatted.");
-            System.out.println("Please enter an email of the form: ___@___.___ with no spaces!");
-            return false;
-        }
-        return true;
-    }
-
-    // checks bio if User decides to do so
-    public boolean checkBio(String bio) {
-        if (bio == null) {
-            System.out.println("ERROR! Please make sure your bio is between 20 to 40 characters!");
-            return false;
-        } else if (bio.isEmpty()) {
-            System.out.println("ERROR! Please make sure your bio is between 20 to 40 characters!");
-            return false;
-        } else if (bio.length() > 40) {
-            System.out.println("ERROR! Please make sure your bio is between 20 to 40 characters!");
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    // checks first name if User decides to do so
-    public boolean checkFirstName(String firstName) {
-        if (firstName == null || firstName.isEmpty() || firstName.contains(" ")) {
-            System.out.println("ERROR! Please enter your first name correctly, without spaces!");
-            return false;
-        }
-        return true;
-    }
-
-    // checks last name if User decides to do so
-    public boolean checkLastName(String lastName) {
+    public boolean setLastName(String lastName) {
         if (lastName == null || lastName.isEmpty() || lastName.contains(" ")) {
             System.out.println("ERROR! Please enter your last name correctly, without spaces!");
             return false;
         }
+        this.lastName = lastName;
+
+        this.setAccountFile();
         return true;
     }
 
-    // checks username if User decides to do so
-    public boolean checkUsername(String username) {
+    // sets username
+    public boolean setUsername(String username) throws IOException {
+        ArrayList<String> allUserNames = new ArrayList<>();
+        File file = new File("All_User_Info.txt");
+        FileReader fr = new FileReader(file);
+        BufferedReader bfr = new BufferedReader(fr);
+        String line = bfr.readLine();
+
+        while (line != null) {
+            allUserNames.add(line);
+            line = bfr.readLine();
+        }
+        bfr.close();
+
+        for (int i = 0; i < allUserNames.size(); i++) {
+            if (allUserNames.get(i).equals(username)) {
+                return false;
+            }
+        }
+
         if (username == null || username.isEmpty() || username.contains(" ")) {
-            System.out.println("ERROR! There should be no spaces in your username!");
             return false;
         }
+        allUserNames.set(allUserNames.indexOf(this.getUsername()), username);
+
+        try {
+            File allUsersFile = new File("All_User_Info.txt");
+            FileOutputStream fosAll = new FileOutputStream(allUsersFile, false);
+            PrintWriter pwAll = new PrintWriter(fosAll);
+            for (int j = 0; j < allUserNames.size(); j++) {
+                pwAll.println(allUserNames.get(j));
+            }
+            pwAll.close();
+        } catch (IOException e) {
+            return false;
+        }
+
+        File newFile = new File("User_" + username + ".txt");
+        boolean check = this.userFile.renameTo(newFile);
+        this.username = username;
+        this.setAccountFile();
+
+        return check;
+    }
+
+    // sets email
+    public boolean setEmail(String email) {
+        if (email == null || email.isEmpty() || !email.contains("@") || email.contains(" ") ||
+                email.charAt(email.length() - 4) != '.') {
+            return false;
+        }
+        this.email = email;
+
+        this.setAccountFile();
         return true;
     }
 
-    // checks password if User decides to do so
-    public boolean checkPassword(String password) {
-        if (password.length() < 4) {
-            System.out.println("ERROR! Your password must be at least 4 characters long!");
+    // sets bio
+    public boolean setBio(String bio) {
+        if (bio.length() > 50) {
             return false;
+        } else {
+            this.bio = bio;
+
+            this.setAccountFile();
+            return true;
         }
+    }
+
+    // sets password
+    public boolean setPassword(String password) {
+        if (password.length() < 4) {
+            return false;
+        } else {
+            this.password = password;
+
+            this.setAccountFile();
+            return true;
+        }
+    }
+
+    public boolean setProfileView(boolean check) {
+        this.profileView = check;
+
+        this.setAccountFile();
         return true;
     }
+
+    public boolean setMessageCheck(boolean check) {
+        this.messageCheck = check;
+
+        this.setAccountFile();
+        return true;
+    }
+    @Override
+    public boolean setAccountFile() {
+        try {
+            File userFile = new File("User_" + username + ".txt");
+            FileOutputStream fos = new FileOutputStream(userFile, false);
+            PrintWriter pw = new PrintWriter(fos);
+            pw.println("User name: " + username);
+            pw.println("Password: " + password);
+            pw.println("First name: " + firstName);
+            pw.println("Last name: " + lastName);
+            pw.println("Email: " + email);
+            pw.println("Bio: " + bio);
+            pw.println("Profile view: " + profileView);
+            pw.println("Message only: " + messageCheck);
+            pw.close();
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void setFriend(File file) {
+        this.friends = file;
+    }
+
+    public void setBlock(File file) {
+        this.block = file;
+    }
+
+    public void setFriendRequest(File file) {
+        this.friendRequest = file;
+    }
+    // verifies if account exists for User
+    public boolean checkAccountExists(String username) throws IOException {
+        ArrayList<String> allUserNames = new ArrayList<>();
+        File file = new File("All_User_Info.txt");
+        FileReader fr = new FileReader(file);
+        BufferedReader bfr = new BufferedReader(fr);
+        String line = bfr.readLine();
+
+        while (line != null) {
+            allUserNames.add(line);
+            line = bfr.readLine();
+        }
+        bfr.close();
+
+        for (int i = 0; i < allUserNames.size(); i++) {
+            if (allUserNames.get(i).equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     // creates new account based on info from scanner in main method
-    public User createAccount(String firstName, String lastName, String email, String bio, String username, String password) {
-        User user = new User(firstName, lastName, email, bio, username, password);
+    public boolean createAccount() {
+        // writing account file
+        this.userFile = new File("User_" + this.username + ".txt");
+        this.friends = new File("User_" + this.username + "_Friends.txt");
+        this.block = new File("User_" + this.username + "_Block.txt");
+        this.friendRequest = new File("User_" + this.username + "_FriendRequest.txt");
+
+        try {
+            File userFile = new File("User_" + username + ".txt");
+            FileOutputStream fos = new FileOutputStream(userFile, false);
+            PrintWriter pw = new PrintWriter(fos);
+            pw.println("User name: " + username);
+            pw.println("Password: " + password);
+            pw.println("First name: " + firstName);
+            pw.println("Last name: " + lastName);
+            pw.println("Email: " + email);
+            pw.println("Bio: " + bio);
+            pw.println("Profile view: " + profileView);
+            pw.println("Message only: " + messageCheck);
+            pw.close();
+        } catch (IOException e) {
+            return false;
+        }
+
+        try {
+            File allUsersFile = new File("All_User_Info.txt");
+            FileOutputStream fosAll = new FileOutputStream(allUsersFile, true);
+            PrintWriter pwAll = new PrintWriter(fosAll);
+            pwAll.println(username);
+            pwAll.close();
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
+    }
+    // verifies login based on info from scanner in main method
+    public User logIn(String username, String password) {
+        File allUser = new File("All_User_Info.txt");
+        int check = 0;
+
+        try {
+            FileReader fr = new FileReader(allUser);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                if (line.equals(username)) {
+                    check = 1;
+                    break;
+                }
+                line = bfr.readLine();
+            }
+            bfr.close();
+
+        } catch (Exception e) {
+            return null;
+        }
+
+        if (check == 0) {
+            return null;
+        }
 
         File userFile = new File("User_" + username + ".txt");
+        ArrayList<String> userData = new ArrayList<>();
 
-        // writing account file
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile))) {
-            bw.write(firstName + "\n");
-            bw.write(lastName + "\n");
-            bw.write(email + "\n");
-            bw.write(bio + "\n");
-            bw.write(username + "\n");
-            bw.write(password + "\n");
-        } catch (IOException e) {
-            System.out.println("File doesn't exist!");
-        }
+        try {
+            FileReader fr = new FileReader(userFile);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
 
-        File allUsersFile = new File("All_User_Info.txt");
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(allUsersFile, true))) {
-            bw.write(username + "\n");
-        } catch (IOException e) {
-            System.out.println("Was unable to write to file!");
-        }
-
-        File userFriendsFile = new File("User_" + username + "_Friends.txt");
-        if (!userFriendsFile.exists()) {
-            try {
-                userFriendsFile.createNewFile();
-            } catch (IOException e) {
-                System.out.println("File doesn't exist!");
+            while (line != null) {
+                userData.add(line);
+                line = bfr.readLine();
             }
+            bfr.close();
+        } catch (Exception e) {
+            return null;
         }
 
-        Friends member = new Friends(firstName, lastName, email, bio, username, password);
-        return member;
-    }
 
-    // edits existing account based on info from scanner in main method
-    public User editAccount(int editOption, String newValue) {
-        User newUser = new User(this.getFirstName(), this.getLastName(), this.getEmail(),
-                this.getBio(), this.getUsername(), this.getPassword());
-        // Assuming there are methods to validate the newValue based on the editOption
-        // For example, if editOption is 1, newValue is validated as a valid first name.
+        if (userData.get(0).equals(username) && userData.get(1).equals(password)) {
+            User user = new User(userData.get(0), userData.get(1), userData.get(2),
+                    userData.get(3), userData.get(4), userData.get(5),
+                    Boolean.parseBoolean(userData.get(6)), Boolean.parseBoolean(userData.get(7)));
 
-        switch (editOption) {
-            case 1:
-                this.setFirstName(newValue);
-                break;
-            case 2:
-                this.setLastName(newValue);
-                break;
-            case 3:
-                this.setBio(newValue);
-                break;
-            case 4:
-                this.setEmail(newValue);
-                break;
-            case 5:
-                this.setPassword(newValue);
-                break;
-            default:
-                System.out.println("Invalid option.");
-                return this;  // Return the current object without changes.
+            user.setAccountFile();
+            user.setFriend(new File("User_" + user.getUsername() + "_Friends.txt"));
+            user.setBlock(new File("User_" + user.getUsername() + "_Block.txt"));
+            user.setFriendRequest(new File("User_" + user.getUsername() + "_FriendRequest.txt"));
+            return user;
         }
 
-        // Update the file with new user information.
-        // Assuming the filename format and structure from your original method.
-        File userFile = new File("User_" + this.getUsername() + ".txt");
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, false))) {
-            bw.write(this.getFirstName() + "\n");
-            bw.write(this.getLastName() + "\n");
-            bw.write(this.getEmail() + "\n");
-            bw.write(this.getBio() + "\n");
-            bw.write(this.getUsername() + "\n");
-            bw.write(this.getPassword() + "\n");
-        } catch (IOException e) {
-            System.out.println("Unable to write to file!");
-        }
-
-        return newUser;
-    }
-
-    // verifies login based on info from scanner in main method
-    public User logIn(String username, String passwordInput) {
-        User user = new User();
-        String[] read = new String[6];
-        File f = new File("User_" + username + ".txt");
-
-        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
-            for (int i = 0; i < 6; i++) {
-                read[i] = bfr.readLine();
-            }
-        } catch (IOException e) {
-            System.out.println("This user does not exist.");
-            return null;  // Error reading the file
-        }
-
-        user.setFirstName(read[0]);
-        user.setLastName(read[1]);
-        user.setEmail(read[2]);
-        user.setUsername(read[3]);
-        user.setBio(read[4]);
-        user.setPassword(read[5]);
-
-        if (!passwordInput.equals(read[5])) {
-            System.out.println("Your password is incorrect.");
-            return null;  // Incorrect password
-        }
-
-        System.out.println("Log in successful");
-        return new Friends(user.getFirstName(), user.getLastName(), user.getEmail(), user.getBio(), user.getUsername(), user.getPassword());
+        return null;
     }
 
     // formats User's information in their own file
     public String toString() {
-        return firstName + "\n"
+        return username + "\n"
+                + firstName + "\n"
                 + lastName + "\n"
                 + email + "\n"
-                + bio + "\n"
-                + username + "\n"
-                + password;
+                + bio;
     }
 
-    // checks if more than one user exists on the "All_User_Info.txt" file
-    public static boolean checkMoreOneUser() {
-        File allUsersFile = new File("All_User_Info.txt");
-        ArrayList<String> users = new ArrayList<>();
-        if (allUsersFile.exists()) { // there are users to look at
-            String fileLine;
-            try (BufferedReader br = new BufferedReader(new FileReader(allUsersFile))) {
-                fileLine = br.readLine();
-                while (fileLine != null && !fileLine.trim().equals("")) {
-                    users.add(fileLine.trim());
-                    fileLine = br.readLine();
-                }
-            } catch (IOException e) {
-                return false; // Consider the check failed in case of an exception
+    public String[] viewFriends() {
+        ArrayList<String> friends = new ArrayList<>();
+        File friendFile = this.getFriends();
+
+        try {
+            FileReader fr = new FileReader(friendFile);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                friends.add(line);
+                line = bfr.readLine();
             }
-            return users.size() > 1; // Return true if more than one user exists
-        } else {
-            return false; // File doesn't exist, so definitely less than two users
+            bfr.close();
+        } catch (Exception e) {
+            return null;
         }
+
+        String[] friend = friends.toArray(new String[friends.size()]);
+        return friend;
     }
 
+    public String[] viewBlocks() {
+        ArrayList<String> blocks = new ArrayList<>();
+        File blockFile = this.getBlock();
+
+        try {
+            FileReader fr = new FileReader(blockFile);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                blocks.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return null;
+        }
+
+        String[] block = blocks.toArray(new String[blocks.size()]);
+        return block;
+    }
+
+    public String viewFile() {
+        ArrayList<String> profile = new ArrayList<>();
+
+        try {
+            File profileFile = this.getUserFile();
+            FileReader fr = new FileReader(profileFile);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                profile.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return null;
+        }
+
+        String userProfile = "";
+
+        for (int i = 0; i < profile.size(); i++) {
+            userProfile += profile.get(i) + "\n";
+        }
+
+        return userProfile;
+    }
+
+    public String[] viewAllUsers() {
+        ArrayList<String> allUsernames = new ArrayList<>();
+
+        try {
+            File allUserFile = new File("All_User_Info.txt");
+            FileReader fr = new FileReader(allUserFile);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                allUsernames.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return null;
+        }
+
+        String[] allUsers = allUsernames.toArray(new String[allUsernames.size()]);
+
+        return allUsers;
+    }
 }

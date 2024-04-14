@@ -12,7 +12,7 @@ public class Servers {
         boolean stay = true;
         boolean newAccount = false;
         User user = new User();
-        int userChoiceFinal = 0;
+        int userChoiceFinal = 2;
         String userChoice = null;
         int userChoice2 = 0;
 
@@ -104,7 +104,7 @@ public class Servers {
                             if (allUsersFile.exists()) {
                                 User loggedInUser = null;
                                 boolean isLoggedIn = false;
-                                while (!isLoggedIn) {
+                                do {
                                     String username = reader.readLine();
                                     writer.write("YES");
                                     writer.println();
@@ -126,7 +126,7 @@ public class Servers {
                                         writer.println();
                                         writer.flush();
                                     }
-                                }
+                                } while (!isLoggedIn);
                             } else {
                                 stay = false; // 'stay' controls whether to continue in the main loop
                             }
@@ -334,7 +334,10 @@ public class Servers {
                                                         fileLine = br.readLine();
                                                     }
                                                 } catch (Exception e) {
-                                                    System.out.println("Unable to find file!");
+                                                    allUsersExists = false;
+                                                    writer.write(String.valueOf(allUsersExists));
+                                                    writer.println();
+                                                    writer.flush();
                                                 }
 
                                                 // return the user that the user chooses
@@ -342,17 +345,36 @@ public class Servers {
                                                 boolean validUsername = true;
                                                 do {
                                                     selectedUserName = reader.readLine();
+                                                    String differentiate = "";
 
                                                     if (!users.contains(selectedUserName)) {
                                                         validUsername = false;
-                                                        System.out.println("ERROR! The username you entered is " +
-                                                                "not a current user!");
+                                                        writer.write(String.valueOf(validUsername));
+                                                        writer.println();
+                                                        writer.flush();
+                                                        reader.readLine();
+                                                        differentiate = "ERROR! The username you entered is " +
+                                                                "not a current user!";
+                                                        writer.write(differentiate);
+                                                        writer.println();
+                                                        writer.flush();
                                                     } else if (user.getUsername().equals(selectedUserName)) {
                                                         validUsername = false;
-                                                        System.out.println("You can't enter your own username! " +
-                                                                "Please put another username.");
+                                                        writer.write(String.valueOf(validUsername));
+                                                        writer.println();
+                                                        writer.flush();
+                                                        reader.readLine();
+                                                        differentiate = "You can't enter your own username! " +
+                                                                "Please put another username.";
+                                                        writer.write(differentiate);
+                                                        writer.println();
+                                                        writer.flush();
                                                     } else {
                                                         validUsername = true;
+                                                        writer.write(String.valueOf(validUsername));
+                                                        writer.println();
+                                                        writer.flush();
+                                                        reader.readLine();
                                                     }
                                                     writer.write(String.valueOf(validUsername));
                                                     writer.println();
@@ -365,7 +387,61 @@ public class Servers {
                                                     try {
                                                         switch (userChoice3) {
                                                             case 1: {  // looking up information of a user
-                                                                person.viewProfile(selectedUserName);
+                                                                File f = new File("User_" + selectedUserName + ".txt");
+                                                                boolean userExists = f.exists();
+                                                                writer.write(String.valueOf(userExists));
+                                                                writer.println();
+                                                                writer.flush();
+                                                                reader.readLine();
+                                                                if (f.exists()) {
+                                                                    try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+                                                                        String line;
+                                                                        int lineNumber = 0;
+                                                                        String firstName = "";
+                                                                        String lastName = "";
+                                                                        String bio = "";
+                                                                        String username = "";
+                                                                        while ((line = bfr.readLine()) != null) {
+                                                                            lineNumber++;
+                                                                            if (lineNumber == 1) { // Store the 4th line (bio)
+                                                                                firstName = line;
+                                                                                writer.write(firstName);
+                                                                                writer.println();
+                                                                                writer.flush();
+                                                                                reader.readLine();
+                                                                            }
+                                                                            if (lineNumber == 2) { // Store the 4th line (bio)
+                                                                                lastName = line;
+                                                                                writer.write(lastName);
+                                                                                writer.println();
+                                                                                writer.flush();
+                                                                                reader.readLine();
+                                                                            }
+                                                                            // Store the 4th line (bio)
+                                                                            if (lineNumber == 4) {
+                                                                                bio = line;
+                                                                                writer.write(bio);
+                                                                                writer.println();
+                                                                                writer.flush();
+                                                                                reader.readLine();
+                                                                            }
+                                                                            // Store the 5th line (username)
+                                                                            if (lineNumber == 5) {
+                                                                                username = line;
+                                                                                writer.write(username);
+                                                                                writer.println();
+                                                                                writer.flush();
+                                                                                reader.readLine();
+                                                                            }
+                                                                        }
+                                                                    } catch (IOException e) {
+                                                                        userExists = false;
+                                                                        writer.write(String.valueOf(userExists));
+                                                                        writer.println();
+                                                                        writer.flush();
+                                                                        reader.readLine();
+                                                                    }
+                                                                }
                                                                 break;
                                                             }
                                                             case 2: { // make a friend request
@@ -385,6 +461,9 @@ public class Servers {
                                                                     String message = reader.readLine();
                                                                     person.makeFriendRequest(message, selectedUserName,
                                                                             user.getUsername());
+                                                                    writer.write("confirm");
+                                                                    writer.println();
+                                                                    writer.flush();
                                                                 }
                                                                 break;
                                                             }
@@ -405,16 +484,26 @@ public class Servers {
                                         }
 
                                         case 3: {  // View all your friends
-                                            int userChoice3 = Integer.parseInt(reader.readLine());
+                                            int userChoice3 = 0;
 
                                             do {
                                                 try {
                                                     userChoice3 = Integer.parseInt(reader.readLine());
+
+                                                    person.friendViewer(user.getUsername());
+
                                                     switch (userChoice3) {
                                                         case 1: {  // message your friend
+                                                            writer.write(user.getUsername());
+                                                            writer.println();
+                                                            writer.flush();
+                                                            reader.readLine();
+
+                                                            boolean friends = person.hasFriends(user.getUsername());
+                                                            writer.write(String.valueOf(friends));
+                                                            writer.println();
+                                                            writer.flush();
                                                             if (person.hasFriends(user.getUsername())) {
-                                                                System.out.printf("%s's friends list:\n",
-                                                                        user.getUsername());
                                                                 ArrayList<String> friendUsernames =
                                                                         person.friendViewer(user.getUsername());
                                                                 boolean validUsername = false;
@@ -449,7 +538,7 @@ public class Servers {
                                                                         BufferedReader bfr = new BufferedReader(fr);
                                                                         String line = bfr.readLine();
                                                                         while (line != null) {
-                                                                            System.out.println(line);
+                                                                            //System.out.println(line);
                                                                             line = bfr.readLine();
                                                                         }
                                                                     } catch (Exception e) {
@@ -666,13 +755,14 @@ public class Servers {
                             } while (userChoice2 != 1 && userChoice2 != 2 && userChoice2 != 3 && userChoice2 != 4 &&
                                     userChoice2 != 5);
                         }
-                        if (!stay) {
+                        // is server supposed to be in continuous loop?
+                        /*if (!stay) {
                             do {
                                 userChoiceFinal = Integer.parseInt(reader.readLine());
                             } while (userChoiceFinal != 1 && userChoiceFinal != 2);
                         } else {
                             userChoiceFinal = 2;
-                        }
+                        }*/
                     } while (userChoiceFinal == 2);
                 }
             }

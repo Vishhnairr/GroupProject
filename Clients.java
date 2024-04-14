@@ -194,6 +194,9 @@ public class Clients {
                                                 JOptionPane.showMessageDialog(null, "Invalid " +
                                                         "username or password. Please try again.", "Database " +
                                                         "Searcher", JOptionPane.ERROR_MESSAGE);
+                                                writer.write("NO");
+                                                writer.println();
+                                                writer.flush();
                                             }
                                         }
                                     } while(!checker);
@@ -216,7 +219,7 @@ public class Clients {
                                         "Would you like to create an account or log-in?" + "\n" + "1. " +
                                                 "Create an account" + "\n" + "2. Log-in" + "\n" + "3. Exit",
                                         "Database Searcher", JOptionPane.QUESTION_MESSAGE));
-                                writer.write(userChoice);
+                                writer.write(String.valueOf(userChoice));
                                 writer.println();
                                 writer.flush();
                             }
@@ -228,7 +231,7 @@ public class Clients {
                                 "Would you like to create an account or log-in?" + "\n" + "1. Create " +
                                         "an account" + "\n" + "2. Log-in" + "\n" + "3. Exit",
                                 "Database Searcher", JOptionPane.QUESTION_MESSAGE));
-                        writer.write(userChoice);
+                        writer.write(String.valueOf(userChoice));
                         writer.println();
                         writer.flush();
                     }
@@ -401,7 +404,7 @@ public class Clients {
                                                                                             "request" + "\n" + "3. Exit",
                                                                                     "Database Searcher",
                                                                                     JOptionPane.QUESTION_MESSAGE));
-                                                                    writer.write(userChoice3);
+                                                                    writer.write(String.valueOf(userChoice3));
                                                                     writer.println();
                                                                     writer.flush();
                                                                 }
@@ -451,6 +454,26 @@ public class Clients {
                                                         writer.flush();
 
                                                         validUsername = Boolean.parseBoolean(reader.readLine());
+                                                        writer.write(String.valueOf(validUsername));
+                                                        writer.println();
+                                                        writer.flush();
+                                                        String differentiate = reader.readLine();
+                                                        if (differentiate.equals("ERROR! The username you entered is " +
+                                                                "not a current user!")) {
+                                                            JOptionPane.showMessageDialog(null,
+                                                                    "ERROR! The user you entered is not " +
+                                                                            "a current user!",
+                                                                    "Database Searcher",
+                                                                    JOptionPane.ERROR_MESSAGE);
+                                                        }
+                                                        if (differentiate.equals("You can't enter your own username! " +
+                                                                "Please put another username.")) {
+                                                            JOptionPane.showMessageDialog(null,
+                                                                    "You can't enter your own username!" +
+                                                                            "Please put another username.",
+                                                                    "Database Searcher",
+                                                                    JOptionPane.ERROR_MESSAGE);
+                                                        }
                                                     } while (!validUsername);
 
                                                     int userChoice3 = 0;
@@ -463,19 +486,61 @@ public class Clients {
                                                                                 "request" + "\n" + "3. Exit",
                                                                         "Database Searcher",
                                                                         JOptionPane.QUESTION_MESSAGE));
-                                                        writer.write(userChoice3);
+                                                        writer.write(String.valueOf(userChoice3));
                                                         writer.println();
                                                         writer.flush();
                                                         try {
                                                             switch (userChoice3) {
                                                                 case 1: {  // looking up information of a user
+                                                                    boolean userExists = Boolean.parseBoolean(reader.readLine());
+                                                                    writer.write("SUCCESS");
+                                                                    writer.println();
+                                                                    writer.flush();
+
+                                                                    String firstName = "";
+                                                                    String lastName = "";
+                                                                    String bio = "";
+                                                                    String username = "";
+                                                                    if (userExists) {
+                                                                        firstName = reader.readLine();
+                                                                        writer.write(firstName);
+                                                                        writer.println();
+                                                                        writer.flush();
+
+                                                                        lastName = reader.readLine();
+                                                                        writer.write(lastName);
+                                                                        writer.println();
+                                                                        writer.flush();
+
+                                                                        bio = reader.readLine();
+                                                                        writer.write(bio);
+                                                                        writer.println();
+                                                                        writer.flush();
+
+                                                                        username = reader.readLine();
+                                                                        writer.write(username);
+                                                                        writer.println();
+                                                                        writer.flush();
+
+                                                                        JOptionPane.showMessageDialog(null,
+                                                                                selectedUserName + "'s Profile" +
+                                                                                        "\n" + "Name: " + firstName +
+                                                                                        " " + lastName + "\n" +
+                                                                                        "Username: " + username + "\n" +
+                                                                                        "Bio: " + bio,
+                                                                                "Database Searcher",
+                                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                                    } else {
+                                                                        JOptionPane.showMessageDialog(null,
+                                                                                "The profile file for" +
+                                                                                        selectedUserName + " does not exist.",
+                                                                                "Database Searcher", JOptionPane.ERROR_MESSAGE);
+                                                                    }
                                                                     break;
                                                                 }
                                                                 case 2: { // make a friend request
                                                                     boolean target = Boolean.parseBoolean(reader.readLine());
                                                                     if (target) {
-                                                                        System.out.printf("What would you like to say to %s?\n",
-                                                                                selectedUserName);
                                                                         String message = JOptionPane.
                                                                                 showInputDialog(null,
                                                                                         "What would you like" +
@@ -486,6 +551,14 @@ public class Clients {
                                                                         writer.write(message);
                                                                         writer.println();
                                                                         writer.flush();
+                                                                        String confirm = reader.readLine();
+                                                                        if (confirm.equals("confirm")) {
+                                                                            JOptionPane.showMessageDialog(null,
+                                                                                    "Request Sent!",
+                                                                                    "Database Searcher",
+                                                                                    JOptionPane.INFORMATION_MESSAGE);
+                                                                        }
+
                                                                     } else {
                                                                         JOptionPane.showMessageDialog(null,
                                                                                 selectedUserName + " does not" +
@@ -509,7 +582,7 @@ public class Clients {
                                                                                             "request" + "\n" + "3. Exit",
                                                                                     "Database Searcher",
                                                                                     JOptionPane.QUESTION_MESSAGE));
-                                                                    writer.write(userChoice3);
+                                                                    writer.write(String.valueOf(userChoice3));
                                                                     writer.println();
                                                                     writer.flush();
                                                                 }
@@ -523,7 +596,7 @@ public class Clients {
                                                                                     "request" + "\n" + "3. Exit",
                                                                             "Database Searcher",
                                                                             JOptionPane.QUESTION_MESSAGE));
-                                                            writer.write(userChoice3);
+                                                            writer.write(String.valueOf(userChoice3));
                                                             writer.println();
                                                             writer.flush();
                                                         }
@@ -533,11 +606,6 @@ public class Clients {
                                             }
 
                                             case 3: {  // View all your friends
-                                                JOptionPane.showMessageDialog(null,
-                                                        user.getUsername() + "'s friends list:",
-                                                        "Database Searcher",
-                                                        JOptionPane.INFORMATION_MESSAGE);
-                                                //person.friendViewer(user.getUsername());
 
                                                 int userChoice3 = 0;
 
@@ -552,13 +620,24 @@ public class Clients {
                                                                                 "4. Block a friend" + "\n" + "5. Exit",
                                                                         "Database Searcher",
                                                                         JOptionPane.QUESTION_MESSAGE));
+                                                        writer.write(String.valueOf(userChoice3));
+                                                        writer.println();
+                                                        writer.flush();
+
                                                         switch (userChoice3) {
                                                             case 1: {  // message your friend
-                                                                if (userChoice3 == 1) {//person.hasFriends(user.getUsername())) {
-                                                                    System.out.printf("%s's friends list:\n",
-                                                                            user.getUsername());
-                                                                    //ArrayList<String> friendUsernames =
-                                                                            //person.friendViewer(user.getUsername());
+                                                                String nameOfUser = reader.readLine();
+                                                                writer.write(nameOfUser);
+                                                                writer.println();
+                                                                writer.flush();
+
+                                                                boolean friend = Boolean.parseBoolean(reader.readLine());
+                                                                if (friend) {
+                                                                    JOptionPane.showMessageDialog(null,
+                                                                            nameOfUser + "'s friends list:",
+                                                                            "Database Searcher",
+                                                                            JOptionPane.INFORMATION_MESSAGE);
+
                                                                     boolean validUsername = false;
                                                                     String selectedUserName;
                                                                     do {
@@ -658,7 +737,7 @@ public class Clients {
                                                                 } else {
                                                                     JOptionPane.showMessageDialog(null,
                                                                             "Sorry! You currently don't have" +
-                                                                                    "any friends.",
+                                                                                    " any friends.",
                                                                             "Database Searcher",
                                                                             JOptionPane.INFORMATION_MESSAGE);
                                                                 }
@@ -670,7 +749,7 @@ public class Clients {
                                                                 if (!client) {
                                                                     JOptionPane.showMessageDialog(null,
                                                                             "You have no friend requests at" +
-                                                                                    "this time.",
+                                                                                    " this time.",
                                                                             "Database Searcher",
                                                                             JOptionPane.INFORMATION_MESSAGE);
                                                                 } else {
@@ -748,14 +827,14 @@ public class Clients {
                                                                         JOptionPane.showMessageDialog(null,
                                                                                 "You can only select" +
                                                                                         "usernames that you are" +
-                                                                                        "friends with.",
+                                                                                        " friends with.",
                                                                                 "Database Searcher",
                                                                                 JOptionPane.INFORMATION_MESSAGE);
                                                                     }
                                                                 } else {
                                                                     JOptionPane.showMessageDialog(null,
                                                                             "Sorry! You currently don't have" +
-                                                                                    "any friends.",
+                                                                                    " any friends.",
                                                                             "Database Searcher",
                                                                             JOptionPane.INFORMATION_MESSAGE);
                                                                 }
@@ -799,7 +878,7 @@ public class Clients {
                                                                     "Email\n5. Password",
                                                             "Database Searcher",
                                                             JOptionPane.QUESTION_MESSAGE));
-                                                    writer.write(editOption);
+                                                    writer.write(String.valueOf(editOption));
                                                     writer.println();
                                                     writer.flush();
 
@@ -936,7 +1015,7 @@ public class Clients {
                                                                 "\n" + "3. View/Interact with your friends" + "\n" + "4. Edit Account" +
                                                                 "\n" + "5. Exit", "Database Searcher",
                                                         JOptionPane.QUESTION_MESSAGE));
-                                                writer.write(userChoice2);
+                                                writer.write(String.valueOf(userChoice2));
                                                 writer.println();
                                                 writer.flush();
                                             }
@@ -962,28 +1041,29 @@ public class Clients {
                                                 "Database Searcher",
                                                 JOptionPane.INFORMATION_MESSAGE);
                                     }
-                                } while (userChoiceFinal != 1 && userChoiceFinal != 2);
+                                } while (userChoiceFinal != JOptionPane.YES_OPTION && userChoiceFinal !=
+                                        JOptionPane.NO_OPTION);
                             } else {
-                                userChoiceFinal = 2;
+                                userChoiceFinal = JOptionPane.NO_OPTION;
                             }
-                        } while (userChoiceFinal == 2);
+                        } while (userChoiceFinal == JOptionPane.NO_OPTION);
                     }
                 } else { // if there aren't enough users, the program will close
                     JOptionPane.showMessageDialog(null,
                             "Thank you for making an account! Please log back in to access app features!",
                             "Database Searcher",
-                            JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
 
                 JOptionPane.showMessageDialog(null,
                         "Goodbye! You have been logged out.",
                         "Database Searcher",
-                        JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Goodbye! You have been logged out.",
                         "Database Searcher",
-                        JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (IOException e) {
             System.out.print("");

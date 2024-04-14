@@ -504,4 +504,25 @@ public class User implements UserList {
 
         return allUsers;
     }
+
+    public boolean searchUser(String searchName) {
+        try {
+            File allUser = new File("All_User_Info.txt");
+            FileReader fr = new FileReader(allUser);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                if (line.equals(searchName)) {
+                    return true;
+                }
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return false;
+        }
+
+        return false;
+    }
 }

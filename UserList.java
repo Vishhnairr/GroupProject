@@ -21,46 +21,53 @@ public interface UserList {
 
     String getPassword();
 
-    File getAccountFile();
+    File getUserFile();
 
-    void setFirstName(String firstName);
+    File getFriends();
 
-    void setLastName(String lastName);
+    File getBlock();
 
-    void setUsername(String username);
+    File getFriendRequest();
 
-    void setEmail(String email);
+    boolean getProfileView();
 
-    void setBio(String bio);
+    boolean getMessageCheck();
 
-    void setPassword(String password);
+    boolean setFirstName(String firstName);
 
-    void setAccountFile();
+    boolean setLastName(String lastName);
 
-    boolean checkAccountExists(String username);
+    boolean setUsername(String username) throws IOException;
 
-    boolean checkEmail(String email);
+    boolean setEmail(String email);
 
-    boolean checkBio(String bio);
+    boolean setBio(String bio);
 
-    boolean checkFirstName(String firstName);
+    boolean setPassword(String password);
 
-    boolean checkLastName(String lastName);
+    boolean setProfileView(boolean check);
 
-    boolean checkUsername(String username);
+    boolean setMessageCheck(boolean check);
 
-    boolean checkPassword(String password);
+    boolean setAccountFile();
 
-    User createAccount(String firstName, String lastName, String email, String bio, String username, String password);
+    boolean checkAccountExists() throws IOException;
 
-    User editAccount(int editOption, String newValue);
+    boolean createAccount();
 
-    User logIn(String username, String passwordInput);
+    User logIn();
 
     String toString();
 
-    static boolean checkMoreOneUser() {
-        return false;
-    }
+    String[] viewFriendsRequest();
 
+    String[] viewFriends();
+
+    String[] viewBlocks();
+
+    String viewFile();
+
+    String[] viewAllUsers();
+
+    boolean searchUser(String searchName);
 }

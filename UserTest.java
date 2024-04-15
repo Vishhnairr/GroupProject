@@ -1,86 +1,265 @@
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.io.*;
+import java.util.ArrayList;
 
 public class UserTest {
 
-    private User user;
-    @Mock private File fileMock;
-    @Mock private FileOutputStream fosMock;
-    @Mock private PrintWriter pwMock;
-    @Mock private FileReader frMock;
-    @Mock private BufferedReader bfrMock;
+    @Test
+    public void testUserConstructor() {
+        try {
+            User user = new User("username", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        user = new User("johndoe", "password123", "John", "Doe", "john@example.com", "Bio", true, false);
-
-        // Setup common mocks
-        when(new File(anyString())).thenReturn(fileMock);
-        when(new FileOutputStream(any(File.class), anyBoolean())).thenReturn(fosMock);
-        when(new PrintWriter(any(FileOutputStream.class))).thenReturn(pwMock);
-        when(new FileReader(any(File.class))).thenReturn(frMock);
-        when(new BufferedReader(any(FileReader.class))).thenReturn(bfrMock);
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testConstructorAndGetters() {
-        assertEquals("johndoe", user.getUsername());
-        assertEquals("password123", user.getPassword());
+    public void testCreateAccount() {
+        try {
+            User user = new User("Creusername", "Crethisispassword",
+                    "Crefirst", "Crelast", "Creemail@gmail.com",
+                    "This is a short bio for Cre.", true, true);
+
+            User another = new User("AnoCreusername", "AnoCrethisispassword",
+                    "AnoCerfirst", "AnoCreLast", "AnoCreemail@gmail.com",
+                    "This is an another short bio for ano Cre.", true, false);
+
+            if (!user.createAccount()) {
+                Assert.fail();
+            }
+
+            if (!another.createAccount()) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testSetUsernameSuccessful() throws Exception {
-        when(bfrMock.readLine()).thenReturn(null);
-        assertTrue(user.setUsername("janedoe"));
-        verify(pwMock).println("janedoe");
+    public void testCheckAccountExist() {
+        try {
+            User user = new User("username", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            if (!user.checkAccountExists()) {
+                Assert.fail();
+            }
+
+            if (!another.checkAccountExists()) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testSetUsernameFailure() throws Exception {
-        when(bfrMock.readLine()).thenReturn("johndoe", (String) null);
-        assertFalse(user.setUsername("johndoe")); // Username already exists
+    public void testLogIn() {
+        try {
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            User logInUser = new User("Anousername", "Anothisispassword");
+            User testUser = logInUser.logIn();
+
+            //test if log in correctly
+            Assert.assertNotNull(testUser);
+            Assert.assertEquals(logInUser.getUsername(), testUser.getUsername());
+            Assert.assertEquals(logInUser.getPassword(), testUser.getPassword());
+
+            //test if log in incorrectly
+            User wrongUser = new User("wrongname", "wrongpassword").logIn();
+            Assert.assertNull(wrongUser);
+
+        } catch (Exception e) {
+            Assert.fail();
+        }
+      
+    public void testViewFile() {
+        try {
+            User user = new User("username", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            String userProfile = "User name: username\n" + "Password: thisispassword\n"
+                    + "First name: First\n" + "Last name: Last\n" + "Email: email@gmail.com\n"
+                    + "Bio: This is a short bio.\n" + "Profile view: true\n" + "Message only: true";
+
+            String anotherProfile = "User name: Anousername\n" + "Password: Anothisispassword\n"
+                    + "First name: Anofirst\n" + "Last name: AnoLast\n" + "Email: Anoemail@gmail.com\n"
+                    + "Bio: This is an another short bio.\n" + "Profile view: true\n" + "Message only: false";
+
+            if (!user.viewFile().equals(userProfile)) {
+                Assert.fail();
+            }
+
+            if (!another.viewFile().equals(anotherProfile)) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testCreateAccountInvalidData() {
-        User invalidUser = new User("johndoe", "", "John", "", "john@example.com", "Bio", true, false);
-        assertFalse(invalidUser.createAccount());
+    public void testSearchUser() {
+        try {
+            User user = new User("username", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            user.createAccount();
+            another.createAccount();
+            if (!user.searchUser(another.getUsername())) {
+                Assert.fail();
+            }
+
+            if (!another.searchUser(user.getUsername())) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testCreateAccountValidData() throws Exception {
-        when(bfrMock.readLine()).thenReturn(null); // Username not found in the file
-        assertTrue(user.createAccount());
-        verify(pwMock).println("User name: johndoe");
+    public void testSetUsername() {
+        try {
+            User user = new User("testsetusername", "thisispassword",
+                    "TestFirst", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            user.createAccount();
+            another.createAccount();
+            if (!user.setUsername("settestname")) {
+                Assert.fail();
+            }
+
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testLogInSuccess() throws Exception {
-        when(bfrMock.readLine()).thenReturn("User name: johndoe", "Password: password123", "First name: John", "Last name: Doe", "Email: john@example.com", "Bio: Bio", "Profile view: true", "Message only: false", null);
-        assertNotNull(user.logIn());
+    public void testViewFriendRequest() {
+        try {
+            User user = new User("setFRname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("AnoFRusername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            user.createAccount();
+            another.createAccount();
+
+            Friends friends = new Friends(user, another.getUsername());
+            friends.makeFriendRequest();
+
+            String[] frForAno = {user.getUsername()};
+            Assert.assertEquals(frForAno, another.viewFriendsRequest());
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+    @Test
+    public void testViewFriends() {
+        try {
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            user.createAccount();
+            another.createAccount();
+            Friends friends = new Friends(user, another.getUsername());
+            Friends friends1 = new Friends(another, user.getUsername());
+
+            friends.makeFriendRequest();
+            friends1.addFriend();
+
+            String[] expectForUser = {"Anousername"};
+            String[] expectForAnother = {"setname"};
+
+            Assert.assertEquals(expectForUser, user.viewFriends());
+            Assert.assertEquals(expectForAnother, another.viewFriends());
+
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testLogInFailure() throws Exception {
-        when(bfrMock.readLine()).thenReturn("User name: johndoe", "Password: wrongpassword", null);
-        assertNull(user.logIn());
+    public void testViewBlocks() {
+        try {
+
+            User another = new User("AnoBlousername", "AnoBlothisispassword",
+                    "AnoBlofirst", "AnoBloLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+
+            User blockUser = new User("Blousername", "Blothisispassword", "Blofirst",
+                    "BlooLast", "Bloemail@gmail.com",
+                    "This is an another short bio for block.", true, false);
+
+            another.createAccount();
+            blockUser.createAccount();
+
+            Friends friends = new Friends(another, blockUser.getUsername());
+            friends.blockUser();
+
+            String[] block = {"Blousername"};
+            Assert.assertEquals(block, another.viewBlocks());
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void testViewFriendsRequests() throws Exception {
-        when(bfrMock.readLine()).thenReturn("Alice", "Bob", null);
-        String[] requests = user.viewFriendsRequest();
-        assertNotNull(requests);
-        assertEquals(2, requests.length);
-        assertEquals("Alice", requests[0]);
-        assertEquals("Bob", requests[1]);
+    public void testViewAllUsers() {
+        try{
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            user.createAccount();
+
+            String[] allUsers = {"setname"};
+
+            Assert.assertEquals(allUsers, user.viewAllUsers());
+
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
+
 }

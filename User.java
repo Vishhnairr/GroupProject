@@ -58,8 +58,8 @@ public class User implements UserList {
     }
 
     // creates custom constructor
-    public User(String firstName, String lastName, String email, String bio, String username,
-                String password, boolean profile, boolean message) {
+    public User(String username, String password, String firstName, String lastName, String email, String bio,
+                boolean profile, boolean message) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -72,6 +72,11 @@ public class User implements UserList {
         this.friendRequest = null;
         this.profileView = profile;
         this.messageCheck = message;
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     // returns first name
@@ -145,7 +150,6 @@ public class User implements UserList {
     // sets last name
     public boolean setLastName(String lastName) {
         if (lastName == null || lastName.isEmpty() || lastName.contains(" ")) {
-            System.out.println("ERROR! Please enter your last name correctly, without spaces!");
             return false;
         }
         this.lastName = lastName;
@@ -155,18 +159,23 @@ public class User implements UserList {
     }
 
     // sets username
-    public boolean setUsername(String username) throws IOException {
+    public boolean setUsername(String username) {
         ArrayList<String> allUserNames = new ArrayList<>();
-        File file = new File("All_User_Info.txt");
-        FileReader fr = new FileReader(file);
-        BufferedReader bfr = new BufferedReader(fr);
-        String line = bfr.readLine();
+        try {
+            File file = new File("All_User_Info.txt");
+            FileReader fr = new FileReader(file);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
 
-        while (line != null) {
-            allUserNames.add(line);
-            line = bfr.readLine();
+            while (line != null) {
+                allUserNames.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return false;
         }
-        bfr.close();
+
 
         for (int i = 0; i < allUserNames.size(); i++) {
             if (allUserNames.get(i).equals(username)) {
@@ -174,10 +183,12 @@ public class User implements UserList {
             }
         }
 
+
         if (username == null || username.isEmpty() || username.contains(" ")) {
             return false;
         }
         allUserNames.set(allUserNames.indexOf(this.getUsername()), username);
+
 
         try {
             File allUsersFile = new File("All_User_Info.txt");
@@ -187,12 +198,14 @@ public class User implements UserList {
                 pwAll.println(allUserNames.get(j));
             }
             pwAll.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             return false;
         }
 
+
         File newFile = new File("User_" + username + ".txt");
-        boolean check = this.userFile.renameTo(newFile);
+        File userFile = new File("User_" + this.username + ".txt");
+        boolean check = userFile.renameTo(newFile);
         this.username = username;
         this.setAccountFile();
 
@@ -267,6 +280,7 @@ public class User implements UserList {
             return false;
         }
 
+        this.userFile = new File("User_" + username + ".txt");
         return true;
     }
 
@@ -282,7 +296,7 @@ public class User implements UserList {
         this.friendRequest = file;
     }
     // verifies if account exists for User
-    public boolean checkAccountExists(String username) throws IOException {
+    public boolean checkAccountExists() throws IOException {
         ArrayList<String> allUserNames = new ArrayList<>();
         File file = new File("All_User_Info.txt");
         FileReader fr = new FileReader(file);
@@ -296,7 +310,7 @@ public class User implements UserList {
         bfr.close();
 
         for (int i = 0; i < allUserNames.size(); i++) {
-            if (allUserNames.get(i).equals(username)) {
+            if (allUserNames.get(i).equals(this.username)) {
                 return true;
             }
         }
@@ -307,6 +321,52 @@ public class User implements UserList {
 
     // creates new account based on info from scanner in main method
     public boolean createAccount() {
+        if (this.firstName == null || this.firstName.isEmpty() || this.firstName.contains(" ")) {
+            return false;
+        }
+
+        if (lastName == null || lastName.isEmpty() || lastName.contains(" ")) {
+            return false;
+        }
+
+        if (password.length() < 4) {
+            return false;
+        }
+
+        if (bio.length() > 50) {
+            return false;
+        }
+
+        if (email == null || email.isEmpty() || !email.contains("@") || email.contains(" ") ||
+                email.charAt(email.length() - 4) != '.') {
+            return false;
+        }
+
+        ArrayList<String> allUserNames = new ArrayList<>();
+        try {
+            File file = new File("All_User_Info.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileReader fr = new FileReader(file);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                allUserNames.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return false;
+        }
+
+        for (int i = 0; i < allUserNames.size(); i++) {
+            if (allUserNames.get(i).equals(username)) {
+                return false;
+            }
+        }
+
         // writing account file
         this.userFile = new File("User_" + this.username + ".txt");
         this.friends = new File("User_" + this.username + "_Friends.txt");
@@ -343,7 +403,7 @@ public class User implements UserList {
         return true;
     }
     // verifies login based on info from scanner in main method
-    public User logIn(String username, String password) {
+    public User logIn() {
         File allUser = new File("All_User_Info.txt");
         int check = 0;
 
@@ -378,7 +438,7 @@ public class User implements UserList {
             String line = bfr.readLine();
 
             while (line != null) {
-                userData.add(line);
+                userData.add(line.substring(line.indexOf(": ") + 1).trim());
                 line = bfr.readLine();
             }
             bfr.close();
@@ -386,36 +446,40 @@ public class User implements UserList {
             return null;
         }
 
+        User user = null;
+        if (userData.size() == 8) {
+            if (userData.get(1).equals(password)) {
+                user = new User(userData.get(0), userData.get(1), userData.get(2),
+                        userData.get(3), userData.get(4), userData.get(5),
+                        Boolean.parseBoolean(userData.get(6)), Boolean.parseBoolean(userData.get(7)));
 
-        if (userData.get(0).equals(username) && userData.get(1).equals(password)) {
-            User user = new User(userData.get(0), userData.get(1), userData.get(2),
-                    userData.get(3), userData.get(4), userData.get(5),
-                    Boolean.parseBoolean(userData.get(6)), Boolean.parseBoolean(userData.get(7)));
-
-            user.setAccountFile();
-            user.setFriend(new File("User_" + user.getUsername() + "_Friends.txt"));
-            user.setBlock(new File("User_" + user.getUsername() + "_Block.txt"));
-            user.setFriendRequest(new File("User_" + user.getUsername() + "_FriendRequest.txt"));
-            return user;
+                user.setAccountFile();
+                user.setFriend(new File("User_" + user.getUsername() + "_Friends.txt"));
+                user.setBlock(new File("User_" + user.getUsername() + "_Block.txt"));
+                user.setFriendRequest(new File("User_" + user.getUsername() + "_FriendRequest.txt"));
+            }
         }
 
-        return null;
+        return user;
     }
 
     // formats User's information in their own file
     public String toString() {
-        return username + "\n"
-                + firstName + "\n"
-                + lastName + "\n"
-                + email + "\n"
-                + bio;
+        return "Username: " + username + "\n"
+                + "First name: " + firstName + "\n"
+                + "Last name: " + lastName + "\n"
+                + "Email: " + email + "\n"
+                + "Bio: " +bio;
     }
 
     public String[] viewFriends() {
         ArrayList<String> friends = new ArrayList<>();
-        File friendFile = this.getFriends();
 
         try {
+            File friendFile = new File("User_" + this.username + "_Friends.txt");
+            if (!friendFile.exists()) {
+                friendFile.createNewFile();
+            }
             FileReader fr = new FileReader(friendFile);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
@@ -435,9 +499,12 @@ public class User implements UserList {
 
     public String[] viewBlocks() {
         ArrayList<String> blocks = new ArrayList<>();
-        File blockFile = this.getBlock();
 
         try {
+            File blockFile = new File("User_" + this.username + "_Block.txt");
+            if (!blockFile.exists()) {
+                blockFile.createNewFile();
+            }
             FileReader fr = new FileReader(blockFile);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
@@ -459,7 +526,7 @@ public class User implements UserList {
         ArrayList<String> profile = new ArrayList<>();
 
         try {
-            File profileFile = this.getUserFile();
+            File profileFile = new File("User_" + this.username + ".txt");
             FileReader fr = new FileReader(profileFile);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
@@ -470,13 +537,18 @@ public class User implements UserList {
             }
             bfr.close();
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
         String userProfile = "";
 
         for (int i = 0; i < profile.size(); i++) {
-            userProfile += profile.get(i) + "\n";
+            if (i == profile.size() - 1) {
+                userProfile += profile.get(i);
+            } else {
+                userProfile += profile.get(i) + "\n";
+            }
         }
 
         return userProfile;
@@ -487,6 +559,9 @@ public class User implements UserList {
 
         try {
             File allUserFile = new File("All_User_Info.txt");
+            if (!allUserFile.exists()) {
+                allUserFile.createNewFile();
+            }
             FileReader fr = new FileReader(allUserFile);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
@@ -497,7 +572,8 @@ public class User implements UserList {
             }
             bfr.close();
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            return new String[0];
         }
 
         String[] allUsers = allUsernames.toArray(new String[allUsernames.size()]);

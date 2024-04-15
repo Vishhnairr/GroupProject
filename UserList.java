@@ -51,11 +51,11 @@ public interface UserList {
 
     boolean setAccountFile();
 
-    boolean checkAccountExists(String username) throws IOException;
+    boolean checkAccountExists() throws IOException;
 
     boolean createAccount();
 
-    User logIn(String username, String passwordInput);
+    User logIn();
 
     String toString();
 
@@ -66,4 +66,6 @@ public interface UserList {
     String viewFile();
 
     String[] viewAllUsers();
+
+    boolean searchUser(String searchName);
 }

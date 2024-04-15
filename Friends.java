@@ -70,8 +70,12 @@ public class Friends implements FriendList{
         if (!this.verifyUser()) {
             return false;
         }
-        File friendFile = this.user.getFriends();
+
         try {
+            File friendFile = new File("User_" + this.user.getUsername() + "_Friends.txt");
+            if (!friendFile.exists()) {
+                friendFile.createNewFile();
+            }
             FileReader fr = new FileReader(friendFile);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
@@ -87,8 +91,12 @@ public class Friends implements FriendList{
             return false;
         }
 
-        File blockFile = this.user.getBlock();
+
         try {
+            File blockFile = new File("User_" + this.user.getUsername() + "_Block.txt");
+            if (!blockFile.exists()) {
+                blockFile.createNewFile();
+            }
             FileReader fr = new FileReader(blockFile);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
@@ -105,7 +113,11 @@ public class Friends implements FriendList{
         }
 
         try {
-            FileOutputStream fos = new FileOutputStream(this.user.getFriendRequest(), true);
+            File friendRequest = new File("User_" + this.user.getUsername() + "_FriendRequest.txt");
+            if (!friendRequest.exists()) {
+                friendRequest.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(friendRequest, true);
             PrintWriter pw = new PrintWriter(fos);
             pw.println(this.friendUsername);
             pw.close();
@@ -118,8 +130,9 @@ public class Friends implements FriendList{
 
     public boolean addFriend() {
         ArrayList<String> requests = new ArrayList<>();
+        File friendRequestFile = new File("User_" + this.user.getUsername() + "_FriendRequest.txt");
         try {
-            FileReader fr = new FileReader(this.user.getFriendRequest());
+            FileReader fr = new FileReader(friendRequestFile);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
 
@@ -145,7 +158,7 @@ public class Friends implements FriendList{
         requests.remove(this.friendUsername);
 
         try {
-            FileOutputStream fos = new FileOutputStream(this.user.getFriendRequest(), false);
+            FileOutputStream fos = new FileOutputStream(friendRequestFile, false);
             PrintWriter pw = new PrintWriter(fos);
             for (int j = 0; j < requests.size(); j++) {
                 pw.println(requests.get(j));
@@ -156,7 +169,8 @@ public class Friends implements FriendList{
         }
 
         try {
-            FileOutputStream fos = new FileOutputStream(this.user.getFriends(), true);
+            File friendFile = new File("User_" + this.user.getUsername() + "_Friends.txt");
+            FileOutputStream fos = new FileOutputStream(friendFile, true);
             PrintWriter pw = new PrintWriter(fos);
             pw.println(this.friendUsername);
             pw.close();
@@ -178,7 +192,7 @@ public class Friends implements FriendList{
     }
 
     public boolean removeFriend() {
-        File friendFile = this.user.getFriends();
+        File friendFile = new File("User_" + this.user.getUsername() + "_Friends.txt");
         ArrayList<String> friends = new ArrayList<>();
 
         try {
@@ -265,7 +279,7 @@ public class Friends implements FriendList{
             return false;
         }
 
-        File blockFile = this.user.getBlock();
+        File blockFile = new File("User_" + this.user.getUsername() + "_Block.txt");
         ArrayList<String> blocks = new ArrayList<>();
         try {
             FileReader fr  = new FileReader(blockFile);
@@ -302,7 +316,7 @@ public class Friends implements FriendList{
     }
 
     public boolean removeBlock() {
-        File blockFile = this.user.getBlock();
+        File blockFile = new File("User_" + this.user.getUsername() + "_Block.txt");
         ArrayList<String> blocks = new ArrayList<>();
 
         try {
@@ -355,13 +369,13 @@ public class Friends implements FriendList{
 
         ArrayList<String> friendProfile = new ArrayList<>();
         try {
-            File friendFile = new File("User_" + this.friendUsername + "_.txt");
+            File friendFile = new File("User_" + this.friendUsername + ".txt");
             FileReader fr = new FileReader(friendFile);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
 
             while (line != null) {
-                friendProfile.add(line);
+                friendProfile.add(line.substring(line.indexOf(": ") + 1).trim());
                 line = bfr.readLine();
             }
             bfr.close();
@@ -376,6 +390,7 @@ public class Friends implements FriendList{
 
         ArrayList<String> friendFriends = new ArrayList<>();
 
+        System.out.println(friend.getProfileView());
         if (friend.getProfileView()) {
             return friend.toString();
         } else {

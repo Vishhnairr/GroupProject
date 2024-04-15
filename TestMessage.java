@@ -1,7 +1,5 @@
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -11,21 +9,18 @@ public class TestMessage {
     @Test
     public void testMessageConstructor() {
         try {
-            User user = new User("first",
-                    "last",
-                    "email@gmail.com",
-                    "This is a bio that need something.",
-                    "username",
-                    "passwordthatweneed");
+            User test = new User("testMesusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
 
-            User receiverUser = new User("receivefirst",
-                    "receivelast",
-                    "recerive@gmail.com",
-                    "This is another bio that need things.",
-                    "receiveUser",
-                    "receivepassword");
+            User user = new User("setMesname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-            MessageList messageList = new MessageList("Content.", user, "receiveUser");
+            test.createAccount();
+            user.createAccount();
+
+            MessageList messageList = new MessageList("Content.", test, user.getUsername());
 
         } catch (Exception e) {
             Assert.fail();
@@ -35,25 +30,22 @@ public class TestMessage {
     @Test
     public void testMessageToString() {
         try {
-            User user = new User("first",
-                    "last",
-                    "email@gmail.com",
-                    "This is a bio that need something.",
-                    "username",
-                    "passwordthatweneed");
+            User test = new User("testMesusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
 
-            User receiverUser = new User("receivefirst",
-                    "receivelast",
-                    "recerive@gmail.com",
-                    "This is another bio that need things.",
-                    "receiveUser",
-                    "receivepassword");
+            User user = new User("setMesname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-            MessageList messageList = new MessageList("Content.", user, "receiveUser");
+            test.createAccount();
+            user.createAccount();
+
+            MessageList messageList = new MessageList("Content.", test, user.getUsername());
 
             String message = messageList.toString();
 
-            Assert.assertEquals("username: Content.", message);
+            Assert.assertEquals("testMesusername: Content.", message);
         } catch (Exception e) {
             Assert.fail();
         }
@@ -62,21 +54,18 @@ public class TestMessage {
     @Test
     public void testMessageSendMessage() {
         try {
-            User user = new User("first",
-                    "last",
-                    "email@gmail.com",
-                    "This is a bio that need something.",
-                    "username",
-                    "passwordthatweneed");
+            User test = new User("testMesusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, true);
 
-            User receiverUser = new User("receivefirst",
-                    "receivelast",
-                    "recerive@gmail.com",
-                    "This is another bio that need things.",
-                    "receiveUser",
-                    "receivepassword");
+            User user = new User("setMesname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-            MessageList messageList = new MessageList("Content.", user, "receiveUser");
+            test.createAccount();
+            user.createAccount();
+
+            MessageList messageList = new MessageList("Content.", test, user.getUsername());
             messageList.sendMessage();
             ArrayList<String> history = messageList.viewMessageHistory();
             int check = 0;
@@ -94,23 +83,20 @@ public class TestMessage {
     }
 
     @Test
-    public void testMessage() {
+    public void testDeleteMessage() {
         try {
-            User user = new User("first",
-                    "last",
-                    "email@gmail.com",
-                    "This is a bio that need something.",
-                    "username",
-                    "passwordthatweneed");
+            User test = new User("testMesDleusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
 
-            User receiverUser = new User("receivefirst",
-                    "receivelast",
-                    "recerive@gmail.com",
-                    "This is another bio that need things.",
-                    "receiveUser",
-                    "receivepassword");
+            User user = new User("setMesDlename", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-            MessageList messageList = new MessageList("Delete.", user, "receiveUser");
+            test.createAccount();
+            user.createAccount();
+
+            MessageList messageList = new MessageList("Content.", test, user.getUsername());
             messageList.sendMessage();
             messageList.deleteMessage(messageList.getContent());
             ArrayList<String> history = messageList.viewMessageHistory();
@@ -131,21 +117,18 @@ public class TestMessage {
     @Test
     public void testMessageViewMessageHistory() {
         try {
-            User user = new User("first",
-                    "last",
-                    "email@gmail.com",
-                    "This is a bio that need something.",
-                    "anotherusername",
-                    "passwordthatweneed");
+            User test = new User("testMesVieusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
 
-            User receiverUser = new User("receivefirst",
-                    "receivelast",
-                    "recerive@gmail.com",
-                    "This is another bio that need things.",
-                    "anotherreceiveUser",
-                    "receivepassword");
+            User user = new User("setMesViename", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-            MessageList messageList = new MessageList("Delete.", user, receiverUser.getUsername());
+            test.createAccount();
+            user.createAccount();
+
+            MessageList messageList = new MessageList("Content.", test, user.getUsername());
             messageList.sendMessage();
             ArrayList<String> history = messageList.viewMessageHistory();
             ArrayList<String> check = new ArrayList<>();

@@ -89,8 +89,11 @@ public class FriendTest {
             user.createAccount();
 
             Friends friends = new Friends(test, user.getUsername());
+            Friends friends1 = new Friends(user, test.getUsername());
 
-            if (!friends.addFriend()) {
+            friends.makeFriendRequest();
+
+            if (!friends1.addFriend()) {
                 Assert.fail();
             }
         } catch (Exception e) {
@@ -113,8 +116,10 @@ public class FriendTest {
             user.createAccount();
 
             Friends friends = new Friends(test, user.getUsername());
+            Friends friends1 = new Friends(user, test.getUsername());
+
             friends.makeFriendRequest();
-            friends.addFriend();
+            friends1.addFriend();
 
             if (!friends.removeFriend()) {
                 Assert.fail();

@@ -1,207 +1,19 @@
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.Scanner;
+import java.util.ArrayList;
 
 public class UserTest {
-
-    private final PrintStream originalOutput = System.out;
-    private final InputStream originalSysin = System.in;
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private ByteArrayInputStream testIn;
-
-    @SuppressWarnings("FieldCanBeLocal")
-    private ByteArrayOutputStream testOut;
-
-    @Before
-    public void outputStart() {
-        testOut = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(testOut));
-    }
-
-    @After
-    public void restoreInputAndOutput() {
-        System.setIn(originalSysin);
-        System.setOut(originalOutput);
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private void receiveInput(String str) {
-        testIn = new ByteArrayInputStream(str.getBytes());
-        System.setIn(testIn);
-    }
 
     @Test
     public void testUserConstructor() {
         try {
-            User user = new User("first", "last", "a@b.c", "bio", "username","password");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
+            User user = new User("username", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-    @Test
-    public void testCheckFirstName() {
-        try {
-            User user = new User("first", "last", "email", "bio", "username","password");
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getFirstName(), "first");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testCheckLastName() {
-        try {
-            User user = new User("first", "last", "email", "bio", "username","password");
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getLastName(), "last");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testCheckEmail() {
-        try {
-            User user = new User("first", "last", "email", "bio", "username","password");
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getEmail(), "email");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testCheckBio() {
-        try {
-            User user = new User("first", "last", "email", "bio", "username","password");
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getBio(), "bio");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testCheckUsername() {
-        try {
-            User user = new User("first", "last", "email", "bio", "username","password");
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getUsername(), "username");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testCheckPassword() {
-        try {
-            User user = new User("first", "last", "email", "bio", "username","password");
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getPassword(), "password");
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testCheckAccountExists() {
-        try {
-            User user = new User("first", "last", "email", "bio", "username","password");
-            Assert.assertNotNull(user);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testChangeEmail() {
-        try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = "aa@b.c";
-            receiveInput(input);
-            user.setEmail(input);
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getEmail(), input);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testChangeBio() {
-        try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = "bioo";
-            receiveInput(input);
-            user.setBio(input);
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getBio(), input);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testChangeFirstName() {
-        try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = "firstt";
-            receiveInput(input);
-            user.setFirstName(input);
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getFirstName(), input);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testChangeLastName() {
-        try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = "lastt";
-            receiveInput(input);
-            user.setLastName(input);
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getLastName(), input);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testChangeUsername() {
-        try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = "usernamee";
-            receiveInput(input);
-            user.setUsername(input);
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getUsername(), input);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testChangePassword() {
-        try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = "passwordd";
-            receiveInput(input);
-            user.setPassword(input);
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getPassword(), input);
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
         } catch (Exception e) {
             Assert.fail();
         }
@@ -210,26 +22,44 @@ public class UserTest {
     @Test
     public void testCreateAccount() {
         try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = user.toString();
-            receiveInput(input);
-            user.setEmail(input);
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getEmail(), input);
+            User user = new User("Creusername", "Crethisispassword",
+                    "Crefirst", "Crelast", "Creemail@gmail.com",
+                    "This is a short bio for Cre.", true, true);
+
+            User another = new User("AnoCreusername", "AnoCrethisispassword",
+                    "AnoCerfirst", "AnoCreLast", "AnoCreemail@gmail.com",
+                    "This is an another short bio for ano Cre.", true, false);
+
+            if (!user.createAccount()) {
+                Assert.fail();
+            }
+
+            if (!another.createAccount()) {
+                Assert.fail();
+            }
         } catch (Exception e) {
             Assert.fail();
         }
     }
 
     @Test
-    public void testEditAccount() {
+    public void testCheckAccountExist() {
         try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = user.toString();
-            receiveInput(input);
-            user.setEmail(input);
-            Assert.assertNotNull(user);
-            Assert.assertEquals(user.getEmail(), input);
+            User user = new User("username", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            if (!user.checkAccountExists()) {
+                Assert.fail();
+            }
+
+            if (!another.checkAccountExists()) {
+                Assert.fail();
+            }
         } catch (Exception e) {
             Assert.fail();
         }
@@ -238,28 +68,170 @@ public class UserTest {
     @Test
     public void testLogIn() {
         try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            String input = "username" + "password";
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            User logInUser = new User("Anousername", "Anothisispassword");
+            User testUser = logInUser.logIn();
+
+            //test if log in correctly
+            Assert.assertNotNull(testUser);
+            Assert.assertEquals(logInUser.getUsername(), testUser.getUsername());
+            Assert.assertEquals(logInUser.getPassword(), testUser.getPassword());
+
+            //test if log in incorrectly
+            User wrongUser = new User("wrongname", "wrongpassword").logIn();
+            Assert.assertNull(wrongUser);
+
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+    @Test
+    public void testViewFile() {
+        try {
+            User user = new User("username", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            String userProfile = "User name: username\n" + "Password: thisispassword\n"
+                    + "First name: First\n" + "Last name: Last\n" + "Email: email@gmail.com\n"
+                    + "Bio: This is a short bio.\n" + "Profile view: true\n" + "Message only: true";
+
+            String anotherProfile = "User name: Anousername\n" + "Password: Anothisispassword\n"
+                    + "First name: Anofirst\n" + "Last name: AnoLast\n" + "Email: Anoemail@gmail.com\n"
+                    + "Bio: This is an another short bio.\n" + "Profile view: true\n" + "Message only: false";
+
+            if (!user.viewFile().equals(userProfile)) {
+                Assert.fail();
+            }
+
+            if (!another.viewFile().equals(anotherProfile)) {
+                Assert.fail();
+            }
         } catch (Exception e) {
             Assert.fail();
         }
     }
 
     @Test
-    public void testToString() {
+    public void testSearchUser() {
         try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            Assert.assertEquals(user.toString(), "first\nlast\na@b.c\nbio\nusername\npassword");
+            User user = new User("username", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            user.createAccount();
+            another.createAccount();
+            if (!user.searchUser(another.getUsername())) {
+                Assert.fail();
+            }
+
+            if (!another.searchUser(user.getUsername())) {
+                Assert.fail();
+            }
         } catch (Exception e) {
             Assert.fail();
         }
     }
 
     @Test
-    public void testCheckOneMoreUser() {
+    public void testSetUsername() {
         try {
-            User user = new User("first", "last", "a@b.c", "bio", "username", "password");
-            User.checkMoreOneUser();
+            User user = new User("testsetusername", "thisispassword",
+                    "TestFirst", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            user.createAccount();
+            another.createAccount();
+            if (!user.setUsername("settestname")) {
+                Assert.fail();
+            }
+
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testViewFriends() {
+        try {
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("Anousername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            Friends friends = new Friends(user, another.getUsername());
+
+            friends.makeFriendRequest();
+            friends.addFriend();
+
+            String[] expectForUser = {"Anousername"};
+            String[] expectForAnother = {"setname"};
+
+            Assert.assertEquals(expectForUser, user.viewFriends());
+            Assert.assertEquals(expectForAnother, another.viewFriends());
+
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testViewBlocks() {
+        try {
+
+            User another = new User("AnoBlousername", "AnoBlothisispassword",
+                    "AnoBlofirst", "AnoBloLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+
+            User blockUser = new User("Blousername", "Blothisispassword", "Blofirst",
+                    "BlooLast", "Bloemail@gmail.com",
+                    "This is an another short bio for block.", true, false);
+
+            another.createAccount();
+            blockUser.createAccount();
+
+            Friends friends = new Friends(another, blockUser.getUsername());
+            friends.blockUser();
+
+            String[] block = {"Blousername"};
+            Assert.assertEquals(block, another.viewBlocks());
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testViewAllUsers() {
+        try{
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            user.createAccount();
+
+            String[] allUsers = {"setname"};
+
+            Assert.assertEquals(allUsers, user.viewAllUsers());
+
         } catch (Exception e) {
             Assert.fail();
         }

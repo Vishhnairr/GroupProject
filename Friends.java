@@ -35,13 +35,6 @@ public class Friends implements FriendList{
     }
 
 
-//    /**
-//     * Sends a friend request to another user.
-//     *
-//     * @param friendUsername The username of the user recieving the friend request.
-//     * @param username       The username of the user sending the friend request.
-//     */
-
     public synchronized boolean verifyUser() {
 
         ArrayList<String> allUsers = new ArrayList<>();
@@ -223,7 +216,7 @@ public class Friends implements FriendList{
 
         return true;
     }
-
+  
     public synchronized boolean removeFriend() {
         ArrayList<String> friends = new ArrayList<>();
 
@@ -301,13 +294,23 @@ public class Friends implements FriendList{
         }
 
         return true;
-    }
-    //    /**
-//     * Blocks a user, preventing them from sending friend requests.
-//     *
-//     * @param usernameToBlock  The username of the user to block.
-//     * @param blockingUsername The username of the user performing the block.
-//     */
+
+        // Remove the user from the friend's list
+        friendLines.removeIf(line -> line.equals(username + " is your friend!"));
+
+        // Rewrite the friend's file without the user
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(friendFile, false))) {
+            for (String line : friendLines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the friend's file.");
+            e.printStackTrace();
+        }
+
+        System.out.printf("User %s has been successfully removed from your friends list.\n", removeUsername);
+
     public synchronized boolean blockUser() {
         if (!this.verifyUser()) {
             return false;

@@ -3,7 +3,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class FriendTest {
-
     @Test
     public void testFriendConstructor() {
         try {
@@ -38,9 +37,6 @@ public class FriendTest {
 
             test.createAccount();
             user.createAccount();
-
-            Friends friends = new Friends(test, user.getUsername());
-
 
             if (!friends.verifyUser()) {
                 Assert.fail();
@@ -130,6 +126,7 @@ public class FriendTest {
     }
 
     @Test
+
     public void testBlockUser() {
         try {
             User test = new User("testusername", "testpassword",

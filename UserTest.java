@@ -87,8 +87,7 @@ public class UserTest {
         } catch (Exception e) {
             Assert.fail();
         }
-    }
-    @Test
+      
     public void testViewFile() {
         try {
             User user = new User("username", "thisispassword",

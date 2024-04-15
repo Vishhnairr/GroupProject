@@ -63,7 +63,35 @@ public class MessageList implements Message {
         return String.format(a, sendUser.getUsername(), content);
     }
 
-    public boolean sendMessage() {
+    public synchronized boolean verifyUser() {
+        File allUserNames = new File("All_User_Info.txt");
+        ArrayList<String> allUsers = new ArrayList<>();
+        try {
+            FileReader fr = new FileReader(allUserNames);
+            BufferedReader bfr =  new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                allUsers.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return false;
+        }
+
+        for (int i = 0; i < allUsers.size(); i++) {
+            if (allUsers.get(i).equals(this.receiveUser)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public synchronized boolean sendMessage() {
+        if (!this.verifyUser()) {
+            return false;
+        }
+
         ArrayList<String> receiveUserInfo = new ArrayList<>();
 
         try {
@@ -73,7 +101,7 @@ public class MessageList implements Message {
             String line = bfr.readLine();
 
             while (line != null) {
-                receiveUserInfo.add(line);
+                receiveUserInfo.add(line.substring(line.indexOf(": ") + 1).trim());
                 line = bfr.readLine();
             }
             bfr.close();
@@ -87,13 +115,22 @@ public class MessageList implements Message {
                 File messageHistoryReceiver = new File (receiveUser + "_"
                         + sendUser.getUsername() + ".txt");
 
+                if (!messageHistorySender.exists()) {
+                    messageHistorySender.createNewFile();
+                }
+
+                if (!messageHistoryReceiver.exists()) {
+                    messageHistoryReceiver.createNewFile();
+                }
+
                 FileOutputStream fosS = new FileOutputStream(messageHistorySender, true);
                 FileOutputStream fosR = new FileOutputStream(messageHistoryReceiver, true);
                 PrintWriter pwS = new PrintWriter(fosS);
                 PrintWriter pwR = new PrintWriter(fosR);
 
-                pwS.println(this.toString());
-                pwR.println(this.toString());
+                String string = this.toString();
+                pwS.println(string);
+                pwR.println(string);
 
                 pwS.close();
                 pwR.close();
@@ -137,13 +174,22 @@ public class MessageList implements Message {
                 File messageHistoryReceiver = new File (receiveUser + "_"
                         + sendUser.getUsername() + ".txt");
 
+                if (!messageHistorySender.exists()) {
+                    messageHistorySender.createNewFile();
+                }
+
+                if (!messageHistoryReceiver.exists()) {
+                    messageHistoryReceiver.createNewFile();
+                }
+
                 FileOutputStream fosS = new FileOutputStream(messageHistorySender, true);
                 FileOutputStream fosR = new FileOutputStream(messageHistoryReceiver, true);
                 PrintWriter pwS = new PrintWriter(fosS);
                 PrintWriter pwR = new PrintWriter(fosR);
 
-                pwS.println(this.toString());
-                pwR.println(this.toString());
+                String string = this.toString();
+                pwS.println(string);
+                pwR.println(string);
 
                 pwS.close();
                 pwR.close();
@@ -157,7 +203,7 @@ public class MessageList implements Message {
         }
     }
 
-    public boolean deleteMessage(String delete) {
+    public synchronized boolean deleteMessage(String delete) {
         ArrayList<String> listOrigilnal = new ArrayList<>();
         ArrayList<String> listCopy = new ArrayList<>();
         try {
@@ -205,7 +251,7 @@ public class MessageList implements Message {
     }
 
     //View users message history
-    public ArrayList<String> viewMessageHistory() {
+    public synchronized ArrayList<String> viewMessageHistory() {
         ArrayList<String> list = new ArrayList<>();
         String [] history;
         try {

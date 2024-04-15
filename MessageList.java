@@ -64,22 +64,26 @@ public class MessageList implements Message {
     }
 
     public synchronized boolean verifyUser() {
-        File allUserNames = new File("All_User_Info.txt");
+        
         ArrayList<String> allUsers = new ArrayList<>();
-        try {
-            FileReader fr = new FileReader(allUserNames);
-            BufferedReader bfr =  new BufferedReader(fr);
-            String line = bfr.readLine();
 
-            while (line != null) {
-                allUsers.add(line);
-                line = bfr.readLine();
+        synchronized (MessageList.class) {
+            File allUserNames = new File("All_User_Info.txt");
+            try {
+                FileReader fr = new FileReader(allUserNames);
+                BufferedReader bfr =  new BufferedReader(fr);
+                String line = bfr.readLine();
+
+                while (line != null) {
+                    allUsers.add(line);
+                    line = bfr.readLine();
+                }
+                bfr.close();
+            } catch (Exception e) {
+                return false;
             }
-            bfr.close();
-        } catch (Exception e) {
-            return false;
         }
-
+        
         for (int i = 0; i < allUsers.size(); i++) {
             if (allUsers.get(i).equals(this.receiveUser)) {
                 return true;

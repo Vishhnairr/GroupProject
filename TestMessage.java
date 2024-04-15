@@ -52,7 +52,7 @@ public class TestMessage {
     }
 
     @Test
-    public void testMessageSendMessage() {
+    public void testMessageSendMessageFriend() {
         try {
             User test = new User("testMesusername", "testpassword",
                     "testfirst", "testlast", "test@gmail.com",
@@ -60,10 +60,14 @@ public class TestMessage {
 
             User user = new User("setMesname", "thisispassword",
                     "First", "Last", "email@gmail.com",
-                    "This is a short bio.", true, true);
+                    "This is a short bio.", true, false);
 
             test.createAccount();
             user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+            friends.makeFriendRequest();
+            friends.addFriend();
 
             MessageList messageList = new MessageList("Content.", test, user.getUsername());
             messageList.sendMessage();
@@ -75,6 +79,40 @@ public class TestMessage {
                 }
             }
             if (check == 0) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testMessageSendMessageBlock() {
+        try {
+            User test = new User("testMesBlousername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, true);
+
+            User user = new User("setMesBloname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, false);
+
+            test.createAccount();
+            user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+            friends.blockUser();
+
+            MessageList messageList = new MessageList("Content.", test, user.getUsername());
+            messageList.sendMessage();
+            ArrayList<String> history = messageList.viewMessageHistory();
+            int check = 0;
+            for (int i = 0; i < history.size(); i++) {
+                if (history.get(i).equals(messageList.toString())) {
+                    check ++;
+                }
+            }
+            if (check != 0) {
                 Assert.fail();
             }
         } catch (Exception e) {

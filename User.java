@@ -41,6 +41,7 @@ public class User implements UserList {
 
     private boolean messageCheck; // if the user want to receive the message from public or friends only
 
+
     // empty constructor
     public User() {
         this.firstName = null;
@@ -159,22 +160,26 @@ public class User implements UserList {
     }
 
     // sets username
-    public synchronized boolean setUsername(String username) {
+    public boolean setUsername(String username) {
         ArrayList<String> allUserNames = new ArrayList<>();
-        try {
-            File file = new File("All_User_Info.txt");
-            FileReader fr = new FileReader(file);
-            BufferedReader bfr = new BufferedReader(fr);
-            String line = bfr.readLine();
 
-            while (line != null) {
-                allUserNames.add(line);
-                line = bfr.readLine();
+        synchronized (User.class) {
+            try {
+                File file = new File("All_User_Info.txt");
+                FileReader fr = new FileReader(file);
+                BufferedReader bfr = new BufferedReader(fr);
+                String line = bfr.readLine();
+
+                while (line != null) {
+                    allUserNames.add(line);
+                    line = bfr.readLine();
+                }
+                bfr.close();
+            } catch (Exception e) {
+                return false;
             }
-            bfr.close();
-        } catch (Exception e) {
-            return false;
         }
+
 
 
         for (int i = 0; i < allUserNames.size(); i++) {
@@ -190,16 +195,18 @@ public class User implements UserList {
         allUserNames.set(allUserNames.indexOf(this.getUsername()), username);
 
 
-        try {
-            File allUsersFile = new File("All_User_Info.txt");
-            FileOutputStream fosAll = new FileOutputStream(allUsersFile, false);
-            PrintWriter pwAll = new PrintWriter(fosAll);
-            for (int j = 0; j < allUserNames.size(); j++) {
-                pwAll.println(allUserNames.get(j));
+        synchronized (User.class) {
+            try {
+                File allUsersFile = new File("All_User_Info.txt");
+                FileOutputStream fosAll = new FileOutputStream(allUsersFile, false);
+                PrintWriter pwAll = new PrintWriter(fosAll);
+                for (int j = 0; j < allUserNames.size(); j++) {
+                    pwAll.println(allUserNames.get(j));
+                }
+                pwAll.close();
+            } catch (Exception e) {
+                return false;
             }
-            pwAll.close();
-        } catch (Exception e) {
-            return false;
         }
 
 
@@ -298,16 +305,19 @@ public class User implements UserList {
     // verifies if account exists for User
     public synchronized boolean checkAccountExists() throws IOException {
         ArrayList<String> allUserNames = new ArrayList<>();
-        File file = new File("All_User_Info.txt");
-        FileReader fr = new FileReader(file);
-        BufferedReader bfr = new BufferedReader(fr);
-        String line = bfr.readLine();
 
-        while (line != null) {
-            allUserNames.add(line);
-            line = bfr.readLine();
+        synchronized (User.class) {
+            File file = new File("All_User_Info.txt");
+            FileReader fr = new FileReader(file);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                allUserNames.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
         }
-        bfr.close();
 
         for (int i = 0; i < allUserNames.size(); i++) {
             if (allUserNames.get(i).equals(this.username)) {
@@ -343,23 +353,27 @@ public class User implements UserList {
         }
 
         ArrayList<String> allUserNames = new ArrayList<>();
-        try {
-            File file = new File("All_User_Info.txt");
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileReader fr = new FileReader(file);
-            BufferedReader bfr = new BufferedReader(fr);
-            String line = bfr.readLine();
 
-            while (line != null) {
-                allUserNames.add(line);
-                line = bfr.readLine();
+        synchronized (User.class) {
+            try {
+                File file = new File("All_User_Info.txt");
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                FileReader fr = new FileReader(file);
+                BufferedReader bfr = new BufferedReader(fr);
+                String line = bfr.readLine();
+
+                while (line != null) {
+                    allUserNames.add(line);
+                    line = bfr.readLine();
+                }
+                bfr.close();
+            } catch (Exception e) {
+                return false;
             }
-            bfr.close();
-        } catch (Exception e) {
-            return false;
         }
+
 
         for (int i = 0; i < allUserNames.size(); i++) {
             if (allUserNames.get(i).equals(username)) {
@@ -390,40 +404,46 @@ public class User implements UserList {
             return false;
         }
 
-        try {
-            File allUsersFile = new File("All_User_Info.txt");
-            FileOutputStream fosAll = new FileOutputStream(allUsersFile, true);
-            PrintWriter pwAll = new PrintWriter(fosAll);
-            pwAll.println(username);
-            pwAll.close();
-        } catch (IOException e) {
-            return false;
+        synchronized (User.class) {
+            try {
+                File allUsersFile = new File("All_User_Info.txt");
+                FileOutputStream fosAll = new FileOutputStream(allUsersFile, true);
+                PrintWriter pwAll = new PrintWriter(fosAll);
+                pwAll.println(username);
+                pwAll.close();
+            } catch (IOException e) {
+                return false;
+            }
         }
+
 
         return true;
     }
     // verifies login based on info from scanner in main method
     public synchronized User logIn() {
-        File allUser = new File("All_User_Info.txt");
         int check = 0;
 
-        try {
-            FileReader fr = new FileReader(allUser);
-            BufferedReader bfr = new BufferedReader(fr);
-            String line = bfr.readLine();
+        synchronized (User.class) {
+            File allUser = new File("All_User_Info.txt");
+            try {
+                FileReader fr = new FileReader(allUser);
+                BufferedReader bfr = new BufferedReader(fr);
+                String line = bfr.readLine();
 
-            while (line != null) {
-                if (line.equals(username)) {
-                    check = 1;
-                    break;
+                while (line != null) {
+                    if (line.equals(username)) {
+                        check = 1;
+                        break;
+                    }
+                    line = bfr.readLine();
                 }
-                line = bfr.readLine();
-            }
-            bfr.close();
+                bfr.close();
 
-        } catch (Exception e) {
-            return null;
+            } catch (Exception e) {
+                return null;
+            }
         }
+
 
         if (check == 0) {
             return null;
@@ -585,24 +605,28 @@ public class User implements UserList {
     public synchronized String[] viewAllUsers() {
         ArrayList<String> allUsernames = new ArrayList<>();
 
-        try {
-            File allUserFile = new File("All_User_Info.txt");
-            if (!allUserFile.exists()) {
-                allUserFile.createNewFile();
-            }
-            FileReader fr = new FileReader(allUserFile);
-            BufferedReader bfr = new BufferedReader(fr);
-            String line = bfr.readLine();
+        synchronized (User.class) {
+            try {
+                File allUserFile = new File("All_User_Info.txt");
+                if (!allUserFile.exists()) {
+                    allUserFile.createNewFile();
+                }
+                FileReader fr = new FileReader(allUserFile);
+                BufferedReader bfr = new BufferedReader(fr);
+                String line = bfr.readLine();
 
-            while (line != null) {
-                allUsernames.add(line);
-                line = bfr.readLine();
+                while (line != null) {
+                    allUsernames.add(line);
+                    line = bfr.readLine();
+                }
+                bfr.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new String[0];
             }
-            bfr.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new String[0];
         }
+
+
 
         String[] allUsers = allUsernames.toArray(new String[allUsernames.size()]);
 
@@ -610,22 +634,26 @@ public class User implements UserList {
     }
 
     public synchronized boolean searchUser(String searchName) {
-        try {
-            File allUser = new File("All_User_Info.txt");
-            FileReader fr = new FileReader(allUser);
-            BufferedReader bfr = new BufferedReader(fr);
-            String line = bfr.readLine();
 
-            while (line != null) {
-                if (line.equals(searchName)) {
-                    return true;
+        synchronized (User.class) {
+            try {
+                File allUser = new File("All_User_Info.txt");
+                FileReader fr = new FileReader(allUser);
+                BufferedReader bfr = new BufferedReader(fr);
+                String line = bfr.readLine();
+
+                while (line != null) {
+                    if (line.equals(searchName)) {
+                        return true;
+                    }
+                    line = bfr.readLine();
                 }
-                line = bfr.readLine();
+                bfr.close();
+            } catch (Exception e) {
+                return false;
             }
-            bfr.close();
-        } catch (Exception e) {
-            return false;
         }
+
 
         return false;
     }

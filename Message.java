@@ -3,7 +3,7 @@
 import java.util.ArrayList;
 
 /**
- * 
+ *
  * Message Interface
  *
  * This class allows for a user to message one of their friends by creating a message object

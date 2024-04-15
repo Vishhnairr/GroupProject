@@ -59,6 +59,8 @@ public interface UserList {
 
     String toString();
 
+    String[] viewFriendsRequest();
+
     String[] viewFriends();
 
     String[] viewBlocks();

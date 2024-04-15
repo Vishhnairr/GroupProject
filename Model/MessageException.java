@@ -1,5 +1,7 @@
+package Model;
+
 /**
- * Message Exception
+ * database.Message Exception
  * 
  * This class is an exception to be thrown when the sender or recipient of a message
  * can't be found.

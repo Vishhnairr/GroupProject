@@ -1,8 +1,7 @@
-import org.junit.Assert;
+package Model;
 
 import java.io.*;
 import java.util.ArrayList;
-//.
 
 /**
  * MessageList
@@ -63,17 +62,16 @@ public class MessageList implements Message {
         return String.format(a, sendUser.getUsername(), content);
     }
 
-    public boolean sendMessage() {
-        ArrayList<String> receiveUserInfo = new ArrayList<>();
-
+    public synchronized boolean verifyUser() {
+        File allUserNames = new File("All_User_Info.txt");
+        ArrayList<String> allUsers = new ArrayList<>();
         try {
-            File friendsFile = new File("User_" + this.receiveUser + ".txt");
-            FileReader fr = new FileReader(friendsFile);
-            BufferedReader bfr = new BufferedReader(fr);
+            FileReader fr = new FileReader(allUserNames);
+            BufferedReader bfr =  new BufferedReader(fr);
             String line = bfr.readLine();
 
             while (line != null) {
-                receiveUserInfo.add(line);
+                allUsers.add(line);
                 line = bfr.readLine();
             }
             bfr.close();
@@ -81,83 +79,39 @@ public class MessageList implements Message {
             return false;
         }
 
-        if (Boolean.parseBoolean(receiveUserInfo.get(7))) {
-            try {
-                File messageHistorySender = new File(sendUser.getUsername() + "_" + receiveUser + ".txt");
-                File messageHistoryReceiver = new File (receiveUser + "_"
-                        + sendUser.getUsername() + ".txt");
-
-                FileOutputStream fosS = new FileOutputStream(messageHistorySender, true);
-                FileOutputStream fosR = new FileOutputStream(messageHistoryReceiver, true);
-                PrintWriter pwS = new PrintWriter(fosS);
-                PrintWriter pwR = new PrintWriter(fosR);
-
-                pwS.println(this.toString());
-                pwR.println(this.toString());
-
-                pwS.close();
-                pwR.close();
-
+        for (int i = 0; i < allUsers.size(); i++) {
+            if (allUsers.get(i).equals(this.receiveUser)) {
                 return true;
-
-            } catch (Exception e) {
-                return false;
             }
-        } else {
-            ArrayList<String> receiveUserFriends = new ArrayList<>();
-
-            try {
-                File receiveUserFriendFile = new File("User_" + receiveUser + "_Friends.txt");
-                FileReader fr = new FileReader(receiveUserFriendFile);
-                BufferedReader bfr = new BufferedReader(fr);
-                String line = bfr.readLine();
-
-                while (line != null) {
-                    receiveUserFriends.add(line);
-                    line = bfr.readLine();
-                }
-                bfr.close();
-            } catch (Exception e) {
-                return false;
+        }
+        return false;
+    }
+    public synchronized boolean sendMessage() {
+        try {
+            File directory = new File("messages");
+            if (!directory.exists()) {
+                directory.mkdir();
             }
+            File messageHistorySender = new File("messages/" + sendUser.getUsername() + "_" + receiveUser + ".txt");
+            File messageHistoryReceiver = new File("messages/" + receiveUser + "_" + sendUser.getUsername() + ".txt");
 
-            int check = 0;
-            for (int i = 0; i < receiveUserFriends.size(); i++) {
-                if (receiveUserFriends.get(i).equals(this.sendUser.getUsername())) {
-                    check = 1;
-                }
+            messageHistorySender.createNewFile();
+            messageHistoryReceiver.createNewFile();
+
+            try (PrintWriter pwSender = new PrintWriter(new FileOutputStream(messageHistorySender, true));
+                 PrintWriter pwReceiver = new PrintWriter(new FileOutputStream(messageHistoryReceiver, true))) {
+                String formattedMessage = String.format("%s: %s", sendUser.getUsername(), content);
+                pwSender.println(formattedMessage);
+                pwReceiver.println(formattedMessage);
             }
-
-            if (check == 0) {
-                return false;
-            }
-
-            try {
-                File messageHistorySender = new File(sendUser.getUsername() + "_" + receiveUser + ".txt");
-                File messageHistoryReceiver = new File (receiveUser + "_"
-                        + sendUser.getUsername() + ".txt");
-
-                FileOutputStream fosS = new FileOutputStream(messageHistorySender, true);
-                FileOutputStream fosR = new FileOutputStream(messageHistoryReceiver, true);
-                PrintWriter pwS = new PrintWriter(fosS);
-                PrintWriter pwR = new PrintWriter(fosR);
-
-                pwS.println(this.toString());
-                pwR.println(this.toString());
-
-                pwS.close();
-                pwR.close();
-
-                return true;
-
-            } catch (Exception e) {
-                return false;
-            }
-
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 
-    public boolean deleteMessage(String delete) {
+
+    public synchronized boolean deleteMessage(String delete) {
         ArrayList<String> listOrigilnal = new ArrayList<>();
         ArrayList<String> listCopy = new ArrayList<>();
         try {
@@ -205,7 +159,7 @@ public class MessageList implements Message {
     }
 
     //View users message history
-    public ArrayList<String> viewMessageHistory() {
+    public synchronized ArrayList<String> viewMessageHistory() {
         ArrayList<String> list = new ArrayList<>();
         String [] history;
         try {

@@ -167,6 +167,29 @@ public class UserTest {
     }
 
     @Test
+    public void testViewFriendRequest() {
+        try {
+            User user = new User("setFRname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            User another = new User("AnoFRusername", "Anothisispassword",
+                    "Anofirst", "AnoLast", "Anoemail@gmail.com",
+                    "This is an another short bio.", true, false);
+
+            user.createAccount();
+            another.createAccount();
+
+            Friends friends = new Friends(user, another.getUsername());
+            friends.makeFriendRequest();
+
+            String[] frForAno = {user.getUsername()};
+            Assert.assertEquals(frForAno, another.viewFriendsRequest());
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+    @Test
     public void testViewFriends() {
         try {
             User user = new User("setname", "thisispassword",
@@ -177,10 +200,13 @@ public class UserTest {
                     "Anofirst", "AnoLast", "Anoemail@gmail.com",
                     "This is an another short bio.", true, false);
 
+            user.createAccount();
+            another.createAccount();
             Friends friends = new Friends(user, another.getUsername());
+            Friends friends1 = new Friends(another, user.getUsername());
 
             friends.makeFriendRequest();
-            friends.addFriend();
+            friends1.addFriend();
 
             String[] expectForUser = {"Anousername"};
             String[] expectForAnother = {"setname"};

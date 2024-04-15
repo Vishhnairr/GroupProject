@@ -92,6 +92,27 @@ public class MessageList implements Message {
             return false;
         }
 
+        try {
+           File receiveUserBlocks = new File("User_" + this.receiveUser + "_Block.txt");
+           if (!receiveUserBlocks.exists()) {
+               receiveUserBlocks.createNewFile();
+           }
+           FileReader fr = new FileReader(receiveUserBlocks);
+           BufferedReader bfr = new BufferedReader(fr);
+           String line = bfr.readLine();
+
+           while (line != null) {
+               if (line.equals(this.sendUser.getUsername())) {
+                   return false;
+               }
+               line = bfr.readLine();
+           }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
         ArrayList<String> receiveUserInfo = new ArrayList<>();
 
         try {

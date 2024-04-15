@@ -1,104 +1,204 @@
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import java.util.*;
-import java.io.*;
+import java.util.ArrayList;
 
 public class FriendTest {
 
-    private Friends friends;
-    private final String username = "testUser";
-    private final String friendUsername = "friendUser";
-    private final String blockedUsername = "blockedUser";
+    @Test
+    public void testFriendConstructor() {
+        try {
+            User test = new User("testusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
 
-    @Before
-    public void setUp() {
-        friends = new Friends("Test", "User", "test@example.com", "This is a bio", username, "password123");
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-        new File("User_" + username + "_Friends.txt").delete();
-        new File("User_" + friendUsername + "_Friends.txt").delete();
-        new File("User_" + blockedUsername + "_Friends.txt").delete();
+            test.createAccount();
+            user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testVerifyUser() {
+        try {
+            User test = new User("testusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
+
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            test.createAccount();
+            user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+
+
+            if (!friends.verifyUser()) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
     public void testMakeFriendRequest() {
-        String inputMessage = "Hi, let's be friends!";
-        System.setIn(new ByteArrayInputStream(inputMessage.getBytes()));
-        Scanner scanner = new Scanner(System.in);
+        try {
+            User test = new User("testusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
 
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-        friends.makeFriendRequest(scanner, friendUsername, username);
+            test.createAccount();
+            user.createAccount();
 
-        File friendFile = new File("User_" + friendUsername + "_Friends.txt");
-        Assert.assertTrue("Friend request file does not exist", friendFile.exists());
+            Friends friends = new Friends(test, user.getUsername());
+
+            if (!friends.makeFriendRequest()) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testAddFriend() {
+        try {
+            User test = new User("testusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
+
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            test.createAccount();
+            user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+
+            if (!friends.addFriend()) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testRemoveFriend() {
+        try {
+            User test = new User("testReusername", "testpassword",
+                    "testRefirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
+
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            test.createAccount();
+            user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+            friends.makeFriendRequest();
+            friends.addFriend();
+
+            if (!friends.removeFriend()) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
     @Test
     public void testBlockUser() {
-        friends.blockUser(blockedUsername, username);
+        try {
+            User test = new User("testusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
 
-        File blockedFile = new File("User_" + blockedUsername + "_Friends.txt");
-        Assert.assertTrue("Blocked user file does not exist", blockedFile.exists());
-    }
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
 
-    @Test
-    public void testRemoveUser() throws IOException {
-        FileWriter writer = new FileWriter("User_" + username + "_Friends.txt", true);
-        writer.write(friendUsername + " is your friend!\n");
-        writer.close();
+            test.createAccount();
+            user.createAccount();
 
-    }
+            Friends friends = new Friends(test, user.getUsername());
 
-    @Test
-    public void testUpdateFriendRequestStatus() throws IOException {
-        String friendRequestMessage = "Friend request from: " + username;
-        FileWriter writerForFriend = new FileWriter("User_" + friendUsername + "_Friends.txt", true);
-        writerForFriend.write(friendRequestMessage + "\n");
-        writerForFriend.close();
-
-        FileWriter writerForUser = new FileWriter("User_" + username + "_Friends.txt", true);
-        writerForUser.write("You sent a friend request to: " + friendUsername + "\n");
-        writerForUser.close();
-
-
-        friends.updateFriendRequestStatus(friendUsername, username, true);
-
-        File userFile = new File("User_" + username + "_Friends.txt");
-        Scanner scanner = new Scanner(userFile);
-        boolean found = false;
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (line.contains(friendUsername + " is your friend!")) {
-                found = true;
-                break;
+            if (!friends.blockUser()) {
+                Assert.fail();
             }
+        } catch (Exception e) {
+            Assert.fail();
         }
-        scanner.close();
     }
 
     @Test
-    public void testFriendViewer() throws IOException {
-        FileWriter writer = new FileWriter("User_" + username + "_Friends.txt", true);
-        writer.write(friendUsername + " is your friend!\n");
-        writer.write(blockedUsername + " is your friend!\n");
-        writer.close();
-        ArrayList<String> friendsList = friends.friendViewer(username);
-        Assert.assertTrue("The friends list should contain " + friendUsername + ".", friendsList.contains(friendUsername));
-        Assert.assertTrue("The friends list should contain " + blockedUsername + ".", friendsList.contains(blockedUsername));
-        Assert.assertEquals("The friends list should contain exactly 2 friends.", 2, friendsList.size());
-    }
-    @Test
-    public void testHasFriends() throws IOException {
-        FileWriter writerWithFriends = new FileWriter("User_" + username + "_Friends.txt", true);
-        writerWithFriends.write(friendUsername + " is your friend!\n");
-        writerWithFriends.close();
-        boolean resultWithFriends = friends.hasFriends(username);
-        Assert.assertTrue("hasFriends should return true when the user has friends", resultWithFriends);
-        new File("User_" + username + "_Friends.txt").delete();
-        setUp();
-        boolean resultWithoutFriends = friends.hasFriends(username);
-        Assert.assertFalse("hasFriends should return false when the user has no friends", resultWithoutFriends);
+    public void testRemoveBlock() {
+        try {
+            User test = new User("testBlousername", "testpassword",
+                    "testBlofirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
+
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            test.createAccount();
+            user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+            friends.blockUser();
+
+            if (!friends.removeBlock()) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
     }
 
+    @Test
+    public void testViewProfile() {
+        try {
+            User test = new User("testusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
+
+            User user = new User("setname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            test.createAccount();
+            user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+
+            String expect = "Username: setname\n" +
+                    "First name: First\n" +
+                    "Last name: Last\n" +
+                    "Email: email@gmail.com\n" +
+                    "Bio: This is a short bio.";
+
+            Assert.assertEquals(expect, friends.viewProfile());
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
 }
 

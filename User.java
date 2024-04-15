@@ -472,6 +472,32 @@ public class User implements UserList {
                 + "Bio: " +bio;
     }
 
+    public synchronized String[] viewFriendsRequest() {
+        ArrayList<String> requests = new ArrayList<>();
+
+        try {
+            File friendRequestFile = new File("User_" + this.username + "_FriendRequest.txt");
+            if (!friendRequestFile.exists()) {
+                friendRequestFile.createNewFile();
+            }
+
+            FileReader fr = new FileReader(friendRequestFile);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                requests.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return null;
+        }
+
+        String[] request = requests.toArray(new String[requests.size()]);
+        return request;
+    }
+
     public synchronized String[] viewFriends() {
         ArrayList<String> friends = new ArrayList<>();
 

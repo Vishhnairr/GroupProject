@@ -43,21 +43,26 @@ public class Friends implements FriendList{
 //     */
 
     public synchronized boolean verifyUser() {
-        File allUserNames = new File("All_User_Info.txt");
-        ArrayList<String> allUsers = new ArrayList<>();
-        try {
-            FileReader fr = new FileReader(allUserNames);
-            BufferedReader bfr =  new BufferedReader(fr);
-            String line = bfr.readLine();
 
-            while (line != null) {
-                allUsers.add(line);
-                line = bfr.readLine();
+        ArrayList<String> allUsers = new ArrayList<>();
+
+        synchronized (Friends.class) {
+            File allUserNames = new File("All_User_Info.txt");
+            try {
+                FileReader fr = new FileReader(allUserNames);
+                BufferedReader bfr =  new BufferedReader(fr);
+                String line = bfr.readLine();
+
+                while (line != null) {
+                    allUsers.add(line);
+                    line = bfr.readLine();
+                }
+                bfr.close();
+            } catch (Exception e) {
+                return false;
             }
-            bfr.close();
-        } catch (Exception e) {
-            return false;
         }
+
 
         for (int i = 0; i < allUsers.size(); i++) {
             if (allUsers.get(i).equals(friendUsername)) {
@@ -113,13 +118,33 @@ public class Friends implements FriendList{
         }
 
         try {
-            File friendRequest = new File("User_" + this.user.getUsername() + "_FriendRequest.txt");
+            File blockFile = new File("User_" + this.friendUsername + "_Block.txt");
+            if (!blockFile.exists()) {
+                blockFile.createNewFile();
+            }
+            FileReader fr = new FileReader(blockFile);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                if (line.equals(this.user.getUsername())) {
+                    return false;
+                }
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return false;
+        }
+
+        try {
+            File friendRequest = new File("User_" + this.friendUsername + "_FriendRequest.txt");
             if (!friendRequest.exists()) {
                 friendRequest.createNewFile();
             }
             FileOutputStream fos = new FileOutputStream(friendRequest, true);
             PrintWriter pw = new PrintWriter(fos);
-            pw.println(this.friendUsername);
+            pw.println(this.user.getUsername());
             pw.close();
         } catch (Exception e) {
             return false;
@@ -142,8 +167,12 @@ public class Friends implements FriendList{
             }
             bfr.close();
         } catch (Exception e) {
+            System.out.println("1");
             return false;
         }
+
+        System.out.println(requests);
+        System.out.println(friendUsername);
 
         int check = 0;
         for (int i = 0; i < requests.size(); i++) {
@@ -152,6 +181,7 @@ public class Friends implements FriendList{
             }
         }
         if (check == 0) {
+            System.out.println("2");
             return false;
         }
 
@@ -165,6 +195,7 @@ public class Friends implements FriendList{
             }
             pw.close();
         } catch (Exception e) {
+            System.out.println("3");
             return false;
         }
 
@@ -175,6 +206,7 @@ public class Friends implements FriendList{
             pw.println(this.friendUsername);
             pw.close();
         } catch (Exception e) {
+            System.out.println("4");
             return false;
         }
 
@@ -185,6 +217,7 @@ public class Friends implements FriendList{
             pw.println(this.user.getUsername());
             pw.close();
         } catch (Exception e) {
+            System.out.println("5");
             return false;
         }
 

@@ -22,6 +22,14 @@ This class extends the User class and allows for a user to make, accept, and dec
 
 This class allows for a user to message one of their friends by creating a message object that contains the message being sent, the message sender, and the message recipient. The class contains methods that check if the recipient is a friend of the sender, create and update a file for both the sender and the recipient that contains the message history of the two users, and delete messages from the message history.
 
+## Server
+
+This class recieves commands from various clients and accesses the database of the social media platform to read from and write to the files of the platform's users for platform functions like creating an account, editing an account, logging in and out, sending friend requests, accepting and denying friend requests, and messaging and blocking other users.
+
+## Client
+
+This class runs the GUI that users will interact with when they use the social media platform. It stores the commands and data that the users choose and input to send to the platform's server and displays interfaces based on data received from the server.
+
 ## Testing
 
 We created three accounts on the platform, one to represent the “current” user and the other two represent “other” users. The current user sends friend requests to both of the other users and each of the other users log in and accept the friend request. The current user logs back in and messages one of the new friends and removes and blocks the other one. The message recipient logs back in and replies to the message. Then, the blocked user logs back and tries to message the user that blocked them but can’t. This tests all the functionalities of our program.

@@ -137,7 +137,7 @@ public class User implements UserList {
     }
 
     // sets first name
-    public boolean setFirstName(String firstName) {
+    public synchronized boolean setFirstName(String firstName) {
         if (firstName == null || firstName.isEmpty() || firstName.contains(" ")) {
             return false;
         }
@@ -148,7 +148,7 @@ public class User implements UserList {
     }
 
     // sets last name
-    public boolean setLastName(String lastName) {
+    public synchronized boolean setLastName(String lastName) {
         if (lastName == null || lastName.isEmpty() || lastName.contains(" ")) {
             return false;
         }
@@ -159,7 +159,7 @@ public class User implements UserList {
     }
 
     // sets username
-    public boolean setUsername(String username) {
+    public synchronized boolean setUsername(String username) {
         ArrayList<String> allUserNames = new ArrayList<>();
         try {
             File file = new File("All_User_Info.txt");
@@ -213,7 +213,7 @@ public class User implements UserList {
     }
 
     // sets email
-    public boolean setEmail(String email) {
+    public synchronized boolean setEmail(String email) {
         if (email == null || email.isEmpty() || !email.contains("@") || email.contains(" ") ||
                 email.charAt(email.length() - 4) != '.') {
             return false;
@@ -225,7 +225,7 @@ public class User implements UserList {
     }
 
     // sets bio
-    public boolean setBio(String bio) {
+    public synchronized boolean setBio(String bio) {
         if (bio.length() > 50) {
             return false;
         } else {
@@ -237,7 +237,7 @@ public class User implements UserList {
     }
 
     // sets password
-    public boolean setPassword(String password) {
+    public synchronized boolean setPassword(String password) {
         if (password.length() < 4) {
             return false;
         } else {
@@ -248,21 +248,21 @@ public class User implements UserList {
         }
     }
 
-    public boolean setProfileView(boolean check) {
+    public synchronized boolean setProfileView(boolean check) {
         this.profileView = check;
 
         this.setAccountFile();
         return true;
     }
 
-    public boolean setMessageCheck(boolean check) {
+    public synchronized boolean setMessageCheck(boolean check) {
         this.messageCheck = check;
 
         this.setAccountFile();
         return true;
     }
     @Override
-    public boolean setAccountFile() {
+    public synchronized boolean setAccountFile() {
         try {
             File userFile = new File("User_" + username + ".txt");
             FileOutputStream fos = new FileOutputStream(userFile, false);
@@ -284,19 +284,19 @@ public class User implements UserList {
         return true;
     }
 
-    public void setFriend(File file) {
+    public synchronized void setFriend(File file) {
         this.friends = file;
     }
 
-    public void setBlock(File file) {
+    public synchronized void setBlock(File file) {
         this.block = file;
     }
 
-    public void setFriendRequest(File file) {
+    public synchronized void setFriendRequest(File file) {
         this.friendRequest = file;
     }
     // verifies if account exists for User
-    public boolean checkAccountExists() throws IOException {
+    public synchronized boolean checkAccountExists() throws IOException {
         ArrayList<String> allUserNames = new ArrayList<>();
         File file = new File("All_User_Info.txt");
         FileReader fr = new FileReader(file);
@@ -320,7 +320,7 @@ public class User implements UserList {
 
 
     // creates new account based on info from scanner in main method
-    public boolean createAccount() {
+    public synchronized boolean createAccount() {
         if (this.firstName == null || this.firstName.isEmpty() || this.firstName.contains(" ")) {
             return false;
         }
@@ -403,7 +403,7 @@ public class User implements UserList {
         return true;
     }
     // verifies login based on info from scanner in main method
-    public User logIn() {
+    public synchronized User logIn() {
         File allUser = new File("All_User_Info.txt");
         int check = 0;
 
@@ -472,7 +472,7 @@ public class User implements UserList {
                 + "Bio: " +bio;
     }
 
-    public String[] viewFriends() {
+    public synchronized String[] viewFriends() {
         ArrayList<String> friends = new ArrayList<>();
 
         try {
@@ -497,7 +497,7 @@ public class User implements UserList {
         return friend;
     }
 
-    public String[] viewBlocks() {
+    public synchronized String[] viewBlocks() {
         ArrayList<String> blocks = new ArrayList<>();
 
         try {
@@ -515,14 +515,16 @@ public class User implements UserList {
             }
             bfr.close();
         } catch (Exception e) {
+            System.out.println("1");
             return null;
         }
 
         String[] block = blocks.toArray(new String[blocks.size()]);
+        System.out.println("2");
         return block;
     }
 
-    public String viewFile() {
+    public synchronized String viewFile() {
         ArrayList<String> profile = new ArrayList<>();
 
         try {
@@ -554,7 +556,7 @@ public class User implements UserList {
         return userProfile;
     }
 
-    public String[] viewAllUsers() {
+    public synchronized String[] viewAllUsers() {
         ArrayList<String> allUsernames = new ArrayList<>();
 
         try {
@@ -581,7 +583,7 @@ public class User implements UserList {
         return allUsers;
     }
 
-    public boolean searchUser(String searchName) {
+    public synchronized boolean searchUser(String searchName) {
         try {
             File allUser = new File("All_User_Info.txt");
             FileReader fr = new FileReader(allUser);

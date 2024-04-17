@@ -47,6 +47,7 @@ public class Clients {
         JOptionPane.showMessageDialog(null, "Welcome to Boiler Town!",
                 "Boiler Town", JOptionPane.INFORMATION_MESSAGE);
 
+        boolean exit = false;
         do {
             String[] fistOptions = {"Log in", "Sign up", "Exit"};
             String firstChose = (String) JOptionPane.showInputDialog(null,
@@ -57,8 +58,8 @@ public class Clients {
                 return;
 
             } else if (firstChose.equals("Log in")) {
-
-                while (true) {
+                boolean changeOne = false;
+                do {
                     String username = JOptionPane.showInputDialog("Please enter your username: ");
 
                     if (username == null) {
@@ -68,7 +69,8 @@ public class Clients {
                         JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
 
                     } else {
-                        while (true) {
+                        boolean changeTwo = false;
+                        do {
                             String password = JOptionPane.showInputDialog("Please enter your password: ");
 
                             if (password == null) {
@@ -91,7 +93,7 @@ public class Clients {
 
                                 } else if (user.equals("Log in Successfully!")) {
 
-                                    String[] secondOptions = {"Set your account",
+                                    String[] secondOptions = {"Edit your account",
                                             "View All users",
                                             "Search a user",
                                             "View your profile",
@@ -113,7 +115,7 @@ public class Clients {
                                         if (secondChose == null) {
                                             return;
 
-                                        } else if (secondChose.equals("Set your account")) {
+                                        } else if (secondChose.equals("Edit your account")) {
                                             String[] thirdOptions = {"Change your username",
                                                     "Change your password",
                                                     "Change your first name",
@@ -968,6 +970,9 @@ public class Clients {
                                                     "Thank you for using Boiler Town!",
                                                     "Boiler Town",
                                                     JOptionPane.INFORMATION_MESSAGE);
+                                            changeOne = true;
+                                            changeTwo = true;
+                                            exit = true;
                                             break;
                                         }
                                     }
@@ -975,49 +980,30 @@ public class Clients {
                                     JOptionPane.showMessageDialog(null, "Fail to log in.");
                                 }
                             }
-
                             break;
-                        }
+                        } while (!changeTwo);
                     }
+                } while (!changeOne);
 
-                    String[] options = {"Yes", "No"};
-                    int option = JOptionPane.showOptionDialog(
-                            null,
-                            "Do you still want to log in?",
-                            "Boiler Town",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            options, options[1]);
-
-                    if (option == JOptionPane.CLOSED_OPTION) {
-                        return;
-                    } else if (option == JOptionPane.NO_OPTION) {
-                        clients.output.println("break");
-                        break;
-                    } else {
-                        clients.output.println("continue");
-                    }
-                }
             } else if (firstChose.equals("Sign up")) {
 
-                String username = JOptionPane.showInputDialog("Please enter your username, it should be unique with no spacse");
+                String username = JOptionPane.showInputDialog("Please enter your username. It should be unique with no spaces.");
                 if (username == null) {
                     return;
 
                 } else {
-                    String password = JOptionPane.showInputDialog("Please enter your password, it should be grater than 4 characters.");
+                    String password = JOptionPane.showInputDialog("Please enter your password. It should have a minimum of 4 characters.");
 
                     if (password == null) {
                         return;
 
                     } else {
-                        String firstName = JOptionPane.showInputDialog("Please enter your first name, it should have no spaces");
+                        String firstName = JOptionPane.showInputDialog("Please enter your first name. It should have no spaces");
 
                         if (firstName == null) {
                             return;
                         } else {
-                            String lastName = JOptionPane.showInputDialog("Please enter your last name, it should have no spaces.");
+                            String lastName = JOptionPane.showInputDialog("Please enter your last name. It should have no spaces.");
 
                             if (lastName == null) {
                                 return;
@@ -1070,12 +1056,16 @@ public class Clients {
                 }
 
             } else if (firstChose.equals("Exit")) {
-                break;
+                JOptionPane.showMessageDialog(null,
+                        "Thank you for using Boiler Town!",
+                        "Boiler Town",
+                        JOptionPane.INFORMATION_MESSAGE);
+                exit = true;
             } else {
-                break;
+                exit = true;
             }
 
-        } while (true);
+        } while (!exit);
 
         clients.disconnect();
     }

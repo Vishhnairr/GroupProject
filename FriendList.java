@@ -18,6 +18,8 @@ public interface FriendList {
     boolean verifyUser();
 
     boolean makeFriendRequest();
+    
+    boolean rejectFriendRequest();
 
     boolean addFriend();
 

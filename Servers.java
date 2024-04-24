@@ -252,12 +252,14 @@ public class Servers {
 
                                         while (true) {
                                             String pickedFriend = input.readLine(); //receive pickedFriend {5}
+                                            System.out.println(pickedFriend);
 
                                             if (pickedFriend.equals("Click on this if you want to exit")) {
                                                 break;
                                             } else {
                                                 while (true) {
                                                     String thirdChose = input.readLine(); //receive thirdChose {6}
+                                                    System.out.println(thirdChose);
 
                                                     if (thirdChose.equals("View Friend's Profile")) {
                                                         Friends friendsTrue = new Friends(user, pickedFriend);
@@ -330,14 +332,72 @@ public class Servers {
                                         }
 
                                         while (true) {
-                                            String thirdChose = input.readLine(); //receive pickedBlock {5}
+                                            String pickedBlock = input.readLine(); //receive pickedBlock {5}
 
-                                            if (thirdChose.equals("Click on this if you want to exit")) {
+                                            if (pickedBlock.equals("Click on this if you want to exit")) {
                                                 break;
-                                            } else if (thirdChose.equals("Remove Block")) {
-                                                
+                                            } else {
+                                                while (true) {
+                                                    String thirdChose = input.readLine(); //receive thirdChose {6}
+
+                                                    if (thirdChose.equals("Remove Block")) {
+                                                        Friends friend = new Friends(user, pickedBlock);
+
+                                                        if (!friend.removeBlock()) {
+                                                            output.println("Fail to remove."); //pass the result of removing block (4)
+                                                        } else {
+                                                            output.println("Remove a blocked successfully!"); //pass the result of removing block (4)
+                                                        }
+                                                    } else {
+                                                        break;
+                                                    }
+                                                }
                                             }
                                         }
+                                    } else if (secondChose.equals("View your friend requests")) {
+                                        String[] requests = user.viewFriendsRequest();
+                                        int requestsCount = requests.length;
+                                        String count = String.valueOf(requestsCount);
+                                        output.println(count); //pass the length of requests (2)
+
+                                        for (int i = 0; i < requestsCount; i++) {
+                                            output.println(requests[i]); //pass requests (3)
+                                        }
+
+                                        while (true) {
+                                            String pickedRequest = input.readLine(); //receive pickedRequest {5}
+
+                                            if (pickedRequest.equals("Click on this if you want to exit")) {
+                                                break;
+                                            } else {
+                                                while (true) {
+                                                    String thirdChose = input.readLine(); //receive thirdChose {6}
+
+                                                    if (thirdChose.equals("Accept request")) {
+                                                        Friends friends = new Friends(user, pickedRequest);
+
+                                                        if (!friends.addFriend()) {
+                                                            output.println("Fail to add a friend"); //pass the result of accepting request (4)
+                                                        } else {
+                                                            output.println("Add a friend successfully!"); //pass the result of accepting request (4)
+                                                        }
+                                                    } else if (thirdChose.equals("Reject request")) {
+                                                        Friends friends = new Friends(user, pickedRequest);
+
+                                                        if (!friends.rejectFriendRequest()) {
+                                                            output.println("Fail to reject"); //pass the result of rejecting request (4)
+                                                        } else {
+                                                            output.println("Reject a friend request successfully!"); //pass the result of rejecting request (4)
+                                                        }
+                                                    } else {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    } else {
+                                        break;
                                     }
                                 }
                             }

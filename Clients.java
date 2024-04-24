@@ -428,6 +428,7 @@ public class Clients {
                                                     profile,
                                                     "Your profile",
                                                     JOptionPane.INFORMATION_MESSAGE);
+
                                         } else if (secondChose.equals("View your friends")) {
                                             clients.output.println(secondChose); //pass secondChose (4)
                                             String friendsCount = clients.input.readLine(); //receive length of friends {2}
@@ -568,6 +569,7 @@ public class Clients {
                                                                 JOptionPane.showMessageDialog(null, result);
                                                             }
                                                         } else {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
                                                             break;
                                                         }
                                                     }
@@ -620,18 +622,93 @@ public class Clients {
                                                         if (thirdChose == null) {
                                                             return;
                                                         } else if (thirdChose.equals("Remove Block")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); // receive the result of removing block {4}
 
+                                                            JOptionPane.showMessageDialog(null, result);
+                                                        } else {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            break;
                                                         }
                                                     }
                                                 }
                                             }
+                                        } else if (secondChose.equals("View your friend requests")) {
+                                            clients.output.println(secondChose); //pass secondChose (4)
+                                            String requestsCount = clients.input.readLine(); //receive the length of requests {2}
+                                            int count = Integer.parseInt(requestsCount);
+
+                                            ArrayList<String> requests = new ArrayList<>();
+                                            requests.add("Click on this if you want to exit");
+
+                                            for (int i = 0; i < count; i++) {
+                                                requests.add(clients.input.readLine()); //receive requests {3}
+                                            }
+
+                                            String[] request = requests.toArray(new String[requests.size()]);
+
+                                            while (true) { //Interactions in friend request
+                                                String pickedRequest = (String) JOptionPane.showInputDialog(
+                                                        null,
+                                                        "Which request do you want to interact?",
+                                                        "Friend Request",
+                                                        JOptionPane.PLAIN_MESSAGE,
+                                                        null,
+                                                        request, request[0]);
+
+                                                if (pickedRequest == null) {
+                                                    return;
+                                                } else if (pickedRequest.equals("Click on this if you want to exit")) {
+                                                    clients.output.println(pickedRequest); //pass pickedRequest (5)
+                                                    break;
+                                                } else {
+                                                    clients.output.println(pickedRequest); //pass pickedRequest (5)
+                                                    String[] thirdOptions = {"Accept request", "Reject request", "Exit"};
+
+                                                    while (true) { //Interactions in view friend request after chose a specific request
+                                                        String thirdChose = (String) JOptionPane.showInputDialog(
+                                                                null,
+                                                                "What do you want to do now?",
+                                                                "Friend Request",
+                                                                JOptionPane.PLAIN_MESSAGE,
+                                                                null,
+                                                                thirdOptions,
+                                                                thirdOptions[0]);
+
+                                                        if (thirdChose == null) {
+                                                            return;
+                                                        } else if (thirdChose.equals("Accept request")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); //receive the result of accepting request {4}
+
+                                                            JOptionPane.showMessageDialog(null, result);
+
+                                                        } else if (thirdChose.equals("Reject request")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); //receive the result of accepting request {4}
+
+                                                            JOptionPane.showMessageDialog(null, result);
+                                                        } else {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            clients.output.println(secondChose); //pass secondChose (4)
+                                            break;
                                         }
                                     }
                                 }
                             }
-                        } //Log in password end
+                            break;
+                        }
+                        break;//Log in password end
                     }
-                } //Log in username end
+                    break;
+                }
+                break;//Log in username end
             } else if (firstChose.equals("Sign up")) { //Sign up
 
                 String username = JOptionPane.showInputDialog("Please enter your username, it should be unique with no spacse");

@@ -35,6 +35,13 @@ public class Friends implements FriendList{
     }
 
 
+//    /**
+//     * Sends a friend request to another user.
+//     *
+//     * @param friendUsername The username of the user recieving the friend request.
+//     * @param username       The username of the user sending the friend request.
+//     */
+
     public synchronized boolean verifyUser() {
 
         ArrayList<String> allUsers = new ArrayList<>();
@@ -146,6 +153,57 @@ public class Friends implements FriendList{
         return true;
     }
 
+    public synchronized boolean rejectFriendRequest() {
+        if (!this.verifyUser()) {
+            return false;
+        }
+
+        ArrayList<String> requests = new ArrayList<>();
+        try {
+            File friendRequest = new File("User_" + this.user.getUsername() + "_FriendRequest.txt");
+            if (!friendRequest.exists()) {
+                friendRequest.createNewFile();
+            }
+
+            FileReader fr = new FileReader(friendRequest);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line = bfr.readLine();
+
+            while (line != null) {
+                requests.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (Exception e) {
+            return false;
+        }
+
+        System.out.println(requests);
+        requests.remove(this.friendUsername);
+        System.out.println(requests);
+
+        try {
+            File friendRequest = new File("User_" + this.user.getUsername() + "_FriendRequest.txt");
+            if (!friendRequest.exists()) {
+                friendRequest.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(friendRequest, false);
+            PrintWriter pw = new PrintWriter(fos);
+
+            pw.print("");
+
+            for (int i = 0; i < requests.size(); i++) {
+                pw.println(requests.get(i));
+            }
+
+            pw.close();
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
     public synchronized boolean addFriend() {
         ArrayList<String> requests = new ArrayList<>();
         File friendRequestFile = new File("User_" + this.user.getUsername() + "_FriendRequest.txt");
@@ -160,7 +218,6 @@ public class Friends implements FriendList{
             }
             bfr.close();
         } catch (Exception e) {
-            System.out.println("1");
             return false;
         }
 
@@ -216,7 +273,7 @@ public class Friends implements FriendList{
 
         return true;
     }
-  
+
     public synchronized boolean removeFriend() {
         ArrayList<String> friends = new ArrayList<>();
 
@@ -294,23 +351,13 @@ public class Friends implements FriendList{
         }
 
         return true;
-
-        // Remove the user from the friend's list
-        friendLines.removeIf(line -> line.equals(username + " is your friend!"));
-
-        // Rewrite the friend's file without the user
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(friendFile, false))) {
-            for (String line : friendLines) {
-                writer.write(line);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while writing to the friend's file.");
-            e.printStackTrace();
-        }
-
-        System.out.printf("User %s has been successfully removed from your friends list.\n", removeUsername);
-
+    }
+    //    /**
+//     * Blocks a user, preventing them from sending friend requests.
+//     *
+//     * @param usernameToBlock  The username of the user to block.
+//     * @param blockingUsername The username of the user performing the block.
+//     */
     public synchronized boolean blockUser() {
         if (!this.verifyUser()) {
             return false;
@@ -391,6 +438,8 @@ public class Friends implements FriendList{
             File blockFile = new File("User_" + this.user.getUsername() + "_Block.txt");
             FileOutputStream fos = new FileOutputStream(blockFile, false);
             PrintWriter pw = new PrintWriter(fos);
+
+            pw.print("");
 
             for (int j = 0; j < blocks.size(); j++) {
                 pw.println(blocks.get(j));

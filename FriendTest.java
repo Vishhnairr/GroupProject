@@ -3,6 +3,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class FriendTest {
+
     @Test
     public void testFriendConstructor() {
         try {
@@ -38,6 +39,9 @@ public class FriendTest {
             test.createAccount();
             user.createAccount();
 
+            Friends friends = new Friends(test, user.getUsername());
+
+
             if (!friends.verifyUser()) {
                 Assert.fail();
             }
@@ -63,6 +67,33 @@ public class FriendTest {
             Friends friends = new Friends(test, user.getUsername());
 
             if (!friends.makeFriendRequest()) {
+                Assert.fail();
+            }
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testRejectFriendRequest() {
+        try {
+            User test = new User("testvnusername", "testpassword",
+                    "testfirst", "testlast", "test@gmail.com",
+                    "This is a bio", true, false);
+
+            User user = new User("setvnname", "thisispassword",
+                    "First", "Last", "email@gmail.com",
+                    "This is a short bio.", true, true);
+
+            test.createAccount();
+            user.createAccount();
+
+            Friends friends = new Friends(test, user.getUsername());
+            Friends friends1 = new Friends(user, test.getUsername());
+
+            friends.makeFriendRequest();
+
+            if (!friends1.rejectFriendRequest()) {
                 Assert.fail();
             }
         } catch (Exception e) {
@@ -126,7 +157,6 @@ public class FriendTest {
     }
 
     @Test
-
     public void testBlockUser() {
         try {
             User test = new User("testusername", "testpassword",
@@ -203,4 +233,3 @@ public class FriendTest {
         }
     }
 }
-

@@ -1,21 +1,9 @@
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
-/**
- * Client
- *
- * This class extends the User class and allows for a user to make, accept, and decline
- * friend requests, block other users, view their friends list, and remove friends from
- * the list. The friends list is stored as a file associated with the user and is updated
- * every time they perform one of the above actions.
- *
- *
- * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
- *
- * @version March 31, 2024
- *
- */
 public class Clients {
     private Socket socket;
     private BufferedReader input;
@@ -43,11 +31,12 @@ public class Clients {
 
     public static void main(String[] args) throws IOException {
         Clients clients = new Clients("localhost", 8787);
+        boolean breakCheck = true;
 
         JOptionPane.showMessageDialog(null, "Welcome to Boiler Town!",
                 "Boiler Town", JOptionPane.INFORMATION_MESSAGE);
 
-        do {
+        do { // program begin
             String[] fistOptions = {"Log in", "Sign up", "Exit"};
             String firstChose = (String) JOptionPane.showInputDialog(null,
                     "What do you want to do today?", "Boiler Town",
@@ -56,9 +45,8 @@ public class Clients {
             if (firstChose == null) {
                 return;
 
-            } else if (firstChose.equals("Log in")) {
-
-                while (true) {
+            } else if (firstChose.equals("Log in")) { //Log in
+                while (breakCheck) { //Log in begin - username
                     String username = JOptionPane.showInputDialog("Please enter your username: ");
 
                     if (username == null) {
@@ -67,32 +55,59 @@ public class Clients {
                     } else if (username.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
 
+                        String[] options = {"Yes", "No"};
+                        int option = JOptionPane.showOptionDialog(
+                                null,
+                                "Do you still want to log in?",
+                                "Boiler Town",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                options, options[1]);
+
+                        if (option == JOptionPane.CLOSED_OPTION || option == JOptionPane.NO_OPTION) {
+                            return;
+                        }
+
                     } else {
-                        while (true) {
+                        while (breakCheck) { //Log in password begin
                             String password = JOptionPane.showInputDialog("Please enter your password: ");
 
                             if (password == null) {
                                 return;
-
                             } else if (password.isEmpty()) {
-                                JOptionPane.showMessageDialog(null,
-                                        "Error! Your enter is empty!");
+                                JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
 
+                                String[] options = {"Yes", "No"};
+                                int option = JOptionPane.showOptionDialog(
+                                        null,
+                                        "Do you still want to log in?",
+                                        "Boiler Town",
+                                        JOptionPane.YES_NO_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        options, options[1]);
+
+                                if (option == JOptionPane.CLOSED_OPTION || option == JOptionPane.NO_OPTION) {
+                                    return;
+                                } else {
+                                    break;
+                                }
                             } else {
-                                clients.output.println(firstChose);
-                                clients.output.println(username);
-                                clients.output.println(password);
+                                clients.output.println(firstChose); //pass first chose of log in (1)
+                                clients.output.println(username); // pass username (2)
+                                clients.output.println(password); // pass password (3)
 
-                                String user = clients.input.readLine();
+                                String user = clients.input.readLine(); // receive user {1}
 
                                 if (user.equals("null")) {
                                     JOptionPane.showMessageDialog(null,
                                             "Your username or password is wrong!");
 
-                                } else if (user.equals("Log in Successfully!")) {
+                                    break;
 
-                                    String[] secondOptions = {"Set your account",
-                                            "View All users",
+                                } else { //Log in successfully
+                                    String[] secondOptions = {"View All users",
                                             "Search a user",
                                             "View your profile",
                                             "View your friends",
@@ -100,7 +115,7 @@ public class Clients {
                                             "View your friend requests",
                                             "Exit"};
 
-                                    while (true) {
+                                    while (breakCheck) { //Interactions after Log In
                                         String secondChose = (String) JOptionPane.showInputDialog(
                                                 null,
                                                 "What do you want to do now?",
@@ -112,351 +127,21 @@ public class Clients {
 
                                         if (secondChose == null) {
                                             return;
-
-                                        } else if (secondChose.equals("Set your account")) {
-                                            String[] thirdOptions = {"Change your username",
-                                                    "Change your password",
-                                                    "Change your first name",
-                                                    "Change your last name",
-                                                    "Change your email",
-                                                    "Edit your bio",
-                                                    "Set your profile view",
-                                                    "Set your message receive",
-                                                    "Exit"};
-
-                                            while (true) {
-                                                String thirdChose = (String) JOptionPane.showInputDialog(
-                                                        null,
-                                                        "What do you want to do now?",
-                                                        "Boiler Town",
-                                                        JOptionPane.PLAIN_MESSAGE,
-                                                        null,
-                                                        thirdOptions,
-                                                        thirdOptions[0]);
-
-                                                if (thirdChose == null) {
-                                                    return;
-
-                                                } else if (thirdChose.equals("Change your username")) {
-
-                                                    while (true) {
-                                                        String newUsername = JOptionPane.showInputDialog(
-                                                                "Please enter your new username: ");
-
-                                                        if (newUsername == null) {
-                                                            return;
-
-                                                        } else if (newUsername.isEmpty()) {
-                                                            JOptionPane.showMessageDialog(
-                                                                    null,
-                                                                    "Error! Your enter is empty!");
-
-                                                        } else {
-                                                            clients.output.println(secondChose);
-                                                            clients.output.println("Change your username");
-                                                            clients.output.println(newUsername);
-                                                            String result = clients.input.readLine();
-
-                                                            if (result.equals("Change Your username successfully!")) {
-                                                                JOptionPane.showMessageDialog(null, "Change Your username successfully!");
-                                                            } else {
-                                                                JOptionPane.showMessageDialog(null, result);
-                                                            }
-                                                        }
-
-                                                        String[] options = {"Yes", "No"};
-                                                        int option = JOptionPane.showOptionDialog(
-                                                                null,
-                                                                "Do you still want to change your username?",
-                                                                "Boiler Town",
-                                                                JOptionPane.YES_NO_OPTION,
-                                                                JOptionPane.QUESTION_MESSAGE,
-                                                                null,
-                                                                options, options[1]);
-
-                                                        if (option == JOptionPane.CLOSED_OPTION) {
-                                                            return;
-                                                        } else if (option == JOptionPane.NO_OPTION) {
-                                                            break;
-                                                        }
-
-                                                    }
-
-                                                } else if (thirdChose.equals("Change your password")) {
-
-                                                    while (true) {
-                                                        String newPassword = JOptionPane.showInputDialog("Please enter your new password: ");
-
-                                                        if (newPassword == null) {
-                                                            return;
-                                                        } else if (newPassword.isEmpty()) {
-                                                            JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-                                                        } else {
-                                                            clients.output.println(secondChose);
-                                                            clients.output.println("Change your password");
-                                                            clients.output.println(newPassword);
-                                                            String result = clients.input.readLine();
-
-                                                            if (result.equals("Change your password successfully!")) {
-                                                                JOptionPane.showMessageDialog(null, "Change your password successfully!");
-                                                            } else {
-                                                                JOptionPane.showMessageDialog(null, result);
-                                                            }
-                                                        }
-
-                                                        String[] options = {"Yes", "No"};
-                                                        int option = JOptionPane.showOptionDialog(
-                                                                null,
-                                                                "Do you still want to change your password?",
-                                                                "Boiler Town",
-                                                                JOptionPane.YES_NO_OPTION,
-                                                                JOptionPane.QUESTION_MESSAGE,
-                                                                null,
-                                                                options, options[1]);
-
-                                                        if (option == JOptionPane.CLOSED_OPTION) {
-                                                            return;
-                                                        } else if (option == JOptionPane.NO_OPTION) {
-                                                            break;
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Change your first name")) {
-
-                                                    while (true) {
-                                                        String newFirstName = JOptionPane.showInputDialog("Please enter your new first name: ");
-
-                                                        if (newFirstName == null) {
-                                                            return;
-
-                                                        } else if (newFirstName.isEmpty()) {
-                                                            JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-
-                                                        } else {
-                                                            clients.output.println(secondChose);
-                                                            clients.output.println("Change your first name");
-                                                            clients.output.println(newFirstName);
-                                                            String result = clients.input.readLine();
-
-                                                            if (result.equals("Change your first name successfully!")) {
-                                                                JOptionPane.showMessageDialog(null, "Change your first name successfully!");
-                                                            } else {
-                                                                JOptionPane.showMessageDialog(null, result);
-                                                            }
-                                                        }
-
-                                                        String[] options = {"Yes", "No"};
-                                                        int option = JOptionPane.showOptionDialog(
-                                                                null,
-                                                                "Do you still want to change your password?",
-                                                                "Boiler Town",
-                                                                JOptionPane.YES_NO_OPTION,
-                                                                JOptionPane.QUESTION_MESSAGE,
-                                                                null,
-                                                                options, options[1]);
-
-                                                        if (option == JOptionPane.CLOSED_OPTION) {
-                                                            return;
-                                                        } else if (option == JOptionPane.NO_OPTION) {
-                                                            break;
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Change your last name")) {
-
-                                                    while (true) {
-                                                        String newLastName = JOptionPane.showInputDialog("Please enter your new last name: ");
-
-                                                        if (newLastName == null) {
-                                                            return;
-                                                        } else if (newLastName.isEmpty()) {
-                                                            JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-                                                        } else {
-                                                            clients.output.println(secondChose);
-                                                            clients.output.println("Change your last name");
-                                                            clients.output.println(newLastName);
-                                                            String result = clients.input.readLine();
-
-                                                            if (result.equals("Change your last name successfully!")) {
-                                                                JOptionPane.showMessageDialog(null, "Change your last name successfully!");
-                                                            } else {
-                                                                JOptionPane.showMessageDialog(null, result);
-                                                            }
-                                                        }
-
-                                                        String[] options = {"Yes", "No"};
-                                                        int option = JOptionPane.showOptionDialog(
-                                                                null,
-                                                                "Do you still want to change your password?",
-                                                                "Boiler Town",
-                                                                JOptionPane.YES_NO_OPTION,
-                                                                JOptionPane.QUESTION_MESSAGE,
-                                                                null,
-                                                                options, options[1]);
-
-                                                        if (option == JOptionPane.CLOSED_OPTION) {
-                                                            return;
-                                                        } else if (option == JOptionPane.NO_OPTION) {
-                                                            break;
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Change your email")) {
-
-                                                    while (true) {
-                                                        String newEmail = JOptionPane.showInputDialog("Please enter your new email: ");
-
-                                                        if (newEmail == null) {
-                                                            return;
-
-                                                        } else if (newEmail.isEmpty()) {
-                                                            JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-
-                                                        } else {
-                                                            clients.output.println(secondChose);
-                                                            clients.output.println("Change your email");
-                                                            clients.output.println(newEmail);
-                                                            String result = clients.input.readLine();
-
-                                                            if (result.equals("Change your email successfully!")) {
-                                                                JOptionPane.showMessageDialog(null, "Change your email successfully!");
-                                                            } else {
-                                                                JOptionPane.showMessageDialog(null, result);
-                                                            }
-                                                        }
-
-                                                        String[] options = {"Yes", "No"};
-                                                        int option = JOptionPane.showOptionDialog(
-                                                                null,
-                                                                "Do you still want to change your password?",
-                                                                "Boiler Town",
-                                                                JOptionPane.YES_NO_OPTION,
-                                                                JOptionPane.QUESTION_MESSAGE,
-                                                                null,
-                                                                options, options[1]);
-
-                                                        if (option == JOptionPane.CLOSED_OPTION) {
-                                                            return;
-                                                        } else if (option == JOptionPane.NO_OPTION) {
-                                                            break;
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Edit your bio")) {
-
-                                                    while (true) {
-                                                        String newBio = JOptionPane.showInputDialog("Please enter your new bio: ");
-
-                                                        if (newBio == null) {
-                                                            return;
-                                                        } else if (newBio.isEmpty()) {
-                                                            JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-                                                        } else {
-                                                            clients.output.println(secondChose);
-                                                            clients.output.println("Edit your bio");
-                                                            clients.output.println(newBio);
-                                                            String result = clients.input.readLine();
-
-                                                            if (result.equals("Change your bio successfully!")) {
-                                                                JOptionPane.showMessageDialog(null, "Change your bio successfully!");
-                                                            } else {
-                                                                JOptionPane.showMessageDialog(null, result);
-                                                            }
-                                                        }
-
-                                                        String[] options = {"Yes", "No"};
-                                                        int option = JOptionPane.showOptionDialog(
-                                                                null,
-                                                                "Do you still want to change your password?",
-                                                                "Boiler Town",
-                                                                JOptionPane.YES_NO_OPTION,
-                                                                JOptionPane.QUESTION_MESSAGE,
-                                                                null,
-                                                                options, options[1]);
-
-                                                        if (option == JOptionPane.CLOSED_OPTION) {
-                                                            return;
-                                                        } else if (option == JOptionPane.NO_OPTION) {
-                                                            break;
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Set your profile view")) {
-
-                                                    while (true) {
-                                                        String newProfileView = JOptionPane.showInputDialog("Please enter your new profile view: ");
-
-                                                        if (newProfileView == null) {
-                                                            return;
-                                                        } else if (newProfileView.isEmpty()) {
-                                                            JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-                                                        } else if (newProfileView.toLowerCase().equals("true") || newProfileView.toLowerCase().equals("false")){
-                                                            clients.output.println(secondChose);
-                                                            clients.output.println("Set your profile view");
-                                                            clients.output.println(newProfileView);
-                                                            String result = clients.input.readLine();
-
-                                                            if (result.equals("Set your profile view successfully!")) {
-                                                                JOptionPane.showMessageDialog(null, "Set your profile view successfully!");
-                                                            } else {
-                                                                JOptionPane.showMessageDialog(null, result);
-                                                            }
-                                                        } else {
-                                                            JOptionPane.showMessageDialog(null, "Error! Invalid enter!");
-                                                        }
-
-                                                        String[] options = {"Yes", "No"};
-                                                        int option = JOptionPane.showOptionDialog(
-                                                                null,
-                                                                "Do you still want to change your password?",
-                                                                "Boiler Town",
-                                                                JOptionPane.YES_NO_OPTION,
-                                                                JOptionPane.QUESTION_MESSAGE,
-                                                                null,
-                                                                options, options[1]);
-
-                                                        if (option == JOptionPane.CLOSED_OPTION) {
-                                                            return;
-                                                        } else if (option == JOptionPane.NO_OPTION) {
-                                                            break;
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Set your message receive")) {
-
-                                                    while (true) {
-                                                        String newMessageReceive = JOptionPane.showInputDialog("Please enter your new message receive: ");
-
-                                                        if (newMessageReceive == null) {
-                                                            return;
-                                                        } else if (newMessageReceive.isEmpty()) {
-                                                            JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-                                                        } else if (newMessageReceive.toLowerCase().equals("true") || newMessageReceive.toLowerCase().equals("false")) {
-                                                            clients.output.println("Set your message receive");
-                                                            clients.output.println(newMessageReceive);
-                                                            String result = clients.input.readLine();
-
-                                                            if (result.equals("Set your message receive successfully!")) {
-                                                                JOptionPane.showMessageDialog(null, "Set your message receive successfully!");
-                                                            } else {
-                                                                JOptionPane.showMessageDialog(null, result);
-                                                            }
-                                                        } else {
-                                                            JOptionPane.showMessageDialog(null, "Error! Invalid enter!");
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Exit")) {
-                                                    break;
-                                                }
-                                            }
                                         } else if (secondChose.equals("View All users")) {
-                                            clients.output.println("View All users");
+                                            clients.output.println(secondChose); //pass secondChose (4)
                                             ArrayList<String> allUsers = new ArrayList<>();
+                                            allUsers.add("Click on this if you want to exit");
 
-                                            String usersCount = clients.input.readLine();
+                                            String usersCount = clients.input.readLine(); //receive length of users {2}
                                             int count = Integer.parseInt(usersCount);
 
                                             for (int i = 0; i < count; i++) {
-                                                allUsers.add(clients.input.readLine());
+                                                allUsers.add(clients.input.readLine()); // receive users {3}
                                             }
 
                                             String[] allUser = allUsers.toArray(new String[allUsers.size()]);
 
-                                            while (true) {
+                                            while (true) { //interaction in All users
                                                 String userSelected = (String) JOptionPane.showInputDialog(
                                                         null,
                                                         "Who do you want to interact with?",
@@ -467,8 +152,12 @@ public class Clients {
 
                                                 if (userSelected == null) {
                                                     return;
+                                                } else if (userSelected.equals("Click on this if you want to exit")) {
+                                                    clients.output.println(userSelected);//pass userSelected (5)
+                                                    break;
 
                                                 } else {
+                                                    clients.output.println(userSelected);//pass userSelected (5)
                                                     String[] thirdOptions = {"View profile",
                                                             "Make a friend request",
                                                             "Block a user",
@@ -476,8 +165,7 @@ public class Clients {
                                                             "View message history",
                                                             "Exit"};
 
-                                                    while (true) {
-
+                                                    while (true) { // interactions if chose a specific user in all users
                                                         String thirdChose = (String) JOptionPane.showInputDialog(
                                                                 null,
                                                                 "What do you want to do now?",
@@ -489,17 +177,16 @@ public class Clients {
 
                                                         if (thirdChose == null) {
                                                             return;
-                                                        } else if (thirdChose.equals("View profile")){
-                                                            clients.output.println(thirdChose);
-                                                            clients.output.println(userSelected);
+                                                        } else if (thirdChose.equals("View profile")) {
+                                                            clients.output.println(thirdChose); // pass thirdChose (6)
+                                                            String countFile = clients.input.readLine(); //receive length of file {4}
 
-                                                            String countFile = clients.input.readLine();
                                                             if (!countFile.equals("0")) {
                                                                 int fileCount = Integer.parseInt(countFile);
                                                                 ArrayList<String> fileList = new ArrayList<>();
 
                                                                 for (int k = 0; k < fileCount; k++) {
-                                                                    fileList.add(clients.input.readLine());
+                                                                    fileList.add(clients.input.readLine()); //receive file {5}
                                                                 }
 
                                                                 String file = "";
@@ -517,33 +204,32 @@ public class Clients {
                                                                         "User profile",
                                                                         JOptionPane.INFORMATION_MESSAGE);
 
-                                                            } else {
+                                                            } else { //if no file is passed
                                                                 JOptionPane.showMessageDialog(
                                                                         null,
                                                                         "You are not allowed " +
                                                                                 "to see this user's profile.");
                                                             }
-
                                                         } else if (thirdChose.equals("Make a friend request")) {
-                                                            clients.output.println(thirdChose);
-                                                            clients.output.println(userSelected);
-                                                            String result = clients.input.readLine();
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); //receive result of making a friend request {4}
 
                                                             if (result.equals("Make a friend request successfully!")) {
                                                                 JOptionPane.showMessageDialog(null, "Make a friend request successfully!");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, result);
                                                             }
+
                                                         } else if (thirdChose.equals("Block a user")) {
-                                                            clients.output.println(thirdChose);
-                                                            clients.output.println(userSelected);
-                                                            String result = clients.input.readLine();
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); //receive result of blocking a user {4}
 
                                                             if (result.equals("Block a user successfully!")) {
                                                                 JOptionPane.showMessageDialog(null, "Block a user successfully!");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, result);
                                                             }
+
                                                         } else if (thirdChose.equals("Send a message")) {
                                                             String content = JOptionPane.showInputDialog("Please enter what you want to send: ");
 
@@ -552,10 +238,9 @@ public class Clients {
                                                             } else if (content.isEmpty()) {
                                                                 JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
                                                             } else {
-                                                                clients.output.println(thirdChose);
-                                                                clients.output.println(userSelected);
-                                                                clients.output.println(content);
-                                                                String result = clients.input.readLine();
+                                                                clients.output.println(thirdChose); //pass thirdChose (6)
+                                                                clients.output.println(content); //pass the content of message (7)
+                                                                String result = clients.input.readLine(); //receive the result of sending message {4}
 
                                                                 if (result.equals("Send a message successfully!")) {
                                                                     JOptionPane.showMessageDialog(null, "Send a message successfully!");
@@ -564,19 +249,18 @@ public class Clients {
                                                                 }
                                                             }
                                                         } else if (thirdChose.equals("View message history")) {
-                                                            clients.output.println(thirdChose);
-                                                            clients.output.println(userSelected);
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
 
-                                                            String messageCount = clients.input.readLine();
+                                                            String messageCount = clients.input.readLine(); //receive the count of messages {4}
                                                             int messages = Integer.parseInt(messageCount);
 
                                                             String history = "";
 
                                                             for (int m = 0; m < messages; m++) {
                                                                 if (m == messages - 1) {
-                                                                    history += clients.input.readLine();
+                                                                    history += clients.input.readLine(); //receive messages {5}
                                                                 } else {
-                                                                    history += clients.input.readLine() + "\n";
+                                                                    history += clients.input.readLine() + "\n"; //receive messages {5}
                                                                 }
                                                             }
 
@@ -584,26 +268,13 @@ public class Clients {
                                                                     history,
                                                                     "Message History",
                                                                     JOptionPane.INFORMATION_MESSAGE);
-                                                        } else if (thirdChose.equals("Exit")) {
+
+                                                        } else {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            System.out.println(thirdChose);
                                                             break;
                                                         }
                                                     }
-                                                }
-
-                                                String[] options = {"Yes", "No"};
-                                                int option = JOptionPane.showOptionDialog(
-                                                        null,
-                                                        "Do you still want to interact view all users?",
-                                                        "Boiler Town",
-                                                        JOptionPane.YES_NO_OPTION,
-                                                        JOptionPane.QUESTION_MESSAGE,
-                                                        null,
-                                                        options, options[1]);
-
-                                                if (option == JOptionPane.CLOSED_OPTION) {
-                                                    return;
-                                                } else if (option == JOptionPane.NO_OPTION) {
-                                                    break;
                                                 }
                                             }
                                         } else if (secondChose.equals("Search a user")) {
@@ -614,25 +285,24 @@ public class Clients {
                                             } else if (userSearched.isEmpty()) {
                                                 JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
                                             } else {
-                                                clients.output.println("Search a user");
-                                                clients.output.println(userSearched);
-                                                String result = clients.input.readLine();
+                                                clients.output.println(secondChose); //pass secondChose (4)
+                                                clients.output.println(userSearched); //pass userSearched (5)
+                                                String result = clients.input.readLine(); //receive result of searching a user {2}
 
-                                                if (result.equals("User searched!")) {
-                                                    JOptionPane.showMessageDialog(null, "User searched!");
-
-                                                    while (true) {
-                                                        String[] thirdOptions = {"View profile",
-                                                                "Make a friend request",
-                                                                "Block a user",
-                                                                "Send a message",
-                                                                "View message history",
-                                                                "Exit"};
-
+                                                if (!result.equals("User searched!")) {
+                                                    JOptionPane.showMessageDialog(null, result);
+                                                } else {
+                                                    String[] thirdOptions = {"View profile",
+                                                            "Make a friend request",
+                                                            "Block a user",
+                                                            "Send a message",
+                                                            "View message history",
+                                                            "Exit"};
+                                                    while (true) { //Interactions in search user
                                                         String thirdChose = (String) JOptionPane.showInputDialog(
                                                                 null,
-                                                                "What do you want to interact with this user?",
-                                                                "Searched User",
+                                                                "What do you want to do now?",
+                                                                "Boiler Town",
                                                                 JOptionPane.PLAIN_MESSAGE,
                                                                 null,
                                                                 thirdOptions,
@@ -642,15 +312,16 @@ public class Clients {
                                                             return;
                                                         } else {
                                                             if (thirdChose.equals("View profile")) {
-                                                                clients.output.println(thirdChose);
+                                                                clients.output.println(thirdChose); // pass thirdChose (6)
 
-                                                                String countFile = clients.input.readLine();
+                                                                String countFile = clients.input.readLine(); //receive length of file {3}
+
                                                                 if (!countFile.equals("0")) {
                                                                     int fileCount = Integer.parseInt(countFile);
                                                                     ArrayList<String> fileList = new ArrayList<>();
 
                                                                     for (int k = 0; k < fileCount; k++) {
-                                                                        fileList.add(clients.input.readLine());
+                                                                        fileList.add(clients.input.readLine()); //receive file {4}
                                                                     }
 
                                                                     String file = "";
@@ -667,30 +338,30 @@ public class Clients {
                                                                             file,
                                                                             "User profile",
                                                                             JOptionPane.INFORMATION_MESSAGE);
-                                                                } else {
+
+                                                                } else { //if no file is passed
                                                                     JOptionPane.showMessageDialog(
                                                                             null,
-                                                                            "You're not allowed " +
+                                                                            "You are not allowed " +
                                                                                     "to see this user's profile.");
                                                                 }
-
                                                             } else if (thirdChose.equals("Make a friend request")) {
-                                                                clients.output.println(thirdChose);
-                                                                String resultMake = clients.input.readLine();
+                                                                clients.output.println(thirdChose); //pass thirdChose (6)
+                                                                String resultRequest = clients.input.readLine(); //receive result of making a friend request {3}
 
-                                                                if (resultMake.equals("Make a friend request successfully!")) {
+                                                                if (resultRequest.equals("Make a friend request successfully!")) {
                                                                     JOptionPane.showMessageDialog(null, "Make a friend request successfully!");
                                                                 } else {
-                                                                    JOptionPane.showMessageDialog(null, result);
+                                                                    JOptionPane.showMessageDialog(null, resultRequest);
                                                                 }
                                                             } else if (thirdChose.equals("Block a user")) {
-                                                                clients.output.println(thirdChose);
-                                                                String resultBlock = clients.input.readLine();
+                                                                clients.output.println(thirdChose); //pass thirdChose (6)
+                                                                String resultBlock = clients.input.readLine(); //receive result of blocking a user {3}
 
                                                                 if (resultBlock.equals("Block a user successfully!")) {
                                                                     JOptionPane.showMessageDialog(null, "Block a user successfully!");
                                                                 } else {
-                                                                    JOptionPane.showMessageDialog(null, result);
+                                                                    JOptionPane.showMessageDialog(null, resultBlock);
                                                                 }
                                                             } else if (thirdChose.equals("Send a message")) {
                                                                 String content = JOptionPane.showInputDialog("Please enter what you want to send: ");
@@ -700,29 +371,29 @@ public class Clients {
                                                                 } else if (content.isEmpty()) {
                                                                     JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
                                                                 } else {
-                                                                    clients.output.println(thirdChose);
-                                                                    clients.output.println(content);
-                                                                    String resultSend = clients.input.readLine();
+                                                                    clients.output.println(thirdChose); //pass thirdChose (6)
+                                                                    clients.output.println(content); //pass the content of message (7)
+                                                                    String resultSend = clients.input.readLine(); //receive the result of sending message {3}
 
                                                                     if (resultSend.equals("Send a message successfully!")) {
                                                                         JOptionPane.showMessageDialog(null, "Send a message successfully!");
                                                                     } else {
-                                                                        JOptionPane.showMessageDialog(null, result);
+                                                                        JOptionPane.showMessageDialog(null, resultSend);
                                                                     }
                                                                 }
                                                             } else if (thirdChose.equals("View message history")) {
-                                                                clients.output.println(thirdChose);
+                                                                clients.output.println(thirdChose); //pass thirdChose (6)
 
-                                                                String messageCount = clients.input.readLine();
+                                                                String messageCount = clients.input.readLine(); //receive the count of messages {3}
                                                                 int messages = Integer.parseInt(messageCount);
 
                                                                 String history = "";
 
                                                                 for (int m = 0; m < messages; m++) {
                                                                     if (m == messages - 1) {
-                                                                        history += clients.input.readLine();
+                                                                        history += clients.input.readLine(); //receive messages {4}
                                                                     } else {
-                                                                        history += clients.input.readLine() + "\n";
+                                                                        history += clients.input.readLine() + "\n"; //receive messages {4}
                                                                     }
                                                                 }
 
@@ -730,27 +401,26 @@ public class Clients {
                                                                         history,
                                                                         "Message History",
                                                                         JOptionPane.INFORMATION_MESSAGE);
-                                                            } else if (thirdChose.equals("Exit")) {
+                                                            } else {
+                                                                clients.output.println(thirdChose); //pass thirdChose (6)
                                                                 break;
                                                             }
                                                         }
                                                     }
-                                                } else {
-                                                    JOptionPane.showMessageDialog(null, result);
                                                 }
                                             }
                                         } else if (secondChose.equals("View your profile")) {
-                                            clients.output.println("View your profile");
-                                            String fileCount = clients.input.readLine();
+                                            clients.output.println(secondChose); //pass secondChose (4)
+                                            String fileCount = clients.input.readLine(); //receive length of file {2}
                                             int count = Integer.parseInt(fileCount);
 
                                             String profile = "";
 
                                             for (int i = 0; i < count; i++) {
                                                 if (i == count - 1) {
-                                                    profile += clients.input.readLine();
+                                                    profile += clients.input.readLine(); //receive file {3}
                                                 } else {
-                                                    profile += clients.input.readLine() + "\n";
+                                                    profile += clients.input.readLine() + "\n"; //receive file {3}
                                                 }
                                             }
 
@@ -759,247 +429,287 @@ public class Clients {
                                                     "Your profile",
                                                     JOptionPane.INFORMATION_MESSAGE);
 
-                                        } else if (secondChose.equals("View your friend requests")) {
-                                            clients.output.println("View your friend requests");
-                                            String requestsCount = clients.input.readLine();
-                                            int count = Integer.parseInt(requestsCount);
-
-                                            String request = "";
-
-                                            for (int i = 0; i < count; i++) {
-                                                if (i == count - 1) {
-                                                    request += clients.input.readLine();
-                                                } else {
-                                                    request += clients.input.readLine() + "\n";
-                                                }
-                                            }
-
-                                            JOptionPane.showMessageDialog(
-                                                    null,
-                                                    request,
-                                                    "Friend Request",
-                                                    JOptionPane.INFORMATION_MESSAGE);
-
-                                            String[] thirdOptions = {"Add a friend", "Exit"};
-                                            while (true) {
-                                                String thirdChose = (String) JOptionPane.showInputDialog(
-                                                        null,
-                                                        "What do you want to do now?",
-                                                        "Friend Request",
-                                                        JOptionPane.PLAIN_MESSAGE,
-                                                        null,
-                                                        thirdOptions,
-                                                        thirdOptions[0]);
-
-                                                if (thirdChose == null) {
-                                                    return;
-                                                } else if (thirdChose.equals("Add a friend")) {
-                                                    clients.output.println(thirdChose);
-                                                    String[] requestFriend = request.split("\n");
-
-                                                    String addFriend = (String) JOptionPane.showInputDialog(
-                                                            null,
-                                                            "Please select who you want to add.",
-                                                            "Friend Request",
-                                                            JOptionPane.PLAIN_MESSAGE,
-                                                            null,
-                                                            requestFriend,
-                                                            requestFriend[0]);
-
-                                                    if (addFriend == null) {
-                                                        return;
-                                                    } else {
-                                                        clients.output.println(addFriend);
-
-                                                        String result = clients.input.readLine();
-
-                                                        if (result.equals("Add a friend successfully!")) {
-                                                            JOptionPane.showMessageDialog(null, "Add a friend successfully!");
-                                                        } else {
-                                                            JOptionPane.showMessageDialog(null, result);
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Exit")) {
-                                                    break;
-                                                }
-                                            }
                                         } else if (secondChose.equals("View your friends")) {
-                                            clients.output.println("View your friends");
-                                            String friendsCount = clients.input.readLine();
+                                            clients.output.println(secondChose); //pass secondChose (4)
+                                            String friendsCount = clients.input.readLine(); //receive length of friends {2}
                                             int count = Integer.parseInt(friendsCount);
 
-                                            String friends = "";
+                                            ArrayList<String> friends = new ArrayList<>();
+                                            friends.add("Click on this if you want to exit");
 
                                             for (int i = 0; i < count; i++) {
-                                                if (i == count - 1) {
-                                                    friends += clients.input.readLine();
-                                                } else {
-                                                    friends += clients.input.readLine() + "\n";
-                                                }
+                                                friends.add(clients.input.readLine()); //receive friends {3}
                                             }
 
-                                            JOptionPane.showMessageDialog(
-                                                    null,
-                                                    friends,
-                                                    "Friends",
-                                                    JOptionPane.INFORMATION_MESSAGE);
+                                            String[] friend = friends.toArray(new String[friends.size()]);
 
-                                            String[] thirdOptions = {"Remove a friend", "Block a user", "Exit"};
-                                            while (true) {
-                                                String thirdChose = (String) JOptionPane.showInputDialog(
+                                            while (true) { //Interactions in View your Friends
+                                                String pickedFriend = (String) JOptionPane.showInputDialog(
                                                         null,
-                                                        "What do you want to do now",
+                                                        "Who do you want to interact with?",
                                                         "Friends",
                                                         JOptionPane.PLAIN_MESSAGE,
                                                         null,
-                                                        thirdOptions, thirdOptions[0]);
+                                                        friend, friend[0]);
 
-                                                String[] friend = friends.split("\n");
-
-                                                if (thirdChose == null) {
+                                                if (pickedFriend == null) {
                                                     return;
-                                                } else if (thirdChose.equals("Remove a friend")){
-                                                    clients.output.println(thirdChose);
-                                                    String removedFriend = (String) JOptionPane.showInputDialog(
-                                                            null,
-                                                            "Please select who you want to remove",
-                                                            "Friends",
-                                                            JOptionPane.PLAIN_MESSAGE,
-                                                            null,
-                                                            friend,
-                                                            friend[0]);
-
-                                                    if (removedFriend == null) {
-                                                        return;
-                                                    } else {
-                                                        clients.output.println(removedFriend);
-                                                        String result = clients.input.readLine();
-
-                                                        if (result.equals("Remove a friend successfully!")) {
-                                                            JOptionPane.showMessageDialog(null, "Remove a friend successfully!");
-                                                        } else {
-                                                            JOptionPane.showMessageDialog(null, result);
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Block a user")) {
-                                                    clients.output.println(thirdChose);
-
-                                                    String blockedFriend = (String) JOptionPane.showInputDialog(
-                                                            null,
-                                                            "Please select who you want to block",
-                                                            "Friends",
-                                                            JOptionPane.PLAIN_MESSAGE,
-                                                            null,
-                                                            friend,
-                                                            friend[0]);
-
-                                                    if (blockedFriend == null) {
-                                                        return;
-
-                                                    } else {
-                                                        clients.output.println(blockedFriend);
-                                                        String result = clients.input.readLine();
-
-                                                        if (result.equals("Block a user successfully!")) {
-                                                            JOptionPane.showMessageDialog(null, "Block a user successfully!");
-                                                        } else {
-                                                            JOptionPane.showMessageDialog(null, result);
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("Exit")) {
+                                                } else if (pickedFriend.equals("Click on this if you want to exit")) {
+                                                    clients.output.println(pickedFriend); //pass pickedFriend (5)
                                                     break;
+                                                } else {
+                                                    clients.output.println(pickedFriend); //pass pickedFriend (5)
+
+                                                    String[] thirdOptions = {"View Friend's Profile",
+                                                            "View Message History",
+                                                            "Send a Message",
+                                                            "Remove a Friend",
+                                                            "Block a Friend",
+                                                            "Exit"};
+
+                                                    while (true) { //Interactions after chose a specific friend
+                                                        String thirdChose = (String) JOptionPane.showInputDialog(
+                                                                null,
+                                                                "What do you want to do now?",
+                                                                "Friends",
+                                                                JOptionPane.PLAIN_MESSAGE,
+                                                                null,
+                                                                thirdOptions,
+                                                                thirdOptions[0]);
+
+                                                        if (thirdChose == null) {
+                                                            return;
+                                                        } else if (thirdChose.equals("View Friend's Profile")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String friendFile = clients.input.readLine(); //receive length of file {4}
+
+                                                            if (!friendFile.equals("0")) {
+                                                                int fileCount = Integer.parseInt(friendFile);
+                                                                ArrayList<String> fileList = new ArrayList<>();
+
+                                                                for (int k = 0; k < fileCount; k++) {
+                                                                    fileList.add(clients.input.readLine()); //receive file {5}
+                                                                }
+
+                                                                String file = "";
+
+                                                                for (int l = 0; l < fileList.size(); l++) {
+                                                                    if (l == fileList.size() - 1) {
+                                                                        file += fileList.get(l);
+                                                                    } else {
+                                                                        file += fileList.get(l) + "\n";
+                                                                    }
+                                                                }
+
+                                                                JOptionPane.showMessageDialog(null,
+                                                                        file,
+                                                                        "Friend profile",
+                                                                        JOptionPane.INFORMATION_MESSAGE);
+
+                                                            } else { //if no file is passed
+                                                                JOptionPane.showMessageDialog(
+                                                                        null,
+                                                                        "You are not allowed " +
+                                                                                "to see this user's profile.");
+                                                            }
+                                                        } else if (thirdChose.equals("View Message History")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+
+                                                            String messageCount = clients.input.readLine(); //receive the count of messages {4}
+                                                            int messages = Integer.parseInt(messageCount);
+
+                                                            String history = "";
+
+                                                            for (int m = 0; m < messages; m++) {
+                                                                if (m == messages - 1) {
+                                                                    history += clients.input.readLine(); //receive messages {5}
+                                                                } else {
+                                                                    history += clients.input.readLine() + "\n"; //receive messages {5}
+                                                                }
+                                                            }
+
+                                                            JOptionPane.showMessageDialog(null,
+                                                                    history,
+                                                                    "Message History",
+                                                                    JOptionPane.INFORMATION_MESSAGE);
+                                                        } else if (thirdChose.equals("Send a Message")) {
+                                                            String content = JOptionPane.showInputDialog("Please enter what you want to send: ");
+
+                                                            if (content == null) {
+                                                                return;
+                                                            } else if (content.isEmpty()) {
+                                                                JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                                                            } else {
+                                                                clients.output.println(thirdChose); //pass thirdChose (6)
+                                                                clients.output.println(content); //pass the content of message (7)
+                                                                String resultSend = clients.input.readLine(); //receive the result of sending message {4}
+
+                                                                if (resultSend.equals("Send a message successfully!")) {
+                                                                    JOptionPane.showMessageDialog(null, "Send a message successfully!");
+                                                                } else {
+                                                                    JOptionPane.showMessageDialog(null, resultSend);
+                                                                }
+                                                            }
+                                                        } else if (thirdChose.equals("Remove a Friend")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); //receive result of removing a friend {4}
+
+                                                            if (result.equals("Remove a friend successfully!")) {
+                                                                JOptionPane.showMessageDialog(null, "Remove a friend successfully!");
+                                                            } else {
+                                                                JOptionPane.showMessageDialog(null, result);
+                                                            }
+                                                        } else if (thirdChose.equals("Block a Friend")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); //receive result of removing a friend {4}
+
+                                                            if (result.equals("Block a friend successfully!")) {
+                                                                JOptionPane.showMessageDialog(null, "Block a friend successfully!");
+                                                            } else {
+                                                                JOptionPane.showMessageDialog(null, result);
+                                                            }
+                                                        } else {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            break;
+                                                        }
+                                                    }
+
                                                 }
                                             }
                                         } else if (secondChose.equals("View your blocks")) {
-                                            clients.output.println("View your blocks");
-                                            String blocksCount = clients.input.readLine();
+                                            clients.output.println(secondChose); //pass secondChose (4)
+                                            String blocksCount = clients.input.readLine(); //receive the length of blocks {2}
                                             int count = Integer.parseInt(blocksCount);
 
-                                            String blocks = "";
+                                            ArrayList<String> blocks = new ArrayList<>();
+                                            blocks.add("Click on this if you want to exit");
 
                                             for (int i = 0; i < count; i++) {
-                                                if (i == count - 1) {
-                                                    blocks += clients.input.readLine();
-                                                } else {
-                                                    blocks += clients.input.readLine() + "\n";
-                                                }
+                                                blocks.add(clients.input.readLine()); //receive blocks {3}
                                             }
 
-                                            JOptionPane.showMessageDialog(
-                                                    null,
-                                                    blocks,
-                                                    "Blocks",
-                                                    JOptionPane.INFORMATION_MESSAGE);
+                                            String[] block = blocks.toArray(new String[blocks.size()]);
 
-                                            String[] thirdOptions = {"Remove a blocked user", "Exit"};
-                                            while (true) {
-                                                String thirdChose = (String) JOptionPane.showInputDialog(
+                                            while (true) { //Interactions in View your blocks
+                                                String pickedBlock = (String) JOptionPane.showInputDialog(
                                                         null,
-                                                        "What do you want to do now?",
+                                                        "Who do you want to interact with?",
                                                         "Blocks",
                                                         JOptionPane.PLAIN_MESSAGE,
-                                                        null, thirdOptions, thirdOptions[0]);
+                                                        null,
+                                                        block, block[0]);
 
-                                                if (thirdChose == null) {
+                                                if (pickedBlock == null) {
                                                     return;
-                                                } else if (thirdChose.equals("Remove a blocked user")){
-                                                    clients.output.println(thirdChose);
-                                                    String result = clients.input.readLine();
+                                                } else if (pickedBlock.equals("Click on this if you want to exit")) {
+                                                    clients.output.println(pickedBlock); //pass pickedBlock (5)
+                                                    break;
+                                                } else {
+                                                    clients.output.println(pickedBlock); //pass pickedBlock (5)
 
-                                                    JOptionPane.showMessageDialog(null, result);
+                                                    String[] thirdOptions = {"Remove Block", "Exit"};
+
+                                                    while (true) { //Interactions in view your blocks after chose a specific block
+                                                        String thirdChose = (String) JOptionPane.showInputDialog(
+                                                                null,
+                                                                "What do you want to do now?",
+                                                                "Blocks",
+                                                                JOptionPane.PLAIN_MESSAGE,
+                                                                null,
+                                                                thirdOptions,
+                                                                thirdOptions[0]);
+
+                                                        if (thirdChose == null) {
+                                                            return;
+                                                        } else if (thirdChose.equals("Remove Block")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); // receive the result of removing block {4}
+
+                                                            JOptionPane.showMessageDialog(null, result);
+                                                        } else {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            break;
+                                                        }
+                                                    }
                                                 }
                                             }
-                                        }
+                                        } else if (secondChose.equals("View your friend requests")) {
+                                            clients.output.println(secondChose); //pass secondChose (4)
+                                            String requestsCount = clients.input.readLine(); //receive the length of requests {2}
+                                            int count = Integer.parseInt(requestsCount);
 
-                                        String[] options = {"Yes", "No"};
-                                        int option = JOptionPane.showOptionDialog(
-                                                null,
-                                                "Do you still want to stay at Boiler Town?",
-                                                "Boiler Town",
-                                                JOptionPane.YES_NO_OPTION,
-                                                JOptionPane.QUESTION_MESSAGE,
-                                                null,
-                                                options, options[1]);
+                                            ArrayList<String> requests = new ArrayList<>();
+                                            requests.add("Click on this if you want to exit");
 
-                                        if (option == JOptionPane.CLOSED_OPTION) {
-                                            return;
-                                        } else if (option == JOptionPane.NO_OPTION) {
-                                            JOptionPane.showMessageDialog(null,
-                                                    "Thank you for using Boiler Town!",
-                                                    "Boiler Town",
-                                                    JOptionPane.INFORMATION_MESSAGE);
+                                            for (int i = 0; i < count; i++) {
+                                                requests.add(clients.input.readLine()); //receive requests {3}
+                                            }
+
+                                            String[] request = requests.toArray(new String[requests.size()]);
+
+                                            while (true) { //Interactions in friend request
+                                                String pickedRequest = (String) JOptionPane.showInputDialog(
+                                                        null,
+                                                        "Which request do you want to interact?",
+                                                        "Friend Request",
+                                                        JOptionPane.PLAIN_MESSAGE,
+                                                        null,
+                                                        request, request[0]);
+
+                                                if (pickedRequest == null) {
+                                                    return;
+                                                } else if (pickedRequest.equals("Click on this if you want to exit")) {
+                                                    clients.output.println(pickedRequest); //pass pickedRequest (5)
+                                                    break;
+                                                } else {
+                                                    clients.output.println(pickedRequest); //pass pickedRequest (5)
+                                                    String[] thirdOptions = {"Accept request", "Reject request", "Exit"};
+
+                                                    while (true) { //Interactions in view friend request after chose a specific request
+                                                        String thirdChose = (String) JOptionPane.showInputDialog(
+                                                                null,
+                                                                "What do you want to do now?",
+                                                                "Friend Request",
+                                                                JOptionPane.PLAIN_MESSAGE,
+                                                                null,
+                                                                thirdOptions,
+                                                                thirdOptions[0]);
+
+                                                        if (thirdChose == null) {
+                                                            return;
+                                                        } else if (thirdChose.equals("Accept request")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); //receive the result of accepting request {4}
+
+                                                            JOptionPane.showMessageDialog(null, result);
+
+                                                        } else if (thirdChose.equals("Reject request")) {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            String result = clients.input.readLine(); //receive the result of accepting request {4}
+
+                                                            JOptionPane.showMessageDialog(null, result);
+                                                        } else {
+                                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            clients.output.println(secondChose); //pass secondChose (4)
                                             break;
                                         }
                                     }
-                                } else {
-                                    JOptionPane.showMessageDialog(null, "Fail to log in.");
                                 }
                             }
-
                             break;
                         }
+                        break;//Log in password end
                     }
-
-                    String[] options = {"Yes", "No"};
-                    int option = JOptionPane.showOptionDialog(
-                            null,
-                            "Do you still want to log in?",
-                            "Boiler Town",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            options, options[1]);
-
-                    if (option == JOptionPane.CLOSED_OPTION) {
-                        return;
-                    } else if (option == JOptionPane.NO_OPTION) {
-                        clients.output.println("break");
-                        break;
-                    } else {
-                        clients.output.println("continue");
-                    }
+                    break;
                 }
-            } else if (firstChose.equals("Sign up")) {
+                break;//Log in username end
+            } else if (firstChose.equals("Sign up")) { //Sign up
 
                 String username = JOptionPane.showInputDialog("Please enter your username, it should be unique with no spacse");
                 if (username == null) {
@@ -1056,9 +766,9 @@ public class Clients {
 
                                                 if (result.equals("Sign up successfully!")) {
                                                     JOptionPane.showMessageDialog(null, "Sign up successfully!");
+                                                    JOptionPane.showMessageDialog(null, "You need to log in your account after you signed up.");
                                                 } else {
                                                     JOptionPane.showMessageDialog(null, result);
-                                                    JOptionPane.showMessageDialog(null, "You need to log in your account after you signed up.");
                                                 }
                                             }
                                         }
@@ -1069,14 +779,12 @@ public class Clients {
                     }
                 }
 
-            } else if (firstChose.equals("Exit")) {
-                break;
-            } else {
+            } else { //Other than Log in or Sign Up, directly just end the program
                 break;
             }
 
         } while (true);
 
-        clients.disconnect();
+        clients.disconnect(); //program end
     }
 }

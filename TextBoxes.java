@@ -76,6 +76,10 @@ public class TextBoxes {
     public void setTextBoxes(int number, String textBoxes) {
         this.textFields.get(number).setText(textBoxes);
     }
+    
+    public void setTextBoxesLength(int number) {
+        this.textFields = new ArrayList<>(number);
+    }
 
     public void emptyTextFields() {
         for (int i = 0; i < this.textFields.size(); i++) {

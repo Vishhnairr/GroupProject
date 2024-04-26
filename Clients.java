@@ -302,8 +302,16 @@ public class Clients {
                                                             file += fileList.get(l) + "\n";
                                                         }
                                                     }
-
-                                                    new UserProfileDisplay(file); // Display user profile using the GUI
+                                                    CountDownLatch latch = new CountDownLatch(1);
+                                                    new UserProfileDisplay(file, () -> {
+                                                        latch.countDown();
+                                                    });
+                                                    try {
+                                                        latch.await(); // This will block until the count reaches zero
+                                                    } catch (InterruptedException e) {
+                                                        Thread.currentThread().interrupt();
+                                                        System.out.println("Interrupted while waiting for the profile editor to close.");
+                                                    }
 
                                                 } else { //if no file is passed
                                                     JOptionPane.showMessageDialog(
@@ -530,7 +538,16 @@ public class Clients {
                                                             }
                                                         }
 
-                                                        new UserProfileDisplay(file); // Display user profile using the GUI
+                                                        CountDownLatch latch = new CountDownLatch(1);
+                                                        new UserProfileDisplay(file, () -> {
+                                                            latch.countDown();
+                                                        });
+                                                        try {
+                                                            latch.await(); // This will block until the count reaches zero
+                                                        } catch (InterruptedException e) {
+                                                            Thread.currentThread().interrupt();
+                                                            System.out.println("Interrupted while waiting for the profile editor to close.");
+                                                        }
 
                                                     } else { //if no file is passed
                                                         JOptionPane.showMessageDialog(
@@ -812,7 +829,16 @@ public class Clients {
                                                     }
                                                 }
 
-                                                new UserProfileDisplay(file);
+                                                CountDownLatch latch = new CountDownLatch(1);
+                                                new UserProfileDisplay(file, () -> {
+                                                    latch.countDown();
+                                                });
+                                                try {
+                                                    latch.await(); // This will block until the count reaches zero
+                                                } catch (InterruptedException e) {
+                                                    Thread.currentThread().interrupt();
+                                                    System.out.println("Interrupted while waiting for the profile editor to close.");
+                                                }
 
                                             } else { //if no file is passed
                                                 JOptionPane.showMessageDialog(

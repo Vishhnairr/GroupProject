@@ -386,29 +386,26 @@ public class Servers {
                                             if (pickedRequest.equals("Click on this if you want to exit")) {
                                                 break;
                                             } else {
-                                                while (true) {
-                                                    String thirdChose = input.readLine(); //receive thirdChose {6}
+                                                String thirdChose = input.readLine(); //receive thirdChose {6}
 
-                                                    if (thirdChose.equals("Accept request")) {
-                                                        Friends friends = new Friends(user, pickedRequest);
+                                                if (thirdChose.equals("Accept request")) {
+                                                    Friends friends = new Friends(user, pickedRequest);
 
-                                                        if (!friends.addFriend()) {
-                                                            output.println("Fail to add a friend"); //pass the result of accepting request (4)
-                                                        } else {
-                                                            output.println("Add a friend successfully!"); //pass the result of accepting request (4)
-                                                        }
-                                                    } else if (thirdChose.equals("Reject request")) {
-                                                        Friends friends = new Friends(user, pickedRequest);
-
-                                                        if (!friends.rejectFriendRequest()) {
-                                                            output.println("Fail to reject"); //pass the result of rejecting request (4)
-                                                        } else {
-                                                            output.println("Reject a friend request successfully!"); //pass the result of rejecting request (4)
-                                                        }
+                                                    if (!friends.addFriend()) {
+                                                        output.println("Fail to add a friend"); //pass the result of accepting request (4)
                                                     } else {
-                                                        break;
+                                                        output.println("Add a friend successfully!"); //pass the result of accepting request (4)
+                                                    }
+                                                } else if (thirdChose.equals("Reject request")) {
+                                                    Friends friends = new Friends(user, pickedRequest);
+
+                                                    if (!friends.rejectFriendRequest()) {
+                                                        output.println("Fail to reject"); //pass the result of rejecting request (4)
+                                                    } else {
+                                                        output.println("Reject a friend request successfully!"); //pass the result of rejecting request (4)
                                                     }
                                                 }
+                                                break;
                                             }
                                         }
 

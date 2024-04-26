@@ -657,4 +657,25 @@ public class User implements UserList {
 
         return false;
     }
+    // only Zixian should use this method or there may be sth wrong
+    public synchronized boolean updateProfile(String[] profileData) {
+
+        if (profileData == null || profileData.length != 8) {
+            return false; // Incorrect profile data format
+        }
+
+        // If validation passes, set the instance variables
+        this.username = profileData[0].substring(profileData[0].indexOf(": ") + 2).trim();
+        this.password = profileData[1];
+        this.firstName = profileData[2];
+        this.lastName = profileData[3];
+        this.email = profileData[4];
+        this.bio = profileData[5];
+        this.profileView = Boolean.parseBoolean(profileData[6]);
+        this.messageCheck = Boolean.parseBoolean(profileData[7]);
+
+        // Now write the updated info back to the file
+        return setAccountFile();
+    }
+
 }

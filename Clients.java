@@ -37,22 +37,66 @@ public class Clients {
                 "Boiler Town", JOptionPane.INFORMATION_MESSAGE);
 
         do { // program begin
-            String[] fistOptions = {"Log in", "Sign up", "Exit"};
-            String firstChose = (String) JOptionPane.showInputDialog(null,
-                    "What do you want to do today?", "Boiler Town",
-                    JOptionPane.PLAIN_MESSAGE, null, fistOptions, fistOptions[0]);
+            GeneralSelectionPane paneOne = new GeneralSelectionPane();
+            String[] firstOptions = {"Log in", "Sign up", "Exit"};
+            paneOne.setChoices(firstOptions);
+            paneOne.setDropDownLabel("What do you want to do today?");
+            paneOne.setCb();
+            paneOne.setButtonEnter();
+            paneOne.createSelectionPane();  // This displays the GUI
 
+            // Busy-wait for the user to make a selection
+            while (!paneOne.isButtonHit()) {
+                try {
+                    Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;  // Exit if the thread is interrupted
+                }
+            }
+            String firstChose = paneOne.getOption();
+
+            // Clean up the frame if still open
+            if (paneOne.isOpen()) {
+                paneOne.getFrame().dispose();
+            }
             if (firstChose == null) {
                 return;
 
             } else if (firstChose.equals("Log in")) { //Log in
+                System.out.println("User has chosen to log in");
                 while (breakCheck) { //Log in begin - username
-                    String username = JOptionPane.showInputDialog("Please enter your username: ");
 
-                    if (username == null) {
-                        return;
+                    TextBoxes first = new TextBoxes();
+                    first.addTextBoxes("Username");
+                    first.addTextBoxPassword("Password");
+                    first.setButtonEnter();
+                    first.createPane();
 
-                    } else if (username.isEmpty()) {
+                    String responses = "";
+
+                    do {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            return;
+                        }
+                        if (first.getHitButton()) {
+                            responses = first.getResponses();
+                        }
+                    } while (!first.getHitButton());
+
+                    if (responses.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                        first.emptyTextFields();
+                    }
+
+                    String username = responses.substring(0, responses.indexOf(";"));
+                    String password = responses.substring(responses.indexOf(";") + 1);
+                    //String username = JOptionPane.showInputDialog("Please enter your username: ");
+
+                    if (username.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
 
                         String[] options = {"Yes", "No"};
@@ -71,11 +115,9 @@ public class Clients {
 
                     } else {
                         while (breakCheck) { //Log in password begin
-                            String password = JOptionPane.showInputDialog("Please enter your password: ");
+                            //String password = JOptionPane.showInputDialog("Please enter your password: ");
 
-                            if (password == null) {
-                                return;
-                            } else if (password.isEmpty()) {
+                            if (password.isEmpty()) {
                                 JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
 
                                 String[] options = {"Yes", "No"};
@@ -103,10 +145,13 @@ public class Clients {
                                 if (user.equals("null")) {
                                     JOptionPane.showMessageDialog(null,
                                             "Your username or password is wrong!");
-
+                                    first.getFrame().dispose();
                                     break;
 
                                 } else { //Log in successfully
+                                    first.getFrame().dispose();
+                                    JOptionPane.showMessageDialog(null,
+                                            "Log In Successful!");
                                     String[] secondOptions = {"View All users",
                                             "Search a user",
                                             "View your profile",
@@ -116,18 +161,31 @@ public class Clients {
                                             "Exit"};
 
                                     while (breakCheck) { //Interactions after Log In
-                                        String secondChose = (String) JOptionPane.showInputDialog(
-                                                null,
-                                                "What do you want to do now?",
-                                                "Boiler Town",
-                                                JOptionPane.PLAIN_MESSAGE,
-                                                null,
-                                                secondOptions,
-                                                secondOptions[0]);
+                                        GeneralSelectionPane paneTwo = new GeneralSelectionPane();
+                                        paneTwo.setChoices(secondOptions);
+                                        paneTwo.setDropDownLabel("What do you want to do now?");
+                                        paneTwo.setCb();
+                                        paneTwo.setButtonEnter();
+                                        paneTwo.createSelectionPane();  // This displays the GUI
+                                        while (!paneTwo.isButtonHit()) {
+                                            try {
+                                                Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                            } catch (InterruptedException e) {
+                                                Thread.currentThread().interrupt();
+                                                return;  // Exit if the thread is interrupted
+                                            }
+                                        }
+                                        String secondChose = paneTwo.getOption();
+
+                                        // Clean up the frame if still open
+                                        if (paneTwo.isOpen()) {
+                                            paneTwo.getFrame().dispose();
+                                        }
 
                                         if (secondChose == null) {
                                             return;
                                         } else if (secondChose.equals("View All users")) {
+                                            System.out.println("User has chosen to " + secondChose);
                                             clients.output.println(secondChose); //pass secondChose (4)
                                             ArrayList<String> allUsers = new ArrayList<>();
                                             allUsers.add("Click on this if you want to exit");
@@ -142,13 +200,28 @@ public class Clients {
                                             String[] allUser = allUsers.toArray(new String[allUsers.size()]);
 
                                             while (true) { //interaction in All users
-                                                String userSelected = (String) JOptionPane.showInputDialog(
-                                                        null,
-                                                        "Who do you want to interact with?",
-                                                        "Boiler Town",
-                                                        JOptionPane.PLAIN_MESSAGE,
-                                                        null,
-                                                        allUser, allUser[0]);
+                                                GeneralSelectionPane paneThree = new GeneralSelectionPane();
+                                                paneThree.setChoices(allUser);
+                                                paneThree.setDropDownLabel("What do you want to do now?");
+                                                paneThree.setCb();
+                                                paneThree.setButtonEnter();
+                                                paneThree.createSelectionPane();  // This displays the GUI
+
+                                                // Busy-wait for the user to make a selection
+                                                while (!paneThree.isButtonHit()) {
+                                                    try {
+                                                        Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                    } catch (InterruptedException e) {
+                                                        Thread.currentThread().interrupt();
+                                                        return;  // Exit if the thread is interrupted
+                                                    }
+                                                }
+                                                String userSelected = paneThree.getOption();
+
+                                                // Clean up the frame if still open
+                                                if (paneThree.isOpen()) {
+                                                    paneThree.getFrame().dispose();
+                                                }
 
                                                 if (userSelected == null) {
                                                     return;
@@ -166,15 +239,28 @@ public class Clients {
                                                             "Exit"};
 
                                                     while (true) { // interactions if chose a specific user in all users
-                                                        String thirdChose = (String) JOptionPane.showInputDialog(
-                                                                null,
-                                                                "What do you want to do now?",
-                                                                "Boiler Town",
-                                                                JOptionPane.PLAIN_MESSAGE,
-                                                                null,
-                                                                thirdOptions,
-                                                                thirdOptions[0]);
+                                                        GeneralSelectionPane paneFour = new GeneralSelectionPane();
+                                                        paneFour.setChoices(thirdOptions);
+                                                        paneFour.setDropDownLabel("What do you want to interact with this user?");
+                                                        paneFour.setCb();
+                                                        paneFour.setButtonEnter();
+                                                        paneFour.createSelectionPane();  // This displays the GUI
 
+                                                        // Busy-wait for the user to make a selection
+                                                        while (!paneFour.isButtonHit()) {
+                                                            try {
+                                                                Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                            } catch (InterruptedException e) {
+                                                                Thread.currentThread().interrupt();
+                                                                return;  // Exit if the thread is interrupted
+                                                            }
+                                                        }
+                                                        String thirdChose = paneFour.getOption();
+
+                                                        // Clean up the frame if still open
+                                                        if (paneFour.isOpen()) {
+                                                            paneFour.getFrame().dispose();
+                                                        }
                                                         if (thirdChose == null) {
                                                             return;
                                                         } else if (thirdChose.equals("View profile")) {
@@ -278,7 +364,28 @@ public class Clients {
                                                 }
                                             }
                                         } else if (secondChose.equals("Search a user")) {
-                                            String userSearched = JOptionPane.showInputDialog("Please enter the username you want to search: ");
+                                            System.out.println("User has chosen to " + secondChose);
+
+                                            TextBoxes second = new TextBoxes();
+                                            second.addTextBoxes("Please enter the user you want to search (Enter a username)");
+                                            second.setButtonEnter();
+                                            second.createPane();
+
+                                            String response = "";
+
+                                            do {
+                                                try {
+                                                    Thread.sleep(100);
+                                                } catch (InterruptedException e) {
+                                                    Thread.currentThread().interrupt();
+                                                    return;
+                                                }
+                                                if (second.getHitButton()) {
+                                                    response = second.getResponses();
+                                                }
+                                            } while (!second.getHitButton());
+
+                                            String userSearched = response;
 
                                             if (userSearched == null) {
                                                 return;
@@ -291,7 +398,9 @@ public class Clients {
 
                                                 if (!result.equals("User searched!")) {
                                                     JOptionPane.showMessageDialog(null, result);
+                                                    second.getFrame().dispose();
                                                 } else {
+                                                    second.getFrame().dispose();
                                                     String[] thirdOptions = {"View profile",
                                                             "Make a friend request",
                                                             "Block a user",
@@ -299,14 +408,28 @@ public class Clients {
                                                             "View message history",
                                                             "Exit"};
                                                     while (true) { //Interactions in search user
-                                                        String thirdChose = (String) JOptionPane.showInputDialog(
-                                                                null,
-                                                                "What do you want to do now?",
-                                                                "Boiler Town",
-                                                                JOptionPane.PLAIN_MESSAGE,
-                                                                null,
-                                                                thirdOptions,
-                                                                thirdOptions[0]);
+                                                        GeneralSelectionPane paneFive = new GeneralSelectionPane();
+                                                        paneFive.setChoices(thirdOptions);
+                                                        paneFive.setDropDownLabel("What do you want to interact with this user?");
+                                                        paneFive.setCb();
+                                                        paneFive.setButtonEnter();
+                                                        paneFive.createSelectionPane();  // This displays the GUI
+
+                                                        // Busy-wait for the user to make a selection
+                                                        while (!paneFive.isButtonHit()) {
+                                                            try {
+                                                                Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                            } catch (InterruptedException e) {
+                                                                Thread.currentThread().interrupt();
+                                                                return;  // Exit if the thread is interrupted
+                                                            }
+                                                        }
+                                                        String thirdChose = paneFive.getOption();
+
+                                                        // Clean up the frame if still open
+                                                        if (paneFive.isOpen()) {
+                                                            paneFive.getFrame().dispose();
+                                                        }
 
                                                         if (thirdChose == null) {
                                                             return;
@@ -410,6 +533,7 @@ public class Clients {
                                                 }
                                             }
                                         } else if (secondChose.equals("View your profile")) {
+                                            System.out.println("User has chosen to " + secondChose);
                                             clients.output.println(secondChose); //pass secondChose (4)
                                             String fileCount = clients.input.readLine(); //receive length of file {2}
                                             int count = Integer.parseInt(fileCount);
@@ -444,13 +568,28 @@ public class Clients {
                                             String[] friend = friends.toArray(new String[friends.size()]);
 
                                             while (true) { //Interactions in View your Friends
-                                                String pickedFriend = (String) JOptionPane.showInputDialog(
-                                                        null,
-                                                        "Who do you want to interact with?",
-                                                        "Friends",
-                                                        JOptionPane.PLAIN_MESSAGE,
-                                                        null,
-                                                        friend, friend[0]);
+                                                GeneralSelectionPane paneSix = new GeneralSelectionPane();
+                                                paneSix.setChoices(friend);
+                                                paneSix.setDropDownLabel("Which friend would you like to interact with?");
+                                                paneSix.setCb();
+                                                paneSix.setButtonEnter();
+                                                paneSix.createSelectionPane();  // This displays the GUI
+
+                                                // Busy-wait for the user to make a selection
+                                                while (!paneSix.isButtonHit()) {
+                                                    try {
+                                                        Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                    } catch (InterruptedException e) {
+                                                        Thread.currentThread().interrupt();
+                                                        return;  // Exit if the thread is interrupted
+                                                    }
+                                                }
+                                                String pickedFriend = paneSix.getOption();
+
+                                                // Clean up the frame if still open
+                                                if (paneSix.isOpen()) {
+                                                    paneSix.getFrame().dispose();
+                                                }
 
                                                 if (pickedFriend == null) {
                                                     return;
@@ -468,14 +607,28 @@ public class Clients {
                                                             "Exit"};
 
                                                     while (true) { //Interactions after chose a specific friend
-                                                        String thirdChose = (String) JOptionPane.showInputDialog(
-                                                                null,
-                                                                "What do you want to do now?",
-                                                                "Friends",
-                                                                JOptionPane.PLAIN_MESSAGE,
-                                                                null,
-                                                                thirdOptions,
-                                                                thirdOptions[0]);
+                                                        GeneralSelectionPane paneSeven = new GeneralSelectionPane();
+                                                        paneSeven.setChoices(thirdOptions);
+                                                        paneSeven.setDropDownLabel("What do you want to do with your friend?");
+                                                        paneSeven.setCb();
+                                                        paneSeven.setButtonEnter();
+                                                        paneSeven.createSelectionPane();  // This displays the GUI
+
+                                                        // Busy-wait for the user to make a selection
+                                                        while (!paneSeven.isButtonHit()) {
+                                                            try {
+                                                                Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                            } catch (InterruptedException e) {
+                                                                Thread.currentThread().interrupt();
+                                                                return;  // Exit if the thread is interrupted
+                                                            }
+                                                        }
+                                                        String thirdChose = paneSeven.getOption();
+
+                                                        // Clean up the frame if still open
+                                                        if (paneSeven.isOpen()) {
+                                                            paneSeven.getFrame().dispose();
+                                                        }
 
                                                         if (thirdChose == null) {
                                                             return;
@@ -577,6 +730,7 @@ public class Clients {
                                                 }
                                             }
                                         } else if (secondChose.equals("View your blocks")) {
+                                            System.out.println("User has chosen to " + secondChose);
                                             clients.output.println(secondChose); //pass secondChose (4)
                                             String blocksCount = clients.input.readLine(); //receive the length of blocks {2}
                                             int count = Integer.parseInt(blocksCount);
@@ -591,13 +745,28 @@ public class Clients {
                                             String[] block = blocks.toArray(new String[blocks.size()]);
 
                                             while (true) { //Interactions in View your blocks
-                                                String pickedBlock = (String) JOptionPane.showInputDialog(
-                                                        null,
-                                                        "Who do you want to interact with?",
-                                                        "Blocks",
-                                                        JOptionPane.PLAIN_MESSAGE,
-                                                        null,
-                                                        block, block[0]);
+                                                GeneralSelectionPane paneEight = new GeneralSelectionPane();
+                                                paneEight.setChoices(block);
+                                                paneEight.setDropDownLabel("Who do you want to interact with?");
+                                                paneEight.setCb();
+                                                paneEight.setButtonEnter();
+                                                paneEight.createSelectionPane();  // This displays the GUI
+
+                                                // Busy-wait for the user to make a selection
+                                                while (!paneEight.isButtonHit()) {
+                                                    try {
+                                                        Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                    } catch (InterruptedException e) {
+                                                        Thread.currentThread().interrupt();
+                                                        return;  // Exit if the thread is interrupted
+                                                    }
+                                                }
+                                                String pickedBlock = paneEight.getOption();
+
+                                                // Clean up the frame if still open
+                                                if (paneEight.isOpen()) {
+                                                    paneEight.getFrame().dispose();
+                                                }
 
                                                 if (pickedBlock == null) {
                                                     return;
@@ -610,14 +779,28 @@ public class Clients {
                                                     String[] thirdOptions = {"Remove Block", "Exit"};
 
                                                     while (true) { //Interactions in view your blocks after chose a specific block
-                                                        String thirdChose = (String) JOptionPane.showInputDialog(
-                                                                null,
-                                                                "What do you want to do now?",
-                                                                "Blocks",
-                                                                JOptionPane.PLAIN_MESSAGE,
-                                                                null,
-                                                                thirdOptions,
-                                                                thirdOptions[0]);
+                                                        GeneralSelectionPane paneNine = new GeneralSelectionPane();
+                                                        paneNine.setChoices(thirdOptions);
+                                                        paneNine.setDropDownLabel("What do you want to interact with this user?");
+                                                        paneNine.setCb();
+                                                        paneNine.setButtonEnter();
+                                                        paneNine.createSelectionPane();  // This displays the GUI
+
+                                                        // Busy-wait for the user to make a selection
+                                                        while (!paneNine.isButtonHit()) {
+                                                            try {
+                                                                Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                            } catch (InterruptedException e) {
+                                                                Thread.currentThread().interrupt();
+                                                                return;  // Exit if the thread is interrupted
+                                                            }
+                                                        }
+                                                        String thirdChose = paneNine.getOption();
+
+                                                        // Clean up the frame if still open
+                                                        if (paneNine.isOpen()) {
+                                                            paneNine.getFrame().dispose();
+                                                        }
 
                                                         if (thirdChose == null) {
                                                             return;
@@ -634,6 +817,7 @@ public class Clients {
                                                 }
                                             }
                                         } else if (secondChose.equals("View your friend requests")) {
+                                            System.out.println("User has chosen to " + secondChose);
                                             clients.output.println(secondChose); //pass secondChose (4)
                                             String requestsCount = clients.input.readLine(); //receive the length of requests {2}
                                             int count = Integer.parseInt(requestsCount);
@@ -648,13 +832,28 @@ public class Clients {
                                             String[] request = requests.toArray(new String[requests.size()]);
 
                                             while (true) { //Interactions in friend request
-                                                String pickedRequest = (String) JOptionPane.showInputDialog(
-                                                        null,
-                                                        "Which request do you want to interact?",
-                                                        "Friend Request",
-                                                        JOptionPane.PLAIN_MESSAGE,
-                                                        null,
-                                                        request, request[0]);
+                                                GeneralSelectionPane paneTen = new GeneralSelectionPane();
+                                                paneTen.setChoices(request);
+                                                paneTen.setDropDownLabel("What do you want to do today?");
+                                                paneTen.setCb();
+                                                paneTen.setButtonEnter();
+                                                paneTen.createSelectionPane();  // This displays the GUI
+
+                                                // Busy-wait for the user to make a selection
+                                                while (!paneTen.isButtonHit()) {
+                                                    try {
+                                                        Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                    } catch (InterruptedException e) {
+                                                        Thread.currentThread().interrupt();
+                                                        return;  // Exit if the thread is interrupted
+                                                    }
+                                                }
+                                                String pickedRequest = paneTen.getOption();
+
+                                                // Clean up the frame if still open
+                                                if (paneTen.isOpen()) {
+                                                    paneTen.getFrame().dispose();
+                                                }
 
                                                 if (pickedRequest == null) {
                                                     return;
@@ -710,76 +909,68 @@ public class Clients {
                 }
                 break;//Log in username end
             } else if (firstChose.equals("Sign up")) { //Sign up
+                System.out.println("User has chosen to sign up");
 
-                String username = JOptionPane.showInputDialog("Please enter your username, it should be unique with no spacse");
-                if (username == null) {
-                    return;
+                TextBoxes third = new TextBoxes();
+                third.addTextBoxes("Username");
+                third.addTextBoxes("Password");
+                third.addTextBoxes("First Name");
+                third.addTextBoxes("Last Name");
+                third.addTextBoxes("Email");
+                third.addTextBoxes("Bio");
+                third.addTextBoxes("Profile View (Enter True or False)");
+                third.addTextBoxes("Message Receive (Enter True or False");
+                third.setButtonEnter();
+                third.createPane();
 
-                } else {
-                    String password = JOptionPane.showInputDialog("Please enter your password, it should be grater than 4 characters.");
+                String responses = "";
 
-                    if (password == null) {
+                do {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         return;
-
-                    } else {
-                        String firstName = JOptionPane.showInputDialog("Please enter your first name, it should have no spaces");
-
-                        if (firstName == null) {
-                            return;
-                        } else {
-                            String lastName = JOptionPane.showInputDialog("Please enter your last name, it should have no spaces.");
-
-                            if (lastName == null) {
-                                return;
-                            } else {
-                                String email = JOptionPane.showInputDialog("Please enter your email of the form: ___@___.___ with no spaces.");
-
-                                if (email == null) {
-                                    return;
-                                } else {
-                                    String bio = JOptionPane.showInputDialog("Please enter your bio, it should be shorter than 50 characters.");
-
-                                    if (bio == null) {
-                                        return;
-                                    } else {
-                                        String profileView = JOptionPane.showInputDialog("Please enter \"true\" or \"false\" for your profile view.");
-
-                                        if (profileView == null) {
-                                            return;
-                                        } else {
-                                            String messageReceive = JOptionPane.showInputDialog("Please enter \"true\" or \"false\" for your message receive.");
-
-                                            if (messageReceive == null) {
-                                                return;
-                                            } else {
-                                                clients.output.println(firstChose);
-                                                clients.output.println(username);
-                                                clients.output.println(password);
-                                                clients.output.println(firstName);
-                                                clients.output.println(lastName);
-                                                clients.output.println(email);
-                                                clients.output.println(bio);
-                                                clients.output.println(profileView);
-                                                clients.output.println(messageReceive);
-
-                                                String result = clients.input.readLine();
-
-                                                if (result.equals("Sign up successfully!")) {
-                                                    JOptionPane.showMessageDialog(null, "Sign up successfully!");
-                                                    JOptionPane.showMessageDialog(null, "You need to log in your account after you signed up.");
-                                                } else {
-                                                    JOptionPane.showMessageDialog(null, result);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
+                    if (third.getHitButton()) {
+                        responses = third.getResponses();
+                    }
+                } while (!third.getHitButton());
+
+                String[] spliter = responses.split(";");
+                String username = spliter[0];
+                String password = spliter[1];
+                String firstName = spliter[2];
+                String lastName = spliter[3];
+                String email = spliter[4];
+                String bio = spliter[5];
+                String profileView = spliter[6];
+                String messageReceive = spliter[7];
+
+                clients.output.println(firstChose);
+                clients.output.println(username);
+                clients.output.println(password);
+                clients.output.println(firstName);
+                clients.output.println(lastName);
+                clients.output.println(email);
+                clients.output.println(bio);
+                clients.output.println(profileView);
+                clients.output.println(messageReceive);
+
+                String result = clients.input.readLine();
+
+                if (result.equals("Sign up successfully!")) {
+                    JOptionPane.showMessageDialog(null, "Sign up successfully!");
+                    JOptionPane.showMessageDialog(null, "You need to log in your account after you signed up.");
+                    third.getFrame().dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, result);
+                    third.getFrame().dispose();
                 }
 
             } else { //Other than Log in or Sign Up, directly just end the program
+                System.out.println("User has chosen to exit");
+                JOptionPane.showMessageDialog(null, "Thank you for using Boiler Town!");
                 break;
             }
 

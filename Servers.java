@@ -157,6 +157,25 @@ public class Servers {
                                                         for (int m = 0; m < messageCount; m++) {
                                                             output.println(messages.get(m)); //pass messages (5)
                                                         }
+                                                        String result = input.readLine();
+                                                        if (result.equals("History window was closed")) {
+                                                            continue;
+                                                        } else {
+                                                            // Assuming the client sends back the number of messages followed by each message
+                                                            int newMessageCount = Integer.parseInt(input.readLine());
+                                                            ArrayList<String> newMessages = new ArrayList<>();
+
+                                                            for (int i = 0; i < newMessageCount; i++) {
+                                                                newMessages.add(input.readLine());
+                                                            }
+
+                                                            // Rewrite these messages to the history files
+                                                            if (messageList.rewriteMessageHistory(newMessages)) {
+                                                                output.println("Updated successfully");
+                                                            } else {
+                                                                output.println("Update failed");
+                                                            }
+                                                        }
                                                     } else {
                                                         break;
                                                     }
@@ -224,10 +243,29 @@ public class Servers {
                                                     ArrayList<String> messages = messageList.viewMessageHistory();
                                                     int messageCount = messages.size();
                                                     String count = String.valueOf(messageCount);
-                                                    output.println(count); //pass the length of messages (3)
+                                                    output.println(count); //pass the length of messages (4)
 
                                                     for (int m = 0; m < messageCount; m++) {
-                                                        output.println(messages.get(m)); //pass messages (4)
+                                                        output.println(messages.get(m)); //pass messages (5)
+                                                    }
+                                                    String result = input.readLine();
+                                                    if (result.equals("History window was closed")) {
+                                                        continue;
+                                                    } else {
+                                                        // Assuming the client sends back the number of messages followed by each message
+                                                        int newMessageCount = Integer.parseInt(input.readLine());
+                                                        ArrayList<String> newMessages = new ArrayList<>();
+
+                                                        for (int i = 0; i < newMessageCount; i++) {
+                                                            newMessages.add(input.readLine());
+                                                        }
+
+                                                        // Rewrite these messages to the history files
+                                                        if (messageList.rewriteMessageHistory(newMessages)) {
+                                                            output.println("Updated successfully");
+                                                        } else {
+                                                            output.println("Update failed");
+                                                        }
                                                     }
                                                 } else {
                                                     break;
@@ -300,11 +338,30 @@ public class Servers {
 
                                                         ArrayList<String> messages = messageList.viewMessageHistory();
                                                         int messageCount = messages.size();
-                                                        String countMessage = String.valueOf(messageCount);
-                                                        output.println(countMessage); //pass the length of messages (4)
+                                                        String count1 = String.valueOf(messageCount);
+                                                        output.println(count1); //pass the length of messages (4)
 
                                                         for (int m = 0; m < messageCount; m++) {
                                                             output.println(messages.get(m)); //pass messages (5)
+                                                        }
+                                                        String result = input.readLine();
+                                                        if (result.equals("History window was closed")) {
+                                                            continue;
+                                                        } else {
+                                                            // Assuming the client sends back the number of messages followed by each message
+                                                            int newMessageCount = Integer.parseInt(input.readLine());
+                                                            ArrayList<String> newMessages = new ArrayList<>();
+
+                                                            for (int i = 0; i < newMessageCount; i++) {
+                                                                newMessages.add(input.readLine());
+                                                            }
+
+                                                            // Rewrite these messages to the history files
+                                                            if (messageList.rewriteMessageHistory(newMessages)) {
+                                                                output.println("Updated successfully");
+                                                            } else {
+                                                                output.println("Update failed");
+                                                            }
                                                         }
                                                     } else if (thirdChose.equals("Send a Message")) {
                                                         String content = input.readLine(); //receive content {7}

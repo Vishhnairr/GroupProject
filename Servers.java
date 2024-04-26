@@ -1,7 +1,11 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 public class Servers {
     private ServerSocket serverSocket;
     private List<ClientHandler> clients = new ArrayList<>();
@@ -27,6 +31,7 @@ public class Servers {
             }
         }
     }
+
 
     public static void main(String[] args) {
         try{
@@ -239,7 +244,18 @@ public class Servers {
                                         for (int i = 0; i < fileCount; i++) {
                                             output.println(fileSplits[i]); //pass file (3)
                                         }
-
+                                        String message = input.readLine();
+                                        if (message.equals("profile_saved_and_closed")) {
+                                            List<String> profileData = new ArrayList<>();
+                                            for (int i = 0; i < fileCount; i++) {
+                                                profileData.add(input.readLine());
+                                            }
+                                            // Handle saving the profile data
+                                            user.updateProfile(profileData.toArray(new String[0]));
+                                        }
+                                        else if (message.equals("profile_edit_cancelled")) {
+                                            // Handle profile editing cancellation
+                                        }
                                     } else if (secondChose.equals("View your friends")) {
                                         String[] friends = user.viewFriends();
                                         int friendsCount = friends.length;

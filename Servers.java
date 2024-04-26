@@ -85,15 +85,17 @@ public class Servers {
                                     System.out.println(secondChose);
 
                                     if (secondChose.equals("View All users")) {
-                                        String[] allUsersArray = user.viewAllUsers();
-                                        String usersCount = String.valueOf(allUsersArray.length);
-                                        output.println(usersCount); // pass length of users (2)
-                                        System.out.println(usersCount);
-                                        for (int i = 0; i < allUsersArray.length; i++) {
-                                            output.println(allUsersArray[i]); //pass users (3)
-                                            System.out.println(allUsersArray[i]);
-                                        }
                                         while (true) {
+                                            String[] allUsersArray = user.viewAllUsers();
+                                            String usersCount = String.valueOf(allUsersArray.length - 1);
+                                            output.println(usersCount); // pass length of users (2)
+                                            System.out.println(usersCount);
+                                            for (int i = 0; i < allUsersArray.length; i++) {
+                                                if (allUsersArray[i].equals(username)) continue;
+                                                output.println(allUsersArray[i]); //pass users (3)
+                                                System.out.println(username);
+                                                System.out.println(allUsersArray[i]);
+                                            }
                                             String userSelected = input.readLine(); //receive userSelected {5}
 
                                             if (!userSelected.equals("Click on this if you want to exit")) {
@@ -187,7 +189,7 @@ public class Servers {
 
                                     } else if (secondChose.equals("Search a user")) {
                                         String searchedUser = input.readLine(); //receive the searchedUser {5}
-                                        if (!user.searchUser(searchedUser)) {
+                                        if (searchedUser.equals(username) || !user.searchUser(searchedUser)) {
                                             output.println("No user searched. Please check the username is valid or not."); //pass the result of searching a user (2)
                                         } else {
                                             output.println("User searched!"); //pass the result of searching a user (2)
@@ -295,149 +297,142 @@ public class Servers {
                                             // Handle profile editing cancellation
                                         }
                                     } else if (secondChose.equals("View your friends")) {
-                                        String[] friends = user.viewFriends();
-                                        int friendsCount = friends.length;
-                                        String count = String.valueOf(friendsCount);
-                                        output.println(count); //pass the length of friends (2)
-
-                                        for (int i = 0; i < friendsCount; i++) {
-                                            output.println(friends[i]); //pass friends (3)
-                                        }
-
                                         while (true) {
+                                            String[] friends = user.viewFriends();
+                                            int friendsCount = friends.length;
+                                            String count = String.valueOf(friendsCount);
+                                            output.println(count); //pass the length of friends (2)
+
+                                            for (int i = 0; i < friendsCount; i++) {
+                                                output.println(friends[i]); //pass friends (3)
+                                            }
                                             String pickedFriend = input.readLine(); //receive pickedFriend {5}
                                             System.out.println(pickedFriend);
 
                                             if (pickedFriend.equals("Click on this if you want to exit")) {
                                                 break;
                                             } else {
-                                                while (true) {
-                                                    String thirdChose = input.readLine(); //receive thirdChose {6}
-                                                    System.out.println(thirdChose);
+                                                String thirdChose = input.readLine(); //receive thirdChose {6}
+                                                System.out.println(thirdChose);
 
-                                                    if (thirdChose.equals("View Friend's Profile")) {
-                                                        Friends friendsTrue = new Friends(user, pickedFriend);
-                                                        String friendFile = friendsTrue.viewProfile();
+                                                if (thirdChose.equals("View Friend's Profile")) {
+                                                    Friends friendsTrue = new Friends(user, pickedFriend);
+                                                    String friendFile = friendsTrue.viewProfile();
 
-                                                        if (friendFile == null) {
-                                                            output.println("0"); // pass length of profile (4)
-                                                        } else {
-                                                            String[] fileSplits = friendFile.split("\n");
-
-                                                            int fileCount = fileSplits.length;
-                                                            String countFriend = String.valueOf(fileCount);
-                                                            output.println(countFriend); // pass length of profile (4)
-
-                                                            for (int j = 0; j < fileCount; j++) {
-                                                                output.println(fileSplits[j]); //pass file (5)
-                                                            }
-                                                        }
-                                                    } else if (thirdChose.equals("View Message History")) {
-                                                        String content = "content";
-                                                        MessageList messageList = new MessageList(content, user, pickedFriend);
-
-                                                        ArrayList<String> messages = messageList.viewMessageHistory();
-                                                        int messageCount = messages.size();
-                                                        String count1 = String.valueOf(messageCount);
-                                                        output.println(count1); //pass the length of messages (4)
-
-                                                        for (int m = 0; m < messageCount; m++) {
-                                                            output.println(messages.get(m)); //pass messages (5)
-                                                        }
-                                                        String result = input.readLine();
-                                                        if (result.equals("History window was closed")) {
-                                                            continue;
-                                                        } else {
-                                                            // Assuming the client sends back the number of messages followed by each message
-                                                            int newMessageCount = Integer.parseInt(input.readLine());
-                                                            ArrayList<String> newMessages = new ArrayList<>();
-
-                                                            for (int i = 0; i < newMessageCount; i++) {
-                                                                newMessages.add(input.readLine());
-                                                            }
-
-                                                            // Rewrite these messages to the history files
-                                                            if (messageList.rewriteMessageHistory(newMessages)) {
-                                                                output.println("Updated successfully");
-                                                            } else {
-                                                                output.println("Update failed");
-                                                            }
-                                                        }
-                                                    } else if (thirdChose.equals("Send a Message")) {
-                                                        String content = input.readLine(); //receive content {7}
-                                                        MessageList messageList = new MessageList(content, user, pickedFriend);
-
-                                                        if (!messageList.sendMessage()) {
-                                                            output.println("Fail to send a message. May be is because you are not this user's friend."); //pass result of sending a message (4)
-                                                        } else {
-                                                            output.println("Send a message successfully!"); //pass result of sending a message (4)
-                                                        }
-                                                    } else if (thirdChose.equals("Remove a Friend")) {
-                                                        Friends friend = new Friends(user, pickedFriend);
-
-                                                        if (!friend.removeFriend()) {
-                                                            output.println("Fail to remove."); //pass the result of removing a friend (4)
-                                                        } else {
-                                                            output.println("Remove a friend successfully!"); //pass the result of removing a friend (4)
-                                                        }
-                                                    } else if (thirdChose.equals("Block a Friend")) {
-                                                        Friends friend = new Friends(user, pickedFriend);
-
-                                                        if (!friend.blockUser()) {
-                                                            output.println("Fail to block."); //pass the result of blocking a friend (4)
-                                                        } else {
-                                                            output.println("Block a friend successfully!"); //pass the result of blocking a friend (4)
-                                                        }
+                                                    if (friendFile == null) {
+                                                        output.println("0"); // pass length of profile (4)
                                                     } else {
-                                                        break;
+                                                        String[] fileSplits = friendFile.split("\n");
+
+                                                        int fileCount = fileSplits.length;
+                                                        String countFriend = String.valueOf(fileCount);
+                                                        output.println(countFriend); // pass length of profile (4)
+
+                                                        for (int j = 0; j < fileCount; j++) {
+                                                            output.println(fileSplits[j]); //pass file (5)
+                                                        }
                                                     }
+                                                } else if (thirdChose.equals("View Message History")) {
+                                                    String content = "content";
+                                                    MessageList messageList = new MessageList(content, user, pickedFriend);
+
+                                                    ArrayList<String> messages = messageList.viewMessageHistory();
+                                                    int messageCount = messages.size();
+                                                    String count1 = String.valueOf(messageCount);
+                                                    output.println(count1); //pass the length of messages (4)
+
+                                                    for (int m = 0; m < messageCount; m++) {
+                                                        output.println(messages.get(m)); //pass messages (5)
+                                                    }
+                                                    String result = input.readLine();
+                                                    if (result.equals("History window was closed")) {
+                                                        continue;
+                                                    } else {
+                                                        // Assuming the client sends back the number of messages followed by each message
+                                                        int newMessageCount = Integer.parseInt(input.readLine());
+                                                        ArrayList<String> newMessages = new ArrayList<>();
+
+                                                        for (int i = 0; i < newMessageCount; i++) {
+                                                            newMessages.add(input.readLine());
+                                                        }
+
+                                                        // Rewrite these messages to the history files
+                                                        if (messageList.rewriteMessageHistory(newMessages)) {
+                                                            output.println("Updated successfully");
+                                                        } else {
+                                                            output.println("Update failed");
+                                                        }
+                                                    }
+                                                } else if (thirdChose.equals("Send a Message")) {
+                                                    String content = input.readLine(); //receive content {7}
+                                                    MessageList messageList = new MessageList(content, user, pickedFriend);
+
+                                                    if (!messageList.sendMessage()) {
+                                                        output.println("Fail to send a message. May be is because you are not this user's friend."); //pass result of sending a message (4)
+                                                    } else {
+                                                        output.println("Send a message successfully!"); //pass result of sending a message (4)
+                                                    }
+                                                } else if (thirdChose.equals("Remove a Friend")) {
+                                                    Friends friend = new Friends(user, pickedFriend);
+
+                                                    if (!friend.removeFriend()) {
+                                                        output.println("Fail to remove."); //pass the result of removing a friend (4)
+                                                    } else {
+                                                        output.println("Remove a friend successfully!"); //pass the result of removing a friend (4)
+                                                    }
+                                                } else if (thirdChose.equals("Block a Friend")) {
+                                                    Friends friend = new Friends(user, pickedFriend);
+
+                                                    if (!friend.blockUser()) {
+                                                        output.println("Fail to block."); //pass the result of blocking a friend (4)
+                                                    } else {
+                                                        output.println("Block a friend successfully!"); //pass the result of blocking a friend (4)
+                                                    }
+                                                } else {
+                                                    break;
                                                 }
                                             }
                                         }
                                     } else if (secondChose.equals("View your blocks")) {
-                                        String[] blocks = user.viewBlocks();
-                                        int blocksCount = blocks.length;
-                                        String count = String.valueOf(blocksCount);
-                                        output.println(count); //pass the length of blocks (2)
-
-                                        for (int i = 0; i < blocksCount; i++) {
-                                            output.println(blocks[i]); //pass blocks (3)
-                                        }
-
                                         while (true) {
+                                            String[] blocks = user.viewBlocks();
+                                            int blocksCount = blocks.length;
+                                            String count = String.valueOf(blocksCount);
+                                            output.println(count); //pass the length of blocks (2)
+
+                                            for (int i = 0; i < blocksCount; i++) {
+                                                output.println(blocks[i]); //pass blocks (3)
+                                            }
                                             String pickedBlock = input.readLine(); //receive pickedBlock {5}
 
                                             if (pickedBlock.equals("Click on this if you want to exit")) {
                                                 break;
                                             } else {
-                                                while (true) {
-                                                    String thirdChose = input.readLine(); //receive thirdChose {6}
+                                                String thirdChose = input.readLine(); //receive thirdChose {6}
 
-                                                    if (thirdChose.equals("Remove Block")) {
-                                                        Friends friend = new Friends(user, pickedBlock);
+                                                if (thirdChose.equals("Remove Block")) {
+                                                    Friends friend = new Friends(user, pickedBlock);
 
-                                                        if (!friend.removeBlock()) {
-                                                            output.println("Fail to remove."); //pass the result of removing block (4)
-                                                        } else {
-                                                            output.println("Remove a blocked successfully!"); //pass the result of removing block (4)
-                                                        }
+                                                    if (!friend.removeBlock()) {
+                                                        output.println("Fail to remove."); //pass the result of removing block (4)
                                                     } else {
-                                                        break;
+                                                        output.println("Remove a blocked successfully!"); //pass the result of removing block (4)
                                                     }
+                                                } else {
+                                                    break;
                                                 }
                                             }
                                         }
                                     } else if (secondChose.equals("View your friend requests")) {
-                                        String[] requests = user.viewFriendsRequest();
-                                        int requestsCount = requests.length;
-                                        String count = String.valueOf(requestsCount);
-                                        output.println(count); //pass the length of requests (2)
-
-                                        for (int i = 0; i < requestsCount; i++) {
-                                            output.println(requests[i]); //pass requests (3)
-                                        }
-
                                         while (true) {
+                                            String[] requests = user.viewFriendsRequest();
+                                            int requestsCount = requests.length;
+                                            String count = String.valueOf(requestsCount);
+                                            output.println(count); //pass the length of requests (2)
+
+                                            for (int i = 0; i < requestsCount; i++) {
+                                                output.println(requests[i]); //pass requests (3)
+                                            }
                                             String pickedRequest = input.readLine(); //receive pickedRequest {5}
 
                                             if (pickedRequest.equals("Click on this if you want to exit")) {
@@ -462,7 +457,6 @@ public class Servers {
                                                         output.println("Reject a friend request successfully!"); //pass the result of rejecting request (4)
                                                     }
                                                 }
-                                                break;
                                             }
                                         }
 

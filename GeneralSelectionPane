@@ -115,24 +115,64 @@ public class GeneralSelectionPane {
         }
     };
 
+    // frame for when calendar needs to be displayed when user is rescheduling
+    public void createCalendarPane(String calendarFileLines) {
+        open = true;
+        buttonHit = false;
+        frame = new JFrame("Boiler Town");
+        frame.setSize(900, 550);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        addTitlePanel(frame, "Boiler Town Calendar"); // Adding title panel
+
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        frame.add(leftPanel, BorderLayout.NORTH);
+
+        JTextArea textArea = new JTextArea(25, 25);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        textArea.setEditable(false);
+        leftPanel.add(scrollPane);
+        for (String line : calendarFileLines.split(";")) {
+            textArea.append(line + "\n");
+        }
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        frame.add(rightPanel, BorderLayout.SOUTH);
+
+        JLabel lbl = new JLabel(dropDownLabel);
+        rightPanel.add(lbl);
+        cb.setMaximumSize(cb.getPreferredSize());
+        rightPanel.add(cb);
+
+        buttonEnter.addActionListener(newEnter);
+        rightPanel.add(buttonEnter);
+        frame.addWindowListener(newExit);
+        frame.setVisible(true);
+    }
+
+
     // frame for most general menu panes
     public void createSelectionPane() {
         open = true;
         buttonHit = false;
         frame = new JFrame("Boiler Town");
-        frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 500);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+
+        // Add the title panel at the top of the frame
+        addTitlePanel(frame, "Boiler Town"); // Set the appropriate title for the context
+
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // added code
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         frame.add(panel);
 
         JLabel lbl = new JLabel(dropDownLabel);
         lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         panel.add(lbl);
 
         cb.setMaximumSize(cb.getPreferredSize());
@@ -151,6 +191,21 @@ public class GeneralSelectionPane {
 
         frame.addWindowListener(newExit);
         frame.setVisible(true);
-
     }
+
+    private void addTitlePanel(JFrame frame, String titleText) {
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0)); // Top and bottom margins
+
+        JLabel titleLabel = new JLabel(titleText);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE); // Font color
+        titleLabel.setOpaque(true);
+        titleLabel.setBackground(new Color(0, 51, 102)); // Deep blue background
+        titlePanel.add(titleLabel);
+
+        frame.add(titlePanel, BorderLayout.NORTH);
+    }
+
 }

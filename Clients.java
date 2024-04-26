@@ -1138,7 +1138,7 @@ public class Clients {
                 third.addTextBoxes("Profile View (Enter True or False)");
                 third.addTextBoxes("Message Receive (Enter True or False");
                 third.setButtonEnter();
-                third.pictureSignIn();
+                //third.pictureSignIn();
                 third.createPane();
 
                 String responses = "";

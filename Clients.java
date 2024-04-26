@@ -66,12 +66,37 @@ public class Clients {
             } else if (firstChose.equals("Log in")) { //Log in
                 System.out.println("User has chosen to log in");
                 while (breakCheck) { //Log in begin - username
-                    String username = JOptionPane.showInputDialog("Please enter your username: ");
 
-                    if (username == null) {
-                        return;
+                    TextBoxes first = new TextBoxes();
+                    first.addTextBoxes("Username");
+                    first.addTextBoxPassword("Password");
+                    first.setButtonEnter();
+                    first.createPane();
 
-                    } else if (username.isEmpty()) {
+                    String responses = "";
+
+                    do {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            return;
+                        }
+                        if (first.getHitButton()) {
+                            responses = first.getResponses();
+                        }
+                    } while (!first.getHitButton());
+
+                    if (responses.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                        first.emptyTextFields();
+                    }
+
+                    String username = responses.substring(0, responses.indexOf(";"));
+                    String password = responses.substring(responses.indexOf(";") + 1);
+                    //String username = JOptionPane.showInputDialog("Please enter your username: ");
+
+                    if (username.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
 
                         String[] options = {"Yes", "No"};
@@ -90,11 +115,9 @@ public class Clients {
 
                     } else {
                         while (breakCheck) { //Log in password begin
-                            String password = JOptionPane.showInputDialog("Please enter your password: ");
+                            //String password = JOptionPane.showInputDialog("Please enter your password: ");
 
-                            if (password == null) {
-                                return;
-                            } else if (password.isEmpty()) {
+                            if (password.isEmpty()) {
                                 JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
 
                                 String[] options = {"Yes", "No"};
@@ -122,10 +145,13 @@ public class Clients {
                                 if (user.equals("null")) {
                                     JOptionPane.showMessageDialog(null,
                                             "Your username or password is wrong!");
-
+                                    first.getFrame().dispose();
                                     break;
 
                                 } else { //Log in successfully
+                                    first.getFrame().dispose();
+                                    JOptionPane.showMessageDialog(null,
+                                            "Log In Successful!");
                                     String[] secondOptions = {"View All users",
                                             "Search a user",
                                             "View your profile",
@@ -339,7 +365,27 @@ public class Clients {
                                             }
                                         } else if (secondChose.equals("Search a user")) {
                                             System.out.println("User has chosen to " + secondChose);
-                                            String userSearched = JOptionPane.showInputDialog("Please enter the username you want to search: ");
+
+                                            TextBoxes second = new TextBoxes();
+                                            second.addTextBoxes("Please enter the user you want to search (Enter a username)");
+                                            second.setButtonEnter();
+                                            second.createPane();
+
+                                            String response = "";
+
+                                            do {
+                                                try {
+                                                    Thread.sleep(100);
+                                                } catch (InterruptedException e) {
+                                                    Thread.currentThread().interrupt();
+                                                    return;
+                                                }
+                                                if (second.getHitButton()) {
+                                                    response = second.getResponses();
+                                                }
+                                            } while (!second.getHitButton());
+
+                                            String userSearched = response;
 
                                             if (userSearched == null) {
                                                 return;
@@ -352,7 +398,9 @@ public class Clients {
 
                                                 if (!result.equals("User searched!")) {
                                                     JOptionPane.showMessageDialog(null, result);
+                                                    second.getFrame().dispose();
                                                 } else {
+                                                    second.getFrame().dispose();
                                                     String[] thirdOptions = {"View profile",
                                                             "Make a friend request",
                                                             "Block a user",
@@ -862,76 +910,67 @@ public class Clients {
                 break;//Log in username end
             } else if (firstChose.equals("Sign up")) { //Sign up
                 System.out.println("User has chosen to sign up");
-                String username = JOptionPane.showInputDialog("Please enter your username, it should be unique with no spacse");
-                if (username == null) {
-                    return;
 
-                } else {
-                    String password = JOptionPane.showInputDialog("Please enter your password, it should be grater than 4 characters.");
+                TextBoxes third = new TextBoxes();
+                third.addTextBoxes("Username");
+                third.addTextBoxes("Password");
+                third.addTextBoxes("First Name");
+                third.addTextBoxes("Last Name");
+                third.addTextBoxes("Email");
+                third.addTextBoxes("Bio");
+                third.addTextBoxes("Profile View (Enter True or False)");
+                third.addTextBoxes("Message Receive (Enter True or False");
+                third.setButtonEnter();
+                third.createPane();
 
-                    if (password == null) {
+                String responses = "";
+
+                do {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         return;
-
-                    } else {
-                        String firstName = JOptionPane.showInputDialog("Please enter your first name, it should have no spaces");
-
-                        if (firstName == null) {
-                            return;
-                        } else {
-                            String lastName = JOptionPane.showInputDialog("Please enter your last name, it should have no spaces.");
-
-                            if (lastName == null) {
-                                return;
-                            } else {
-                                String email = JOptionPane.showInputDialog("Please enter your email of the form: ___@___.___ with no spaces.");
-
-                                if (email == null) {
-                                    return;
-                                } else {
-                                    String bio = JOptionPane.showInputDialog("Please enter your bio, it should be shorter than 50 characters.");
-
-                                    if (bio == null) {
-                                        return;
-                                    } else {
-                                        String profileView = JOptionPane.showInputDialog("Please enter \"true\" or \"false\" for your profile view.");
-
-                                        if (profileView == null) {
-                                            return;
-                                        } else {
-                                            String messageReceive = JOptionPane.showInputDialog("Please enter \"true\" or \"false\" for your message receive.");
-
-                                            if (messageReceive == null) {
-                                                return;
-                                            } else {
-                                                clients.output.println(firstChose);
-                                                clients.output.println(username);
-                                                clients.output.println(password);
-                                                clients.output.println(firstName);
-                                                clients.output.println(lastName);
-                                                clients.output.println(email);
-                                                clients.output.println(bio);
-                                                clients.output.println(profileView);
-                                                clients.output.println(messageReceive);
-
-                                                String result = clients.input.readLine();
-
-                                                if (result.equals("Sign up successfully!")) {
-                                                    JOptionPane.showMessageDialog(null, "Sign up successfully!");
-                                                    JOptionPane.showMessageDialog(null, "You need to log in your account after you signed up.");
-                                                } else {
-                                                    JOptionPane.showMessageDialog(null, result);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
+                    if (third.getHitButton()) {
+                        responses = third.getResponses();
+                    }
+                } while (!third.getHitButton());
+
+                String[] spliter = responses.split(";");
+                String username = spliter[0];
+                String password = spliter[1];
+                String firstName = spliter[2];
+                String lastName = spliter[3];
+                String email = spliter[4];
+                String bio = spliter[5];
+                String profileView = spliter[6];
+                String messageReceive = spliter[7];
+
+                clients.output.println(firstChose);
+                clients.output.println(username);
+                clients.output.println(password);
+                clients.output.println(firstName);
+                clients.output.println(lastName);
+                clients.output.println(email);
+                clients.output.println(bio);
+                clients.output.println(profileView);
+                clients.output.println(messageReceive);
+
+                String result = clients.input.readLine();
+
+                if (result.equals("Sign up successfully!")) {
+                    JOptionPane.showMessageDialog(null, "Sign up successfully!");
+                    JOptionPane.showMessageDialog(null, "You need to log in your account after you signed up.");
+                    third.getFrame().dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, result);
+                    third.getFrame().dispose();
                 }
 
             } else { //Other than Log in or Sign Up, directly just end the program
                 System.out.println("User has chosen to exit");
+                JOptionPane.showMessageDialog(null, "Thank you for using Boiler Town!");
                 break;
             }
 

@@ -1,5 +1,3 @@
-import org.junit.Assert;
-
 import java.io.*;
 import java.util.ArrayList;
 //.
@@ -297,5 +295,25 @@ public class MessageList implements Message {
         }
         return list;
     }
+    public synchronized boolean rewriteMessageHistory(ArrayList<String> newMessages) {
+        File senderFile = new File(sendUser.getUsername() + "_" + receiveUser + ".txt");
+        File receiverFile = new File(receiveUser + "_" + sendUser.getUsername() + ".txt");
+
+        try {
+            try (PrintWriter senderWriter = new PrintWriter(new FileOutputStream(senderFile, false));
+                 PrintWriter receiverWriter = new PrintWriter(new FileOutputStream(receiverFile, false))) {
+
+                for (String message : newMessages) {
+                    senderWriter.println(message);
+                    receiverWriter.println(message);
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }

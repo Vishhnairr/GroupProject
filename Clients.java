@@ -366,11 +366,47 @@ public class Clients {
                                                                 }
                                                             }
 
-                                                            JOptionPane.showMessageDialog(null,
-                                                                    history,
-                                                                    "Message History",
-                                                                    JOptionPane.INFORMATION_MESSAGE);
+                                                            String finalHistory = history;
+                                                            CountDownLatch latch = new CountDownLatch(1);
 
+                                                            SwingUtilities.invokeLater(() -> {
+                                                                new MessageHistoryEditor(finalHistory, new MessageHistoryEditor.MessageHistoryListener() {
+                                                                    @Override
+                                                                    public void onWindowClosed() {
+                                                                        System.out.println("111");
+                                                                        clients.output.println("History window was closed");
+                                                                        latch.countDown(); // Notify the latch that the task is completed
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onMessagesDeleted(List<String> remainingMessages) {
+                                                                        System.out.println("!!!");
+                                                                        if (!finalHistory.isEmpty()) {
+                                                                            clients.output.println("Delete");
+                                                                            clients.output.println(remainingMessages.size());
+                                                                            for (int i = 0; i < remainingMessages.size(); i++) {
+                                                                                clients.output.println(remainingMessages.get(i));
+                                                                            }
+                                                                            String result = null;
+                                                                            try {
+                                                                                result = clients.input.readLine();
+                                                                            } catch (IOException e) {
+                                                                                e.printStackTrace();
+                                                                            }
+                                                                            JOptionPane.showMessageDialog(null, result);
+                                                                        }
+                                                                        latch.countDown(); // Notify the latch that the task is completed
+                                                                    }
+                                                                });
+                                                            });
+
+// Wait for the message history editor to close
+                                                            try {
+                                                                latch.await(); // This will block until the count reaches zero
+                                                            } catch (InterruptedException e) {
+                                                                Thread.currentThread().interrupt();
+                                                                System.out.println("Interrupted while waiting for the message history editor to close.");
+                                                            }
                                                         } else {
                                                             clients.output.println(thirdChose); //pass thirdChose (6)
                                                             System.out.println(thirdChose);
@@ -542,23 +578,60 @@ public class Clients {
                                                             } else if (thirdChose.equals("View message history")) {
                                                                 clients.output.println(thirdChose); //pass thirdChose (6)
 
-                                                                String messageCount = clients.input.readLine(); //receive the count of messages {3}
+                                                                String messageCount = clients.input.readLine(); //receive the count of messages {4}
                                                                 int messages = Integer.parseInt(messageCount);
 
                                                                 String history = "";
 
                                                                 for (int m = 0; m < messages; m++) {
                                                                     if (m == messages - 1) {
-                                                                        history += clients.input.readLine(); //receive messages {4}
+                                                                        history += clients.input.readLine(); //receive messages {5}
                                                                     } else {
-                                                                        history += clients.input.readLine() + "\n"; //receive messages {4}
+                                                                        history += clients.input.readLine() + "\n"; //receive messages {5}
                                                                     }
                                                                 }
 
-                                                                JOptionPane.showMessageDialog(null,
-                                                                        history,
-                                                                        "Message History",
-                                                                        JOptionPane.INFORMATION_MESSAGE);
+                                                                String finalHistory = history;
+                                                                CountDownLatch latch = new CountDownLatch(1);
+
+                                                                SwingUtilities.invokeLater(() -> {
+                                                                    new MessageHistoryEditor(finalHistory, new MessageHistoryEditor.MessageHistoryListener() {
+                                                                        @Override
+                                                                        public void onWindowClosed() {
+                                                                            System.out.println("111");
+                                                                            clients.output.println("History window was closed");
+                                                                            latch.countDown(); // Notify the latch that the task is completed
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onMessagesDeleted(List<String> remainingMessages) {
+                                                                            System.out.println("!!!");
+                                                                            if (!finalHistory.isEmpty()) {
+                                                                                clients.output.println("Delete");
+                                                                                clients.output.println(remainingMessages.size());
+                                                                                for (int i = 0; i < remainingMessages.size(); i++) {
+                                                                                    clients.output.println(remainingMessages.get(i));
+                                                                                }
+                                                                                String result = null;
+                                                                                try {
+                                                                                    result = clients.input.readLine();
+                                                                                } catch (IOException e) {
+                                                                                    e.printStackTrace();
+                                                                                }
+                                                                                JOptionPane.showMessageDialog(null, result);
+                                                                            }
+                                                                            latch.countDown(); // Notify the latch that the task is completed
+                                                                        }
+                                                                    });
+                                                                });
+
+// Wait for the message history editor to close
+                                                                try {
+                                                                    latch.await(); // This will block until the count reaches zero
+                                                                } catch (InterruptedException e) {
+                                                                    Thread.currentThread().interrupt();
+                                                                    System.out.println("Interrupted while waiting for the message history editor to close.");
+                                                                }
                                                             } else {
                                                                 clients.output.println(thirdChose); //pass thirdChose (6)
                                                                 break;
@@ -744,10 +817,47 @@ public class Clients {
                                                                 }
                                                             }
 
-                                                            JOptionPane.showMessageDialog(null,
-                                                                    history,
-                                                                    "Message History",
-                                                                    JOptionPane.INFORMATION_MESSAGE);
+                                                            String finalHistory = history;
+                                                            CountDownLatch latch = new CountDownLatch(1);
+
+                                                            SwingUtilities.invokeLater(() -> {
+                                                                new MessageHistoryEditor(finalHistory, new MessageHistoryEditor.MessageHistoryListener() {
+                                                                    @Override
+                                                                    public void onWindowClosed() {
+                                                                        System.out.println("111");
+                                                                        clients.output.println("History window was closed");
+                                                                        latch.countDown(); // Notify the latch that the task is completed
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onMessagesDeleted(List<String> remainingMessages) {
+                                                                        System.out.println("!!!");
+                                                                        if (!finalHistory.isEmpty()) {
+                                                                            clients.output.println("Delete");
+                                                                            clients.output.println(remainingMessages.size());
+                                                                            for (int i = 0; i < remainingMessages.size(); i++) {
+                                                                                clients.output.println(remainingMessages.get(i));
+                                                                            }
+                                                                            String result = null;
+                                                                            try {
+                                                                                result = clients.input.readLine();
+                                                                            } catch (IOException e) {
+                                                                                e.printStackTrace();
+                                                                            }
+                                                                            JOptionPane.showMessageDialog(null, result);
+                                                                        }
+                                                                        latch.countDown(); // Notify the latch that the task is completed
+                                                                    }
+                                                                });
+                                                            });
+
+// Wait for the message history editor to close
+                                                            try {
+                                                                latch.await(); // This will block until the count reaches zero
+                                                            } catch (InterruptedException e) {
+                                                                Thread.currentThread().interrupt();
+                                                                System.out.println("Interrupted while waiting for the message history editor to close.");
+                                                            }
                                                         } else if (thirdChose.equals("Send a Message")) {
                                                             TextBoxes messageBox = new TextBoxes();
                                                             String content;

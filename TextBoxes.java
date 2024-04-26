@@ -37,6 +37,12 @@ public class TextBoxes {
         this.collectedInfo.add(null);
     }
 
+    public void addTextBoxPassword(String labelText) {
+        this.textFields.add(new JPasswordField(5));
+        this.labels.add(new JLabel(labelText));
+        this.collectedInfo.add(null);
+    }
+
     public ArrayList<JTextField> getTextFields() {
         return this.textFields;
     }
@@ -46,7 +52,7 @@ public class TextBoxes {
     }
 
     public boolean getHitButton() {
-        return this.buttonClicked;
+        return buttonClicked;
     }
 
     public void setHitButton(boolean hitButton) {
@@ -66,7 +72,7 @@ public class TextBoxes {
     }
 
     public JFrame getFrame() {
-        return frames;
+        return this.frames;
     }
 
     public void setButtonEnter() {
@@ -76,7 +82,7 @@ public class TextBoxes {
     public void setTextBoxes(int number, String textBoxes) {
         this.textFields.get(number).setText(textBoxes);
     }
-    
+
     public void setTextBoxesLength(int number) {
         this.textFields = new ArrayList<>(number);
     }
@@ -98,6 +104,7 @@ public class TextBoxes {
             }
 
             buttonClicked = true;
+
         }
     };
 
@@ -106,6 +113,7 @@ public class TextBoxes {
         public void windowClosing(WindowEvent e) {
             buttonClicked = true;
             panelOpen = false;
+
         }
     };
 
@@ -117,6 +125,7 @@ public class TextBoxes {
         frames.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frames.setSize(textFieldLength, textFieldHeight);
         frames.setResizable(false);
+        frames.setLocationRelativeTo(null);
         GridLayout gl = new GridLayout();
         gl.setRows(textFields.size());
         gl.setColumns(2);

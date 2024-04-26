@@ -3,20 +3,17 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * Project 5 - GeneralSelectionPane
- * <p>
- * This class allows for the customization and generation of panes that involve a dropdown box of options, or when
- * some text just needs to be displayed to the user. the createSelectionPane method is the method to generate a basic
- * pane that just has an enter button with a dropdown box of options, with the potential to add a logout button.
- * The createCalendarPane method is used for when the user is displayed a calendar along with a dropdown box of
- * valid appointment times in that calendar so that the user can reschedule their appointment. This method is also
- * used to display all a users approved appointments with a dropdown box to allow them to choose which one they want
- * to edit. The showCalendar method is only for when a customer wants to view a calendar for a store, it just has a
- * JScrollArea to display all the text of the calendar, there is no other buttons. Likewise, the showAppointments
- * method is for when the user just wants to be displayed appointments. The method just displays appointments to the
- * user in a JScrollArea with no other buttons.
+ * GeneralSelectionPane
+ *
+ * This class creates the GUI for any parts that include dropdown boxes.
+ * It allows the user to choose between the options and is used in the
+ * client class in order to take data and send it back to the server.
+ *
+ * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
+ *
+ * @version April 26, 2024
+ *
  */
-
 
 public class GeneralSelectionPane {
     private String[] choices;  // all the choices in the dropdown box
@@ -24,7 +21,6 @@ public class GeneralSelectionPane {
     private JFrame frame;  // the JFrame object
     private JButton buttonEnter;  // The enter button object
     private JButton buttonLogOut;  // The logout button object
-
     private String option;  // The string that holds the selected option from the dropdown
     private String dropDownLabel; // the label for the dropdown box;
     private boolean buttonHit;  // boolean to tell if any button has been hit, including the button to close the window
@@ -172,6 +168,7 @@ public class GeneralSelectionPane {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 500);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // added code
 
@@ -181,7 +178,6 @@ public class GeneralSelectionPane {
         lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel.add(lbl);
-
 
         cb.setMaximumSize(cb.getPreferredSize());
         cb.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -200,45 +196,5 @@ public class GeneralSelectionPane {
         frame.addWindowListener(newExit);
         frame.setVisible(true);
 
-    }
-
-    public void showCalendar(String calendarFileLines) { // can be used as show user bio
-        open = true;
-        buttonHit = false;
-        frame = new JFrame("Boiler Town");
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(900, 550);
-        JTextArea textArea = new JTextArea(25, 25);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setEditable(false);
-        frame.add(scrollPane);
-        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-        for (String line : calendarFileLines.split(";")) {
-            textArea.append(line + "\n");
-        }
-        frame.addWindowListener(newExit);
-        frame.setVisible(true);
-    }
-
-    public void showAppointments(String appointments) { // can be used to just view friends
-        open = true;
-        buttonHit = false;
-        frame = new JFrame("Boiler Town");
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(900, 550);
-        JTextArea textArea = new JTextArea(25, 25);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setEditable(false);
-        frame.add(scrollPane);
-        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-        for (String line : appointments.split(";")) {
-            textArea.append(line + "\n");
-        }
-        frame.addWindowListener(newExit);
-        frame.setVisible(true);
     }
 }

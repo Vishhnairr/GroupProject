@@ -31,6 +31,7 @@ public class Clients {
     public static void main(String[] args) throws IOException {
         Clients clients = new Clients("localhost", 8787);
         boolean breakCheck = true;
+        boolean exit = false;
 
         JOptionPane.showMessageDialog(null, "Welcome to Boiler Town!",
                 "Boiler Town", JOptionPane.INFORMATION_MESSAGE);
@@ -75,47 +76,53 @@ public class Clients {
                     String responses = "";
 
                     do {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            return;
-                        }
-                        if (first.getHitButton()) {
-                            responses = first.getResponses();
-                        }
-                    } while (!first.getHitButton());
+                        do {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                return;
+                            }
+                            if (first.getHitButton()) {
+                                responses = first.getResponses();
+                            }
+                        } while (!first.getHitButton());
 
-                    if (responses.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-                        first.emptyTextFields();
-                    }
+                        if (responses.equals(";")) {
+                            JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                            first.emptyTextFields();
+                            first.setButtonEnter();
+                            first.setHitButton(false);
 
-                    String username = responses.substring(0, responses.indexOf(";"));
-                    String password = responses.substring(responses.indexOf(";") + 1);
+                            String[] options = {"Yes", "No"};
+                            int option = JOptionPane.showOptionDialog(
+                                    null,
+                                    "Do you still want to log in?",
+                                    "Boiler Town",
+                                    JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    options, options[1]);
 
-                    if (username.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                            if (option == JOptionPane.CLOSED_OPTION || option == JOptionPane.NO_OPTION) {
+                                first.getFrame().dispose();
+                                responses = ";";
+                                break;
+                            }
+                            responses = "";
+                        } else if (!responses.equals("exit")) {
+                            String username = responses.substring(0, responses.indexOf(";"));
+                            String password = responses.substring(responses.indexOf(";") + 1);
 
-                        String[] options = {"Yes", "No"};
-                        int option = JOptionPane.showOptionDialog(
-                                null,
-                                "Do you still want to log in?",
-                                "Boiler Town",
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                options, options[1]);
+                            clients.output.println(firstChose); //pass first chose of log in (1)
+                            clients.output.println(username); // pass username (2)
+                            clients.output.println(password); // pass password (3)
 
-                        if (option == JOptionPane.CLOSED_OPTION || option == JOptionPane.NO_OPTION) {
-                            return;
-                        }
+                            String user = clients.input.readLine(); // receive user {1}
 
-                    } else {
-                        while (breakCheck) { //Log in password begin
-
-                            if (password.isEmpty()) {
-                                JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                            if (user.equals("null")) {
+                                JOptionPane.showMessageDialog(null,
+                                        "Your username or password is wrong!");
 
                                 String[] options = {"Yes", "No"};
                                 int option = JOptionPane.showOptionDialog(
@@ -128,24 +135,23 @@ public class Clients {
                                         options, options[1]);
 
                                 if (option == JOptionPane.CLOSED_OPTION || option == JOptionPane.NO_OPTION) {
-                                    return;
-                                } else {
-                                    break;
-                                }
-                            } else {
-                                clients.output.println(firstChose); //pass first chose of log in (1)
-                                clients.output.println(username); // pass username (2)
-                                clients.output.println(password); // pass password (3)
-
-                                String user = clients.input.readLine(); // receive user {1}
-
-                                if (user.equals("null")) {
-                                    JOptionPane.showMessageDialog(null,
-                                            "Your username or password is wrong!");
                                     first.getFrame().dispose();
+                                    responses = ";";
                                     break;
+                                } else {
+                                    first.emptyTextFields();
+                                    first.setHitButton(false);
+                                }
+                                responses = "";
+                            }
+                        } else {
+                            first.getFrame().dispose();
+                            responses = ";";
+                            break;
+                        }
+                    } while (responses.isEmpty());
 
-                                } else { //Log in successfully
+                    if (!responses.equals(";")) { //Log in successfully
                                     first.getFrame().dispose();
                                     JOptionPane.showMessageDialog(null,
                                             "Log In Successful!");
@@ -1099,16 +1105,14 @@ public class Clients {
                                             clients.output.println(secondChose); //pass secondChose (4)
                                             break;
                                         }
+                                        break;
                                     }
-                                }
-                            }
-                            break;
-                        }
-                        break;//Log in password end
+                                    break;
                     }
                     break;
                 }
                 break;//Log in username end
+
             } else if (firstChose.equals("Sign up")) { //Sign up
                 System.out.println("User has chosen to sign up");
 
@@ -1120,62 +1124,127 @@ public class Clients {
                 third.addTextBoxes("Email");
                 third.addTextBoxes("Bio");
                 third.addTextBoxes("Profile View (Enter True or False)");
-                third.addTextBoxes("Message Receive (Enter True or False");
+                third.addTextBoxes("Message Receive (Enter True or False)");
                 third.setButtonEnter();
+                //third.pictureSignIn();
                 third.createPane();
 
                 String responses = "";
 
                 do {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        return;
+                    do {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            return;
+                        }
+                        if (third.getHitButton()) {
+                            responses = third.getResponses();
+                        }
+                    } while (!third.getHitButton());
+
+                    if (!responses.equals(";;;;;;;")) {
+
+                        try {
+                            String[] spliter = responses.split(";");
+                            String username = spliter[0];
+                            String password = spliter[1];
+                            String firstName = spliter[2];
+                            String lastName = spliter[3];
+                            String email = spliter[4];
+                            String bio = spliter[5];
+                            String profileView = spliter[6];
+                            String messageReceive = spliter[7];
+
+                            clients.output.println(firstChose);
+                            clients.output.println(username);
+                            clients.output.println(password);
+                            clients.output.println(firstName);
+                            clients.output.println(lastName);
+                            clients.output.println(email);
+                            clients.output.println(bio);
+                            clients.output.println(profileView);
+                            clients.output.println(messageReceive);
+
+                            String result = clients.input.readLine();
+
+                            if (result.equals("Sign up successfully!")) {
+                                JOptionPane.showMessageDialog(null, "Sign up successfully!");
+                                JOptionPane.showMessageDialog(null, "You need to log in your " +
+                                        "account after you signed up.");
+                                third.getFrame().dispose();
+                            } else {
+                                JOptionPane.showMessageDialog(null, result);
+                                responses = "";
+                                third.emptyTextFields();
+                                third.setHitButton(false);
+                            }
+                        } catch (IndexOutOfBoundsException e) {
+                            if (responses.equals("exit")) {
+                                third.getFrame().dispose();
+                                responses = "EXIT";
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Please fill all fields!");
+                                responses = "";
+
+                                String[] options = {"Yes", "No"};
+                                int option = JOptionPane.showOptionDialog(
+                                        null,
+                                        "Do you want to exit Boiler Town?",
+                                        "Boiler Town",
+                                        JOptionPane.YES_NO_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        options, options[1]);
+
+                                if (option == JOptionPane.CLOSED_OPTION || option == JOptionPane.YES_OPTION) {
+                                    third.getFrame().dispose();
+                                    responses = "EXIT";
+                                } else {
+                                    third.emptyTextFields();
+                                    third.setHitButton(false);
+                                }
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Please fill all fields!");
+                        responses = "";
+
+                        String[] options = {"Yes", "No"};
+                        int option = JOptionPane.showOptionDialog(
+                                null,
+                                "Do you want to exit Boiler Town?",
+                                "Boiler Town",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                options, options[1]);
+
+                        if (option == JOptionPane.CLOSED_OPTION || option == JOptionPane.YES_OPTION) {
+                            third.getFrame().dispose();
+                            responses = "EXIT";
+                        } else {
+                            third.emptyTextFields();
+                            third.setHitButton(false);
+                        }
                     }
-                    if (third.getHitButton()) {
-                        responses = third.getResponses();
-                    }
-                } while (!third.getHitButton());
-
-                String[] spliter = responses.split(";");
-                String username = spliter[0];
-                String password = spliter[1];
-                String firstName = spliter[2];
-                String lastName = spliter[3];
-                String email = spliter[4];
-                String bio = spliter[5];
-                String profileView = spliter[6];
-                String messageReceive = spliter[7];
-
-                clients.output.println(firstChose);
-                clients.output.println(username);
-                clients.output.println(password);
-                clients.output.println(firstName);
-                clients.output.println(lastName);
-                clients.output.println(email);
-                clients.output.println(bio);
-                clients.output.println(profileView);
-                clients.output.println(messageReceive);
-
-                String result = clients.input.readLine();
-
-                if (result.equals("Sign up successfully!")) {
-                    JOptionPane.showMessageDialog(null, "Sign up successfully!");
-                    JOptionPane.showMessageDialog(null, "You need to log in your account after you signed up.");
-                    third.getFrame().dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, result);
-                    third.getFrame().dispose();
-                }
-
+                } while (responses.isEmpty());
+                break;
             } else { //Other than Log in or Sign Up, directly just end the program
                 System.out.println("User has chosen to exit");
                 JOptionPane.showMessageDialog(null, "Thank you for using Boiler Town!");
+                exit = true;
                 break;
             }
 
         } while (true);
+
+        if (!exit) {
+            System.out.println("User has chosen to exit");
+            JOptionPane.showMessageDialog(null, "Thank you for using Boiler Town!");
+        }
+
         clients.disconnect(); //program end
     }
 }

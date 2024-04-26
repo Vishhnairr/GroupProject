@@ -93,7 +93,6 @@ public class Clients {
 
                     String username = responses.substring(0, responses.indexOf(";"));
                     String password = responses.substring(responses.indexOf(";") + 1);
-                    //String username = JOptionPane.showInputDialog("Please enter your username: ");
 
                     if (username.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
@@ -114,7 +113,6 @@ public class Clients {
 
                     } else {
                         while (breakCheck) { //Log in password begin
-                            //String password = JOptionPane.showInputDialog("Please enter your password: ");
 
                             if (password.isEmpty()) {
                                 JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
@@ -722,10 +720,7 @@ public class Clients {
                                                                     }
                                                                 }
 
-                                                                JOptionPane.showMessageDialog(null,
-                                                                        file,
-                                                                        "Friend profile",
-                                                                        JOptionPane.INFORMATION_MESSAGE);
+                                                                new UserProfileDisplay(file);
 
                                                             } else { //if no file is passed
                                                                 JOptionPane.showMessageDialog(
@@ -952,36 +947,47 @@ public class Clients {
                                                     break;
                                                 } else {
                                                     clients.output.println(pickedRequest); //pass pickedRequest (5)
+                                                    GeneralSelectionPane paneThree = new GeneralSelectionPane();
                                                     String[] thirdOptions = {"Accept request", "Reject request", "Exit"};
+                                                    paneThree.setChoices(thirdOptions);
+                                                    paneThree.setDropDownLabel("What do you want to do now?");
+                                                    paneThree.setCb();
+                                                    paneThree.setButtonEnter();
+                                                    paneThree.createSelectionPane();  // This displays the GUI
 
-                                                    while (true) { //Interactions in view friend request after chose a specific request
-                                                        String thirdChose = (String) JOptionPane.showInputDialog(
-                                                                null,
-                                                                "What do you want to do now?",
-                                                                "Friend Request",
-                                                                JOptionPane.PLAIN_MESSAGE,
-                                                                null,
-                                                                thirdOptions,
-                                                                thirdOptions[0]);
-
-                                                        if (thirdChose == null) {
-                                                            return;
-                                                        } else if (thirdChose.equals("Accept request")) {
-                                                            clients.output.println(thirdChose); //pass thirdChose (6)
-                                                            String result = clients.input.readLine(); //receive the result of accepting request {4}
-
-                                                            JOptionPane.showMessageDialog(null, result);
-
-                                                        } else if (thirdChose.equals("Reject request")) {
-                                                            clients.output.println(thirdChose); //pass thirdChose (6)
-                                                            String result = clients.input.readLine(); //receive the result of accepting request {4}
-
-                                                            JOptionPane.showMessageDialog(null, result);
-                                                        } else {
-                                                            clients.output.println(thirdChose); //pass thirdChose (6)
-                                                            break;
+                                                    // Busy-wait for the user to make a selection
+                                                    while (!paneThree.isButtonHit()) {
+                                                        try {
+                                                            Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                                        } catch (InterruptedException e) {
+                                                            Thread.currentThread().interrupt();
+                                                            return;  // Exit if the thread is interrupted
                                                         }
                                                     }
+                                                    String thirdChose = paneThree.getOption();
+
+                                                    // Clean up the frame if still open
+                                                    if (paneThree.isOpen()) {
+                                                        paneThree.getFrame().dispose();
+                                                    }
+
+                                                    if (thirdChose == null) {
+                                                        return;
+                                                    } else if (thirdChose.equals("Accept request")) {
+                                                        clients.output.println(thirdChose); //pass thirdChose (6)
+                                                        String result = clients.input.readLine(); //receive the result of accepting request {4}
+
+                                                        JOptionPane.showMessageDialog(null, result);
+
+                                                    } else if (thirdChose.equals("Reject request")) {
+                                                        clients.output.println(thirdChose); //pass thirdChose (6)
+                                                        String result = clients.input.readLine(); //receive the result of accepting request {4}
+
+                                                        JOptionPane.showMessageDialog(null, result);
+                                                    } else {
+                                                        clients.output.println(thirdChose); //pass thirdChose (6)
+                                                    }
+                                                    break;
                                                 }
                                             }
                                         } else {
@@ -1065,7 +1071,6 @@ public class Clients {
             }
 
         } while (true);
-
         clients.disconnect(); //program end
     }
 }

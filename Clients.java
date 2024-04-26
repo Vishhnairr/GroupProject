@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Client
  *
- * This class runs the GUI that users will interact with when they use 
+ * This class runs the GUI that users will interact with when they use
  * the social platform. It stores the commands and data that the users choose
  * and input to send to the platform's server and displays interfaces
  * based on data received from the server.
@@ -1120,7 +1120,6 @@ public class Clients {
                                 clients.output.println(secondChose); //pass secondChose (4)
                                 break;
                             }
-                            break;
                         }
                         break;
                     }

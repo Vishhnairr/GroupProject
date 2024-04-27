@@ -120,34 +120,18 @@ public class TextBoxes {
     public void createPane() {
         panelOpen = true;
         buttonClicked = false;
-        frames = new JFrame("BoilerTown");
-        frames.setVisible(true);
+        frames = new JFrame("Boiler Town");
         frames.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frames.setSize(textFieldLength, textFieldHeight);
         frames.setResizable(false);
         frames.setLocationRelativeTo(null);
-
-        // Create a title panel
-        JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0)); // Set top and bottom margins
-
-        JLabel titleLabel = new JLabel("Boiler Town");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
-        titleLabel.setForeground(Color.WHITE); // Set font color to white
-        titleLabel.setOpaque(true);
-        titleLabel.setBackground(new Color(0, 51, 102)); // Deep blue background
-        titlePanel.add(titleLabel);
-
-        frames.add(titlePanel, BorderLayout.NORTH);
 
         GridLayout gl = new GridLayout();
         gl.setRows(textFields.size());
         gl.setColumns(2);
 
         JPanel textPanel = new JPanel();
-        frames.add(textPanel, BorderLayout.CENTER);
+        frames.add(textPanel, BorderLayout.NORTH);
         textPanel.setLayout(gl);
 
         JLabel currentLabel;
@@ -163,19 +147,14 @@ public class TextBoxes {
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
         frames.add(bottomPanel, BorderLayout.SOUTH);
 
-        if (dropDownList != null) {
-            dropDownList.setAlignmentX(Component.CENTER_ALIGNMENT);
-            bottomPanel.add(dropDownList);
-        }
-
         enterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         bottomPanel.add(enterButton);
         enterButton.addActionListener(enterNew);
 
         frames.addWindowListener(exitNew);
         frames.setVisible(true);
-    }
 
+    }
 
     public String getResponses() {
         String responses = "";

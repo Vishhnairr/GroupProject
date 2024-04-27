@@ -22,7 +22,7 @@ public class Clients {
     private Socket socket;
     private BufferedReader input;
     private PrintWriter output;
-
+    private DataOutputStream dataOutput; // For binary data
     public Clients(String address, int port) {
         try {
             this.socket = new Socket(address, port);

@@ -65,11 +65,4 @@ public class UserProfileDisplay {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
-    public static void main(String[] args) {
-        String profile = "Username: user\nEmail: user@example.com\nPhone: 1234567890";
-        new UserProfileDisplay(profile, () -> {
-            System.out.println("Window has been closed, continue the program...");
-        });
-    }
 }

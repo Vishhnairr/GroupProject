@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -478,19 +479,26 @@ public class Servers {
                         String profileView = input.readLine();
                         String messageReceive = input.readLine();
 
-                        User user = new User(username,
-                                password,
-                                firstName,
-                                lastName,
-                                email,
-                                bio,
-                                Boolean.parseBoolean(profileView),
-                                Boolean.parseBoolean(messageReceive));
-
-                        if (!user.createAccount()) {
-                            output.println("Error! Your account already exist! Or one of your enter is invalid!");
+                        if (!profileView.equalsIgnoreCase("true") &&
+                                !profileView.equalsIgnoreCase("false") &&
+                                (!messageReceive.equalsIgnoreCase("true") &&
+                                        !messageReceive.equalsIgnoreCase("false"))) {
+                            output.println("Error! Your account already exists! Or one of your inputs is invalid!");
                         } else {
-                            output.println("Sign up successfully!");
+                            User user = new User(username,
+                                    password,
+                                    firstName,
+                                    lastName,
+                                    email,
+                                    bio,
+                                    Boolean.parseBoolean(profileView),
+                                    Boolean.parseBoolean(messageReceive));
+
+                            if (!user.createAccount()) {
+                                output.println("Error! Your account already exists! Or one of your inputs is invalid!");
+                            } else {
+                                output.println("Sign up successfully!");
+                            }
                         }
                     } else {
                         break;

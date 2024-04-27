@@ -448,7 +448,7 @@ public class Clients {
                                 System.out.println("User has chosen to " + secondChose);
 
                                 TextBoxes second = new TextBoxes();
-                                second.addTextBoxes("Please enter the user you want to search (Enter a username)");
+                                second.addTextBoxes("Enter a username to search");
                                 second.setButtonEnter();
                                 second.createPane();
 

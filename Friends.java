@@ -1,3 +1,4 @@
+
 // imports
 import java.io.*;
 import java.util.*;
@@ -17,7 +18,7 @@ import java.util.*;
  *
  */
 
-public class Friends implements FriendList{
+public class Friends implements FriendList {
 
     private User user; //The user
     private String friendUsername; // The user we want to process
@@ -319,7 +320,7 @@ public class Friends implements FriendList{
         }
 
 
-        ArrayList<String> frinedsFriend = new ArrayList<>();
+        ArrayList<String> friendsFriend = new ArrayList<>();
 
         try {
             File friendsFile = new File("User_" + this.friendUsername + "_Friends.txt");
@@ -328,7 +329,7 @@ public class Friends implements FriendList{
             String line = bfr.readLine();
 
             while (line != null) {
-                frinedsFriend.add(line);
+                friendsFriend.add(line);
                 line = bfr.readLine();
             }
             bfr.close();
@@ -336,14 +337,14 @@ public class Friends implements FriendList{
             return false;
         }
 
-        frinedsFriend.remove(this.user.getUsername());
+        friendsFriend.remove(this.user.getUsername());
         try {
             File friendsFile = new File("User_" + this.friendUsername + "_Friends.txt");
             FileOutputStream fos = new FileOutputStream(friendsFile, false);
             PrintWriter pw = new PrintWriter(fos);
 
-            for (int k = 0; k < frinedsFriend.size(); k++) {
-                pw.println(frinedsFriend.get(k));
+            for (int k = 0; k < friendsFriend.size(); k++) {
+                pw.println(friendsFriend.get(k));
             }
             pw.close();
         } catch (Exception e) {

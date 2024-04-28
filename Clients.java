@@ -448,232 +448,251 @@ public class Clients {
                                 System.out.println("User has chosen to " + secondChose);
 
                                 TextBoxes second = new TextBoxes();
-                                second.addTextBoxes("Please enter the user you want to search (Enter a username)");
+                                second.addTextBoxes("Enter a username to search");
                                 second.setButtonEnter();
                                 second.createPane();
 
                                 String response = "";
+                                String userSearched = "";
 
                                 do {
-                                    try {
-                                        Thread.sleep(100);
-                                    } catch (InterruptedException e) {
-                                        Thread.currentThread().interrupt();
-                                        return;
-                                    }
-                                    if (second.getHitButton()) {
-                                        response = second.getResponses();
-                                    }
-                                } while (!second.getHitButton());
+                                    do {
+                                        try {
+                                            Thread.sleep(100);
+                                        } catch (InterruptedException e) {
+                                            Thread.currentThread().interrupt();
+                                            return;
+                                        }
+                                        if (second.getHitButton()) {
+                                            response = second.getResponses();
+                                        }
+                                    } while (!second.getHitButton());
 
-                                String userSearched = response;
+                                    System.out.println(response);
 
-                                if (userSearched == null) {
-                                    return;
-                                } else if (userSearched.isEmpty()) {
-                                    JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-                                } else {
-                                    clients.output.println(secondChose); //pass secondChose (4)
-                                    clients.output.println(userSearched); //pass userSearched (5)
-                                    String result = clients.input.readLine(); //receive result of searching a user {2}
-
-                                    if (!result.equals("User searched!")) {
-                                        JOptionPane.showMessageDialog(null, result);
+                                    if (response.equals(";")) {
+                                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                                        response = "";
+                                        second.emptyTextFields();
+                                        second.setHitButton(false);
+                                    } else if (response.isEmpty()) {
+                                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                                        response = "";
+                                        second.emptyTextFields();
+                                        second.setHitButton(false);
+                                    } else if (response.equals("exit")) {
                                         second.getFrame().dispose();
+                                        response = ";";
+                                        break;
                                     } else {
-                                        second.getFrame().dispose();
-                                        String[] thirdOptions = {"View profile",
-                                                "Make a friend request",
-                                                "Block a user",
-                                                "Send a message",
-                                                "View message history",
-                                                "Exit"};
-                                        while (true) { //Interactions in search user
-                                            GeneralSelectionPane paneFive = new GeneralSelectionPane();
-                                            paneFive.setChoices(thirdOptions);
-                                            paneFive.setDropDownLabel("What do you want to interact with this user?");
-                                            paneFive.setCb();
-                                            paneFive.setButtonEnter();
-                                            paneFive.createSelectionPane();  // This displays the GUI
+                                        userSearched = response;
 
-                                            // Busy-wait for the user to make a selection
-                                            while (!paneFive.isButtonHit()) {
-                                                try {
-                                                    Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
-                                                } catch (InterruptedException e) {
-                                                    Thread.currentThread().interrupt();
-                                                    return;  // Exit if the thread is interrupted
-                                                }
+                                        clients.output.println(secondChose); //pass secondChose (4)
+                                        clients.output.println(userSearched); //pass userSearched (5)
+                                        String result = clients.input.readLine(); //receive result of searching a user {2}
+
+                                        if (!result.equals("User searched!")) {
+                                            JOptionPane.showMessageDialog(null, result);
+                                            response = "";
+                                            second.emptyTextFields();
+                                            second.setHitButton(false);
+                                        }
+                                    }
+                                } while (response.isEmpty());
+
+                                if (!response.equals(";")) {
+                                    second.getFrame().dispose();
+                                    String[] thirdOptions = {"View profile",
+                                            "Make a friend request",
+                                            "Block a user",
+                                            "Send a message",
+                                            "View message history",
+                                            "Exit"};
+                                    while (true) { //Interactions in search user
+                                        GeneralSelectionPane paneFive = new GeneralSelectionPane();
+                                        paneFive.setChoices(thirdOptions);
+                                        paneFive.setDropDownLabel("What do you want to interact with this user?");
+                                        paneFive.setCb();
+                                        paneFive.setButtonEnter();
+                                        paneFive.createSelectionPane();  // This displays the GUI
+
+                                        // Busy-wait for the user to make a selection
+                                        while (!paneFive.isButtonHit()) {
+                                            try {
+                                                Thread.sleep(100);  // Sleep to reduce CPU usage while waiting
+                                            } catch (InterruptedException e) {
+                                                Thread.currentThread().interrupt();
+                                                return;  // Exit if the thread is interrupted
                                             }
-                                            String thirdChose = paneFive.getOption();
+                                        }
+                                        String thirdChose = paneFive.getOption();
 
-                                            // Clean up the frame if still open
-                                            if (paneFive.isOpen()) {
-                                                paneFive.getFrame().dispose();
-                                            }
+                                        // Clean up the frame if still open
+                                        if (paneFive.isOpen()) {
+                                            paneFive.getFrame().dispose();
+                                        }
 
-                                            if (thirdChose == null) {
-                                                return;
-                                            } else {
-                                                if (thirdChose.equals("View profile")) {
-                                                    clients.output.println(thirdChose); // pass thirdChose (6)
+                                        if (thirdChose == null) {
+                                            return;
+                                        } else {
+                                            if (thirdChose.equals("View profile")) {
+                                                clients.output.println(thirdChose); // pass thirdChose (6)
 
-                                                    String countFile = clients.input.readLine(); //receive length of file {3}
+                                                String countFile = clients.input.readLine(); //receive length of file {3}
 
-                                                    if (!countFile.equals("0")) {
-                                                        int fileCount = Integer.parseInt(countFile);
-                                                        ArrayList<String> fileList = new ArrayList<>();
+                                                if (!countFile.equals("0")) {
+                                                    int fileCount = Integer.parseInt(countFile);
+                                                    ArrayList<String> fileList = new ArrayList<>();
 
-                                                        for (int k = 0; k < fileCount; k++) {
-                                                            fileList.add(clients.input.readLine()); //receive file {4}
-                                                        }
-
-                                                        String file = "";
-
-                                                        for (int l = 0; l < fileList.size(); l++) {
-                                                            if (l == fileList.size() - 1) {
-                                                                file += fileList.get(l);
-                                                            } else {
-                                                                file += fileList.get(l) + "\n";
-                                                            }
-                                                        }
-
-                                                        CountDownLatch latch = new CountDownLatch(1);
-                                                        new UserProfileDisplay(file, () -> {
-                                                            latch.countDown();
-                                                        });
-                                                        try {
-                                                            latch.await(); // This will block until the count reaches zero
-                                                        } catch (InterruptedException e) {
-                                                            Thread.currentThread().interrupt();
-                                                            System.out.println("Interrupted while waiting for the profile editor to close.");
-                                                        }
-
-                                                    } else { //if no file is passed
-                                                        JOptionPane.showMessageDialog(
-                                                                null,
-                                                                "You are not allowed " +
-                                                                        "to see this user's profile.");
-                                                    }
-                                                } else if (thirdChose.equals("Make a friend request")) {
-                                                    clients.output.println(thirdChose); //pass thirdChose (6)
-                                                    String resultRequest = clients.input.readLine(); //receive result of making a friend request {3}
-
-                                                    if (resultRequest.equals("Make a friend request successfully!")) {
-                                                        JOptionPane.showMessageDialog(null, "Make a friend request successfully!");
-                                                    } else {
-                                                        JOptionPane.showMessageDialog(null, resultRequest);
-                                                    }
-                                                } else if (thirdChose.equals("Block a user")) {
-                                                    clients.output.println(thirdChose); //pass thirdChose (6)
-                                                    String resultBlock = clients.input.readLine(); //receive result of blocking a user {3}
-
-                                                    if (resultBlock.equals("Block a user successfully!")) {
-                                                        JOptionPane.showMessageDialog(null, "Block a user successfully!");
-                                                    } else {
-                                                        JOptionPane.showMessageDialog(null, resultBlock);
-                                                    }
-                                                } else if (thirdChose.equals("Send a message")) {
-                                                    TextBoxes messageBox = new TextBoxes();
-                                                    String content;
-                                                    boolean noInput = true;
-                                                    messageBox.addTextBoxes("Please enter what you want to send: ");
-                                                    messageBox.setButtonEnter();
-                                                    messageBox.createPane();
-
-                                                    content = "";
-                                                    do {
-                                                        // delay makes loop work
-                                                        try {
-                                                            Thread.sleep(10);
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                        if (messageBox.getHitButton()) {
-                                                            content = messageBox.getResponses();
-                                                            noInput = false;
-                                                        }
-                                                    } while (noInput);
-                                                    if (messageBox.getFrame() != null) {
-                                                        messageBox.getFrame().dispose();
+                                                    for (int k = 0; k < fileCount; k++) {
+                                                        fileList.add(clients.input.readLine()); //receive file {4}
                                                     }
 
-                                                    if (content == null) {
-                                                        return;
-                                                    } else if (content.isEmpty()) {
-                                                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
-                                                    } else {
-                                                        clients.output.println(thirdChose); //pass thirdChose (6)
-                                                        clients.output.println(content); //pass the content of message (7)
-                                                        String resultSend = clients.input.readLine(); //receive the result of sending message {3}
+                                                    String file = "";
 
-                                                        if (resultSend.equals("Send a message successfully!")) {
-                                                            JOptionPane.showMessageDialog(null, "Send a message successfully!");
+                                                    for (int l = 0; l < fileList.size(); l++) {
+                                                        if (l == fileList.size() - 1) {
+                                                            file += fileList.get(l);
                                                         } else {
-                                                            JOptionPane.showMessageDialog(null, resultSend);
-                                                        }
-                                                    }
-                                                } else if (thirdChose.equals("View message history")) {
-                                                    clients.output.println(thirdChose); //pass thirdChose (6)
-
-                                                    String messageCount = clients.input.readLine(); //receive the count of messages {4}
-                                                    int messages = Integer.parseInt(messageCount);
-
-                                                    String history = "";
-
-                                                    for (int m = 0; m < messages; m++) {
-                                                        if (m == messages - 1) {
-                                                            history += clients.input.readLine(); //receive messages {5}
-                                                        } else {
-                                                            history += clients.input.readLine() + "\n"; //receive messages {5}
+                                                            file += fileList.get(l) + "\n";
                                                         }
                                                     }
 
-                                                    String finalHistory = history;
                                                     CountDownLatch latch = new CountDownLatch(1);
-
-                                                    SwingUtilities.invokeLater(() -> {
-                                                        new MessageHistoryEditor(finalHistory, new MessageHistoryEditor.MessageHistoryListener() {
-                                                            @Override
-                                                            public void onWindowClosed() {
-                                                                System.out.println("111");
-                                                                clients.output.println("History window was closed");
-                                                                latch.countDown(); // Notify the latch that the task is completed
-                                                            }
-
-                                                            @Override
-                                                            public void onMessagesDeleted(List<String> remainingMessages) {
-                                                                System.out.println("!!!");
-                                                                if (!finalHistory.isEmpty()) {
-                                                                    clients.output.println("Delete");
-                                                                    clients.output.println(remainingMessages.size());
-                                                                    for (int i = 0; i < remainingMessages.size(); i++) {
-                                                                        clients.output.println(remainingMessages.get(i));
-                                                                    }
-                                                                    String result = null;
-                                                                    try {
-                                                                        result = clients.input.readLine();
-                                                                    } catch (IOException e) {
-                                                                        e.printStackTrace();
-                                                                    }
-                                                                    JOptionPane.showMessageDialog(null, result);
-                                                                }
-                                                                latch.countDown(); // Notify the latch that the task is completed
-                                                            }
-                                                        });
+                                                    new UserProfileDisplay(file, () -> {
+                                                        latch.countDown();
                                                     });
-
-// Wait for the message history editor to close
                                                     try {
                                                         latch.await(); // This will block until the count reaches zero
                                                     } catch (InterruptedException e) {
                                                         Thread.currentThread().interrupt();
-                                                        System.out.println("Interrupted while waiting for the message history editor to close.");
+                                                        System.out.println("Interrupted while waiting for the profile editor to close.");
                                                     }
+
+                                                } else { //if no file is passed
+                                                    JOptionPane.showMessageDialog(
+                                                            null,
+                                                            "You are not allowed " +
+                                                                    "to see this user's profile.");
+                                                }
+                                            } else if (thirdChose.equals("Make a friend request")) {
+                                                clients.output.println(thirdChose); //pass thirdChose (6)
+                                                String resultRequest = clients.input.readLine(); //receive result of making a friend request {3}
+
+                                                if (resultRequest.equals("Make a friend request successfully!")) {
+                                                    JOptionPane.showMessageDialog(null, "Make a friend request successfully!");
+                                                } else {
+                                                    JOptionPane.showMessageDialog(null, resultRequest);
+                                                }
+                                            } else if (thirdChose.equals("Block a user")) {
+                                                clients.output.println(thirdChose); //pass thirdChose (6)
+                                                String resultBlock = clients.input.readLine(); //receive result of blocking a user {3}
+
+                                                if (resultBlock.equals("Block a user successfully!")) {
+                                                    JOptionPane.showMessageDialog(null, "Block a user successfully!");
+                                                } else {
+                                                    JOptionPane.showMessageDialog(null, resultBlock);
+                                                }
+                                            } else if (thirdChose.equals("Send a message")) {
+                                                TextBoxes messageBox = new TextBoxes();
+                                                String content;
+                                                boolean noInput = true;
+                                                messageBox.addTextBoxes("Please enter what you want to send: ");
+                                                messageBox.setButtonEnter();
+                                                messageBox.createPane();
+
+                                                content = "";
+                                                do {
+                                                    // delay makes loop work
+                                                    try {
+                                                        Thread.sleep(10);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    if (messageBox.getHitButton()) {
+                                                        content = messageBox.getResponses();
+                                                        noInput = false;
+                                                    }
+                                                } while (noInput);
+                                                if (messageBox.getFrame() != null) {
+                                                    messageBox.getFrame().dispose();
+                                                }
+
+                                                if (content == null) {
+                                                    return;
+                                                } else if (content.isEmpty()) {
+                                                    JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
                                                 } else {
                                                     clients.output.println(thirdChose); //pass thirdChose (6)
-                                                    break;
+                                                    clients.output.println(content); //pass the content of message (7)
+                                                    String resultSend = clients.input.readLine(); //receive the result of sending message {3}
+
+                                                    if (resultSend.equals("Send a message successfully!")) {
+                                                        JOptionPane.showMessageDialog(null, "Send a message successfully!");
+                                                    } else {
+                                                        JOptionPane.showMessageDialog(null, resultSend);
+                                                    }
                                                 }
+                                            } else if (thirdChose.equals("View message history")) {
+                                                clients.output.println(thirdChose); //pass thirdChose (6)
+
+                                                String messageCount = clients.input.readLine(); //receive the count of messages {4}
+                                                int messages = Integer.parseInt(messageCount);
+
+                                                String history = "";
+
+                                                for (int m = 0; m < messages; m++) {
+                                                    if (m == messages - 1) {
+                                                        history += clients.input.readLine(); //receive messages {5}
+                                                    } else {
+                                                        history += clients.input.readLine() + "\n"; //receive messages {5}
+                                                    }
+                                                }
+
+                                                String finalHistory = history;
+                                                CountDownLatch latch = new CountDownLatch(1);
+
+                                                SwingUtilities.invokeLater(() -> {
+                                                    new MessageHistoryEditor(finalHistory, new MessageHistoryEditor.MessageHistoryListener() {
+                                                        @Override
+                                                        public void onWindowClosed() {
+                                                            System.out.println("111");
+                                                            clients.output.println("History window was closed");
+                                                            latch.countDown(); // Notify the latch that the task is completed
+                                                        }
+
+                                                        @Override
+                                                        public void onMessagesDeleted(List<String> remainingMessages) {
+                                                            System.out.println("!!!");
+                                                            if (!finalHistory.isEmpty()) {
+                                                                clients.output.println("Delete");
+                                                                clients.output.println(remainingMessages.size());
+                                                                for (int i = 0; i < remainingMessages.size(); i++) {
+                                                                    clients.output.println(remainingMessages.get(i));
+                                                                }
+                                                                String result = null;
+                                                                try {
+                                                                    result = clients.input.readLine();
+                                                                } catch (IOException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                                JOptionPane.showMessageDialog(null, result);
+                                                            }
+                                                            latch.countDown(); // Notify the latch that the task is completed
+                                                        }
+                                                    });
+                                                });
+
+// Wait for the message history editor to close
+                                                try {
+                                                    latch.await(); // This will block until the count reaches zero
+                                                } catch (InterruptedException e) {
+                                                    Thread.currentThread().interrupt();
+                                                    System.out.println("Interrupted while waiting for the message history editor to close.");
+                                                }
+                                            } else {
+                                                clients.output.println(thirdChose); //pass thirdChose (6)
+                                                break;
                                             }
                                         }
                                     }

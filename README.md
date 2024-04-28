@@ -17,7 +17,7 @@ This class allows for the manipulation of all the basic information about a user
 
 ## Friends
 
-This class extends the User class and allows for a user to make, accept, and decline friend requests, block other users, view their friends list, and remove friends from the list. The friends list is stored as a file associated with the user and is updated every time they perform one of the above actions.
+This class creates a User instance variable and allows for a user to make, accept, and decline friend requests, block other users, view their friends list, and remove friends from the list. The friends list is stored as a file associated with the user and is updated every time they perform one of the above actions.
 
 ## MessageList
 
@@ -37,7 +37,8 @@ We created three accounts on the platform, one to represent the “current” us
 
 ## EditableUserProfile
 
-This class creates the GUI for the user profile that will be editable and can store the new data in the user's file. It allows the user to edit their information such as password, first name, last name, email, bio, preference for profile view and preference of message receive. They can then save the changes they made or restore it to its original data before hitting save.
+This class creates the GUI for the user profile that will be editable and can store the new data in
+the user's file. It allows the user to edit their information such as password, first name, last name, email, bio, preference for profile view and preference of message receive. They can then save the changes they made or restore it to its original data before hitting save.
 
 ## GeneralSelectionPane
 
@@ -54,3 +55,4 @@ This class creates the GUI for any panels that deal with the user's input in ter
 ## UserProfileDisplay
 
 This class creates a GUI that displays a specifically searched user’s profile with all of their information, not including their password. It allows the user to look at other users and their information, if that user is friends with them or if that specific user has their profile view on public (true).
+

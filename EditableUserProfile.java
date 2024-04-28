@@ -132,8 +132,9 @@ public class EditableUserProfile {
 
         // Check email
         String email = dataTextFields[4].getText();
-        if (email == null || email.isEmpty() || !email.contains("@") || email.contains(" ") || !email.endsWith(".com")) {
-            errorMessage.append("Email should be in the format 'user@example.com' and contain an '@' and a '.com'.\n");
+        if (email == null || email.isEmpty() || !email.contains("@") || email.contains(" ") ||
+                email.charAt(email.length() - 4) != '.') {
+            errorMessage.append("Email should be in the format 'user@example.___' and contain an '@' and a '.___'.\n");
         }
 
         // Check bio

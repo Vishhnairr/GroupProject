@@ -321,48 +321,74 @@ public class Friends implements FriendList{
 //     */
     public synchronized boolean blockUser() {
         if (!this.verifyUser()) {
-            return false;
+            return false;  // Verify that the friendUsername exists in the system
         }
 
-        ArrayList<String> blocks = new ArrayList<>();
+        // Remove any friend requests received from the target user
+        if (!removeFriendRequestFromUser(this.user.getUsername(), this.friendUsername)) {
+            return false;  // If the operation fails, return false
+        }
+
+        // Remove any friend requests sent to the target user
+        if (!removeFriendRequestFromUser(this.friendUsername, this.user.getUsername())) {
+            return false;  // If the operation fails, return false
+        }
+
+        // Remove the target user from the friends list, if present
+        this.removeFriend();
+
+        // Add the target user to the block list
         try {
             File blockFile = new File("User_" + this.user.getUsername() + "_Block.txt");
             if (!blockFile.exists()) {
-                blockFile.createNewFile();
+                blockFile.createNewFile();  // Create the block file if it doesn't exist
             }
-            FileReader fr  = new FileReader(blockFile);
-            BufferedReader bfr = new BufferedReader(fr);
-            String line = bfr.readLine();
-
-            while (line != null) {
-                blocks.add(line);
-                line = bfr.readLine();
-            }
-            bfr.close();
-        } catch (Exception e) {
-            return false;
-        }
-
-        for (int i = 0; i < blocks.size(); i++) {
-            if (blocks.get(i).equals(this.friendUsername)) {
-                return false;
-            }
-        }
-
-        this.removeFriend();
-
-        try {
-            File blockFile = new File("User_" + this.user.getUsername() + "_Block.txt");
-            FileOutputStream fos = new FileOutputStream(blockFile, true);
-            PrintWriter pw = new PrintWriter(fos);
-            pw.println(this.friendUsername);
-            pw.close();
-        } catch (Exception e) {
+            FileWriter fw = new FileWriter(blockFile, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(this.friendUsername);  // Write the target username to the block file
+            bw.newLine();
+            bw.close();
+        } catch (IOException e) {
             return false;
         }
 
         return true;
     }
+
+    private synchronized boolean removeFriendRequestFromUser(String ownerUsername, String targetUsername) {
+        ArrayList<String> requests = new ArrayList<>();
+        try {
+            File requestFile = new File("User_" + ownerUsername + "_FriendRequest.txt");
+            if (!requestFile.exists()) {
+                return true;  // If the file does not exist, there are no requests to delete
+            }
+
+            // Read all requests
+            FileReader fr = new FileReader(requestFile);
+            BufferedReader bfr = new BufferedReader(fr);
+            String line;
+            while ((line = bfr.readLine()) != null) {
+                if (!line.equals(targetUsername)) {  // Keep requests that are not from the target user
+                    requests.add(line);
+                }
+            }
+            bfr.close();
+
+            // Rewrite the request file
+            FileWriter fw = new FileWriter(requestFile, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for (String request : requests) {
+                bw.write(request);
+                bw.newLine();
+            }
+            bw.close();
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
+
+
 
     public synchronized boolean removeBlock() {
         ArrayList<String> blocks = new ArrayList<>();

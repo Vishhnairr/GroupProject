@@ -4,13 +4,15 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 /**
- * TextBoxes
+ * Text Boxes
  *
- * This class create a inputbox for user to input.
+ * This class creates the GUI for any panels that deal
+ * with user's input in terms of JTextFields
+ * and incorporates them into the Clients class.
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
- * @version April 26, 2024
+ * @version April 28, 2024
  *
  */
 

@@ -11,7 +11,7 @@ import java.awt.event.*;
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
- * @version April 26, 2024
+ * @version April 28, 2024
  *
  */
 
@@ -196,7 +196,8 @@ public class GeneralSelectionPane {
     private void addTitlePanel(JFrame frame, String titleText) {
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0)); // Top and bottom margins
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
+        // Top and bottom margins
 
         JLabel titleLabel = new JLabel(titleText);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));

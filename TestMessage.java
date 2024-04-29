@@ -29,7 +29,7 @@ public class TestMessage {
             test.createAccount();
             user.createAccount();
 
-            MessageList messageList = new MessageList("Content.", test, user.getUsername());
+            MessageList messageList = new Message("Content.", test, user.getUsername());
 
         } catch (Exception e) {
             Assert.fail();
@@ -50,7 +50,7 @@ public class TestMessage {
             test.createAccount();
             user.createAccount();
 
-            MessageList messageList = new MessageList("Content.", test, user.getUsername());
+            MessageList messageList = new Message("Content.", test, user.getUsername());
 
             String message = messageList.toString();
 
@@ -78,7 +78,7 @@ public class TestMessage {
             friends.makeFriendRequest();
             friends.addFriend();
 
-            MessageList messageList = new MessageList("Content.", test, user.getUsername());
+            MessageList messageList = new Message("Content.", test, user.getUsername());
             messageList.sendMessage();
             ArrayList<String> history = messageList.viewMessageHistory();
             int check = 0;
@@ -112,7 +112,7 @@ public class TestMessage {
             Friends friends = new Friends(test, user.getUsername());
             friends.blockUser();
 
-            MessageList messageList = new MessageList("Content.", test, user.getUsername());
+            MessageList messageList = new Message("Content.", test, user.getUsername());
             messageList.sendMessage();
             ArrayList<String> history = messageList.viewMessageHistory();
             int check = 0;
@@ -143,7 +143,7 @@ public class TestMessage {
             test.createAccount();
             user.createAccount();
 
-            MessageList messageList = new MessageList("Content.", test, user.getUsername());
+            MessageList messageList = new Message("Content.", test, user.getUsername());
             messageList.sendMessage();
             messageList.deleteMessage(messageList.getContent());
             ArrayList<String> history = messageList.viewMessageHistory();
@@ -175,7 +175,7 @@ public class TestMessage {
             test.createAccount();
             user.createAccount();
 
-            MessageList messageList = new MessageList("Content.", test, user.getUsername());
+            MessageList messageList = new Message("Content.", test, user.getUsername());
             messageList.sendMessage();
             ArrayList<String> history = messageList.viewMessageHistory();
             ArrayList<String> check = new ArrayList<>();

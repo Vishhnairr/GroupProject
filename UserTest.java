@@ -260,7 +260,7 @@ public class UserTest {
 
     @Test
     public void testViewAllUsers() {
-        try{
+        try {
             User user = new User("setname", "thisispassword",
                     "First", "Last", "email@gmail.com",
                     "This is a short bio.", true, true);

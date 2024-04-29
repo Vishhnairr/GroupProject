@@ -115,43 +115,6 @@ public class GeneralSelectionPane {
         }
     };
 
-    // frame for when calendar needs to be displayed when user is rescheduling
-    public void createCalendarPane(String calendarFileLines) {
-        open = true;
-        buttonHit = false;
-        frame = new JFrame("Boiler Town");
-        frame.setSize(900, 550);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        addTitlePanel(frame, "Boiler Town Calendar"); // Adding title panel
-
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        frame.add(leftPanel, BorderLayout.NORTH);
-
-        JTextArea textArea = new JTextArea(25, 25);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setEditable(false);
-        leftPanel.add(scrollPane);
-        for (String line : calendarFileLines.split(";")) {
-            textArea.append(line + "\n");
-        }
-
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        frame.add(rightPanel, BorderLayout.SOUTH);
-
-        JLabel lbl = new JLabel(dropDownLabel);
-        rightPanel.add(lbl);
-        cb.setMaximumSize(cb.getPreferredSize());
-        rightPanel.add(cb);
-
-        buttonEnter.addActionListener(newEnter);
-        rightPanel.add(buttonEnter);
-        frame.addWindowListener(newExit);
-        frame.setVisible(true);
-    }
-
 
     // frame for most general menu panes
     public void createSelectionPane() {

@@ -18,24 +18,24 @@ Our social media platform provides a dynamic environment for user interaction th
 
 ## Features
 ### Account Management
-Account Creation: Users can sign up by providing essential information, which is securely stored in individual files.  
-Login System: Secure login functionality allows users to access their profiles and interact with the platform.
-Profile Editing: Users can update their personal information, including names, biographies, and preferences related to profile visibility and message reception.
+Account Creation: Users can sign up by providing essential information, which is securely stored in individual files.    
+Login System: Secure login functionality allows users to access their profiles and interact with the platform.  
+Profile Editing: Users can update their personal information, including names, biographies, and preferences related to profile visibility and message reception.  
 
 ### Friendship Management
-Friend Requests: Users can send, accept, or decline friend requests, enabling them to build a network of connections.
-Friend List Management: The platform allows users to view their current friends, remove friends, or block users, which also prevents any further interactions.
+Friend Requests: Users can send, accept, or decline friend requests, enabling them to build a network of connections.  
+Friend List Management: The platform allows users to view their current friends, remove friends, or block users, which also prevents any further interactions.  
 
 ### Messaging
-Direct Messaging: Users can send private messages to their friends.
-Message History: Users can view and manage their message history, including deleting messages to keep their conversation relevant and tidy.
+Direct Messaging: Users can send private messages to their friends.  
+Message History: Users can view and manage their message history, including deleting messages to keep their conversation relevant and tidy.  
 
 ### Search Functionality
-User Search: Users can search for other profiles using usernames. This feature includes auto-complete suggestions to help find users quickly.
+User Search: Users can search for other profiles using usernames. This feature includes auto-complete suggestions to help find users quickly.  
 
 ### User Profiles
-Profile Viewing: Users can view their own and others’ profiles, with the visibility contingent upon the user’s privacy settings.
-Dynamic Profiles: Profiles dynamically update based on user interactions and changes to the account settings.
+Profile Viewing: Users can view their own and others’ profiles, with the visibility contingent upon the user’s privacy settings.  
+Dynamic Profiles: Profiles dynamically update based on user interactions and changes to the account settings.  
 
 ### Real-time Interaction
 Immediate Updates: Changes made by users, like sending messages or updating profiles, are reflected in real-time, enhancing the interactive experience.

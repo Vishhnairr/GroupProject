@@ -20,7 +20,7 @@ Our social media platform provides a dynamic environment for user interaction th
 ### Account Management
 #### Account Creation: Users can sign up by providing essential information, which is securely stored in individual files.
 #### Login System: Secure login functionality allows users to access their profiles and interact with the platform.
-Profile Editing: Users can update their personal information, including names, biographies, and preferences related to profile visibility and message reception.
+#### Profile Editing: Users can update their personal information, including names, biographies, and preferences related to profile visibility and message reception.
 
 ### Friendship Management
 #### Friend Requests: Users can send, accept, or decline friend requests, enabling them to build a network of connections.

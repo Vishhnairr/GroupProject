@@ -138,29 +138,29 @@ public class User implements UserList {
     }
 
     // sets first name
-    public synchronized boolean setFirstName(String firstName) {
-        if (firstName == null || firstName.isEmpty() || firstName.contains(" ")) {
+    public synchronized boolean setFirstName(String firstNameNew) {
+        if (firstNameNew == null || firstNameNew.isEmpty() || firstNameNew.contains(" ")) {
             return false;
         }
-        this.firstName = firstName;
+        this.firstName = firstNameNew;
 
         this.setAccountFile();
         return true;
     }
 
     // sets last name
-    public synchronized boolean setLastName(String lastName) {
-        if (lastName == null || lastName.isEmpty() || lastName.contains(" ")) {
+    public synchronized boolean setLastName(String lastNameNew) {
+        if (lastNameNew == null || lastNameNew.isEmpty() || lastNameNew.contains(" ")) {
             return false;
         }
-        this.lastName = lastName;
+        this.lastName = lastNameNew;
 
         this.setAccountFile();
         return true;
     }
 
     // sets username
-    public boolean setUsername(String username) {
+    public boolean setUsername(String usernameNew) {
         ArrayList<String> allUserNames = new ArrayList<>();
 
         synchronized (User.class) {
@@ -183,16 +183,16 @@ public class User implements UserList {
 
 
         for (int i = 0; i < allUserNames.size(); i++) {
-            if (allUserNames.get(i).equals(username)) {
+            if (allUserNames.get(i).equals(usernameNew)) {
                 return false;
             }
         }
 
 
-        if (username == null || username.isEmpty() || username.contains(" ")) {
+        if (usernameNew == null || usernameNew.isEmpty() || usernameNew.contains(" ")) {
             return false;
         }
-        allUserNames.set(allUserNames.indexOf(this.getUsername()), username);
+        allUserNames.set(allUserNames.indexOf(this.getUsername()), usernameNew);
 
 
         synchronized (User.class) {
@@ -213,30 +213,30 @@ public class User implements UserList {
         File newFile = new File("User_" + username + ".txt");
         File userFile = new File("User_" + this.username + ".txt");
         boolean check = userFile.renameTo(newFile);
-        this.username = username;
+        this.username = usernameNew;
         this.setAccountFile();
 
         return check;
     }
 
     // sets email
-    public synchronized boolean setEmail(String email) {
-        if (email == null || email.isEmpty() || !email.contains("@") || email.contains(" ") ||
-                email.charAt(email.length() - 4) != '.') {
+    public synchronized boolean setEmail(String emailNew) {
+        if (emailNew == null || emailNew.isEmpty() || !emailNew.contains("@") || emailNew.contains(" ") ||
+                emailNew.charAt(emailNew.length() - 4) != '.') {
             return false;
         }
-        this.email = email;
+        this.email = emailNew;
 
         this.setAccountFile();
         return true;
     }
 
     // sets bio
-    public synchronized boolean setBio(String bio) {
-        if (bio.length() > 50) {
+    public synchronized boolean setBio(String bioNew) {
+        if (bioNew.length() > 50) {
             return false;
         } else {
-            this.bio = bio;
+            this.bio = bioNew;
 
             this.setAccountFile();
             return true;
@@ -244,11 +244,11 @@ public class User implements UserList {
     }
 
     // sets password
-    public synchronized boolean setPassword(String password) {
-        if (password.length() < 4) {
+    public synchronized boolean setPassword(String passwordNew) {
+        if (passwordNew.length() < 4) {
             return false;
         } else {
-            this.password = password;
+            this.password = passwordNew;
 
             this.setAccountFile();
             return true;
@@ -271,8 +271,8 @@ public class User implements UserList {
     @Override
     public synchronized boolean setAccountFile() {
         try {
-            File userFile = new File("User_" + username + ".txt");
-            FileOutputStream fos = new FileOutputStream(userFile, false);
+            File userFileNew = new File("User_" + username + ".txt");
+            FileOutputStream fos = new FileOutputStream(userFileNew, false);
             PrintWriter pw = new PrintWriter(fos);
             pw.println("User name: " + username);
             pw.println("Password: " + password);
@@ -388,8 +388,8 @@ public class User implements UserList {
         this.friendRequest = new File("User_" + this.username + "_FriendRequest.txt");
 
         try {
-            File userFile = new File("User_" + username + ".txt");
-            FileOutputStream fos = new FileOutputStream(userFile, false);
+            File userFileNew = new File("User_" + username + ".txt");
+            FileOutputStream fos = new FileOutputStream(userFileNew, false);
             PrintWriter pw = new PrintWriter(fos);
             pw.println("User name: " + username);
             pw.println("Password: " + password);
@@ -449,11 +449,11 @@ public class User implements UserList {
             return null;
         }
 
-        File userFile = new File("User_" + username + ".txt");
+        File userFileNew = new File("User_" + username + ".txt");
         ArrayList<String> userData = new ArrayList<>();
 
         try {
-            FileReader fr = new FileReader(userFile);
+            FileReader fr = new FileReader(userFileNew);
             BufferedReader bfr = new BufferedReader(fr);
             String line = bfr.readLine();
 
@@ -489,7 +489,7 @@ public class User implements UserList {
                 + "First name: " + firstName + "\n"
                 + "Last name: " + lastName + "\n"
                 + "Email: " + email + "\n"
-                + "Bio: " +bio;
+                + "Bio: " + bio;
     }
 
     public synchronized String[] viewFriendsRequest() {

@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,15 +10,18 @@ import java.util.List;
 /**
  * Servers
  *
- * This class allow multiple users to connect. And creat a nested class called clientHandle to handle every client.
+ * This class runs all the data gathered from the input
+ * of the user that is sent to it from the Clients class, and
+ * implements the specific methods and reads or writes to files and
+ * sends that information back to the Clients class.
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
- * @version April 26, 2024
+ * @version April 28, 2024
  *
  */
 
-public class Servers implements ServerList {
+public class Servers {
     private ServerSocket serverSocket;
     private List<ClientHandler> clients = new ArrayList<>();
 
@@ -55,7 +57,7 @@ public class Servers implements ServerList {
         }
     }
 
-    class ClientHandler extends Thread implements Runnable, ClientHandlerList {
+    class ClientHandler extends Thread implements Runnable {
         private Socket clientSocket;
         private BufferedReader input;
         private PrintWriter output;
@@ -136,33 +138,44 @@ public class Servers implements ServerList {
                                                         Friends friends = new Friends(user, userSelected);
 
                                                         if (!friends.makeFriendRequest()) {
-                                                            output.println("Fail to make a friend. This user might already be your friend or blocked."); //pass result of making a friend request (4)
+                                                            output.println("Fail to make a friend. This user " +
+                                                                    "might already be your friend or blocked.");
+                                                            //pass result of making a friend request (4)
                                                         } else {
-                                                            output.println("Make a friend request successfully!"); //pass result of making a friend request (4)
+                                                            output.println("Make a friend request successfully!");
+                                                            //pass result of making a friend request (4)
                                                         }
 
                                                     } else if (thirdChose.equals("Block a user")) {
                                                         Friends friends = new Friends(user, userSelected);
 
                                                         if (!friends.blockUser()) {
-                                                            output.println("Fail to block a user. This user might already be blocked."); //pass result of blocking a user (4)
+                                                            output.println("Fail to block a user. This user might " +
+                                                                    "already be blocked.");
+                                                            //pass result of blocking a user (4)
                                                         } else {
-                                                            output.println("Block a user successfully!"); //pass result of blocking a user (4)
+                                                            output.println("Block a user successfully!");
+                                                            //pass result of blocking a user (4)
                                                         }
 
                                                     } else if (thirdChose.equals("Send a message")) {
                                                         String content = input.readLine(); //receive content {7}
-                                                        MessageList messageList = new Message(content, user, userSelected);
+                                                        MessageList messageList = new MessageList(content, user,
+                                                                userSelected);
 
                                                         if (!messageList.sendMessage()) {
-                                                            output.println("Fail to send a message. May be is because you are not this user's friend."); //pass result of sending a message (4)
+                                                            output.println("Fail to send a message. This may be " +
+                                                                    "because you are not this user's friend.");
+                                                            //pass result of sending a message (4)
                                                         } else {
-                                                            output.println("Send a message successfully!"); //pass result of sending a message (4)
+                                                            output.println("Send a message successfully!");
+                                                            //pass result of sending a message (4)
                                                         }
 
                                                     } else if (thirdChose.equals("View message history")) {
                                                         String content = "content";
-                                                        MessageList messageList = new Message(content, user, userSelected);
+                                                        MessageList messageList = new MessageList(content, user,
+                                                                userSelected);
 
                                                         ArrayList<String> messages = messageList.viewMessageHistory();
                                                         int messageCount = messages.size();
@@ -176,7 +189,8 @@ public class Servers implements ServerList {
                                                         if (result.equals("History window was closed")) {
                                                             continue;
                                                         } else {
-                                                            // Assuming the client sends back the number of messages followed by each message
+                                                            // Assuming the client sends back the number of messages
+                                                            // followed by each message
                                                             int newMessageCount = Integer.parseInt(input.readLine());
                                                             ArrayList<String> newMessages = new ArrayList<>();
 
@@ -203,7 +217,8 @@ public class Servers implements ServerList {
                                     } else if (secondChose.equals("Search a user")) {
                                         String searchedUser = input.readLine(); //receive the searchedUser {5}
                                         if (searchedUser.equals(username) || !user.searchUser(searchedUser)) {
-                                            output.println("No user searched. Please check the username is valid or not."); //pass the result of searching a user (2)
+                                            output.println("No user searched. Please check the username is " +
+                                                    "valid or not."); //pass the result of searching a user (2)
                                         } else {
                                             output.println("User searched!"); //pass the result of searching a user (2)
 
@@ -230,30 +245,41 @@ public class Servers implements ServerList {
                                                     Friends friends = new Friends(user, searchedUser);
 
                                                     if (!friends.makeFriendRequest()) {
-                                                        output.println("Fail to make a friend. This user might already be your friend or blocked."); //pass result of making a friend request (3)
+                                                        output.println("Fail to make a friend. This user might " +
+                                                                "already be your friend or blocked.");
+                                                        //pass result of making a friend request (3)
                                                     } else {
-                                                        output.println("Make a friend request successfully!"); //pass result of making a friend request (3)
+                                                        output.println("Make a friend request successfully!");
+                                                        //pass result of making a friend request (3)
                                                     }
                                                 } else if (thirdChose.equals("Block a user")) {
                                                     Friends friends = new Friends(user, searchedUser);
 
                                                     if (!friends.blockUser()) {
-                                                        output.println("Fail to block a user. This user might already be blocked."); //pass result of blocking a user (3)
+                                                        output.println("Fail to block a user. This user might " +
+                                                                "already be blocked.");
+                                                        //pass result of blocking a user (3)
                                                     } else {
-                                                        output.println("Block a user successfully!"); //pass result of blocking a user (3)
+                                                        output.println("Block a user successfully!");
+                                                        //pass result of blocking a user (3)
                                                     }
                                                 } else if (thirdChose.equals("Send a message")) {
                                                     String content = input.readLine(); //receive content {7}
-                                                    MessageList messageList = new Message(content, user, searchedUser);
+                                                    MessageList messageList = new MessageList(content, user,
+                                                            searchedUser);
 
                                                     if (!messageList.sendMessage()) {
-                                                        output.println("Fail to send a message. May be is because you are not this user's friend."); //pass result of sending a message (3)
+                                                        output.println("Fail to send a message. This may be " +
+                                                                "because you are not this user's friend.");
+                                                        //pass result of sending a message (3)
                                                     } else {
-                                                        output.println("Send a message successfully!"); //pass result of sending a message (3)
+                                                        output.println("Send a message successfully!");
+                                                        //pass result of sending a message (3)
                                                     }
                                                 } else if (thirdChose.equals("View message history")) {
                                                     String content = "content";
-                                                    MessageList messageList = new Message(content, user, searchedUser);
+                                                    MessageList messageList = new MessageList(content, user,
+                                                            searchedUser);
 
                                                     ArrayList<String> messages = messageList.viewMessageHistory();
                                                     int messageCount = messages.size();
@@ -267,7 +293,8 @@ public class Servers implements ServerList {
                                                     if (result.equals("History window was closed")) {
                                                         continue;
                                                     } else {
-                                                        // Assuming the client sends back the number of messages followed by each message
+                                                        // Assuming the client sends back the number of messages
+                                                        // followed by each message
                                                         int newMessageCount = Integer.parseInt(input.readLine());
                                                         ArrayList<String> newMessages = new ArrayList<>();
 
@@ -347,7 +374,8 @@ public class Servers implements ServerList {
                                                     }
                                                 } else if (thirdChose.equals("View Message History")) {
                                                     String content = "content";
-                                                    MessageList messageList = new Message(content, user, pickedFriend);
+                                                    MessageList messageList = new MessageList(content, user,
+                                                            pickedFriend);
 
                                                     ArrayList<String> messages = messageList.viewMessageHistory();
                                                     int messageCount = messages.size();
@@ -361,7 +389,8 @@ public class Servers implements ServerList {
                                                     if (result.equals("History window was closed")) {
                                                         continue;
                                                     } else {
-                                                        // Assuming the client sends back the number of messages followed by each message
+                                                        // Assuming the client sends back the number of messages
+                                                        // followed by each message
                                                         int newMessageCount = Integer.parseInt(input.readLine());
                                                         ArrayList<String> newMessages = new ArrayList<>();
 
@@ -378,28 +407,36 @@ public class Servers implements ServerList {
                                                     }
                                                 } else if (thirdChose.equals("Send a Message")) {
                                                     String content = input.readLine(); //receive content {7}
-                                                    MessageList messageList = new Message(content, user, pickedFriend);
+                                                    MessageList messageList = new MessageList(content, user,
+                                                            pickedFriend);
 
                                                     if (!messageList.sendMessage()) {
-                                                        output.println("Fail to send a message. May be is because you are not this user's friend."); //pass result of sending a message (4)
+                                                        output.println("Fail to send a message. This may be " +
+                                                                "because you are not this user's friend.");
+                                                        //pass result of sending a message (4)
                                                     } else {
-                                                        output.println("Send a message successfully!"); //pass result of sending a message (4)
+                                                        output.println("Send a message successfully!");
+                                                        //pass result of sending a message (4)
                                                     }
                                                 } else if (thirdChose.equals("Remove a Friend")) {
                                                     Friends friend = new Friends(user, pickedFriend);
 
                                                     if (!friend.removeFriend()) {
-                                                        output.println("Fail to remove."); //pass the result of removing a friend (4)
+                                                        output.println("Fail to remove.");
+                                                        //pass the result of removing a friend (4)
                                                     } else {
-                                                        output.println("Remove a friend successfully!"); //pass the result of removing a friend (4)
+                                                        output.println("Remove a friend successfully!");
+                                                        //pass the result of removing a friend (4)
                                                     }
                                                 } else if (thirdChose.equals("Block a Friend")) {
                                                     Friends friend = new Friends(user, pickedFriend);
 
                                                     if (!friend.blockUser()) {
-                                                        output.println("Fail to block."); //pass the result of blocking a friend (4)
+                                                        output.println("Fail to block.");
+                                                        //pass the result of blocking a friend (4)
                                                     } else {
-                                                        output.println("Block a friend successfully!"); //pass the result of blocking a friend (4)
+                                                        output.println("Block a friend successfully!");
+                                                        //pass the result of blocking a friend (4)
                                                     }
                                                 } else {
                                                     break;
@@ -427,9 +464,11 @@ public class Servers implements ServerList {
                                                     Friends friend = new Friends(user, pickedBlock);
 
                                                     if (!friend.removeBlock()) {
-                                                        output.println("Fail to remove."); //pass the result of removing block (4)
+                                                        output.println("Fail to remove.");
+                                                        //pass the result of removing block (4)
                                                     } else {
-                                                        output.println("Remove a blocked successfully!"); //pass the result of removing block (4)
+                                                        output.println("Remove a blocked successfully!");
+                                                        //pass the result of removing block (4)
                                                     }
                                                 } else {
                                                     break;
@@ -457,17 +496,21 @@ public class Servers implements ServerList {
                                                     Friends friends = new Friends(user, pickedRequest);
 
                                                     if (!friends.addFriend()) {
-                                                        output.println("Fail to add a friend"); //pass the result of accepting request (4)
+                                                        output.println("Fail to add a friend");
+                                                        //pass the result of accepting request (4)
                                                     } else {
-                                                        output.println("Add a friend successfully!"); //pass the result of accepting request (4)
+                                                        output.println("Add a friend successfully!");
+                                                        //pass the result of accepting request (4)
                                                     }
                                                 } else if (thirdChose.equals("Reject request")) {
                                                     Friends friends = new Friends(user, pickedRequest);
 
                                                     if (!friends.rejectFriendRequest()) {
-                                                        output.println("Fail to reject"); //pass the result of rejecting request (4)
+                                                        output.println("Fail to reject");
+                                                        //pass the result of rejecting request (4)
                                                     } else {
-                                                        output.println("Reject a friend request successfully!"); //pass the result of rejecting request (4)
+                                                        output.println("Reject a friend request successfully!");
+                                                        //pass the result of rejecting request (4)
                                                     }
                                                 }
                                             }

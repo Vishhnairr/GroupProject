@@ -4,13 +4,15 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * EditableUserProfile
+ * Editable User Profile
  *
- * This class create a Editable user profile to let user edit his/her profile.
+ * This class creates the GUI for the user profile that
+ * will be editable and can store the new data in
+ * the user's file.
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
- * @version April 26, 2024
+ * @version April 28, 2024
  *
  */
 
@@ -96,7 +98,6 @@ public class EditableUserProfile {
     }
 
     // Additional methods (addSaveRestoreButtons, saveChanges, restoreOriginalData)
-    // ...
     private void addSaveRestoreButtons() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -168,7 +169,8 @@ public class EditableUserProfile {
         }
 
         if (errorMessage.length() > 0) {
-            JOptionPane.showMessageDialog(frame, errorMessage.toString(), "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, errorMessage.toString(), "Input Error",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         } else {
             for (int i = 1; i < dataTextFields.length; i++) {

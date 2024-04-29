@@ -13,13 +13,18 @@
  */
 public interface FriendList {
     boolean verifyUser();
+
     boolean makeFriendRequest();
+
     boolean rejectFriendRequest();
+
     boolean addFriend();
+
     boolean removeFriend();
+
     boolean blockUser();
-    boolean removeFriendRequestFromUser(String ownerUsername, String targetUsername);
+
     boolean removeBlock();
+
     String viewProfile();
 }
-

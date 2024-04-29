@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
- * @version April 26, 2024
+ * @version April 28, 2024
  *
  */
 
@@ -84,7 +84,7 @@ public class TestMessage {
             int check = 0;
             for (int i = 0; i < history.size(); i++) {
                 if (history.get(i).equals(messageList.toString())) {
-                    check ++;
+                    check++;
                 }
             }
             if (check == 0) {
@@ -118,7 +118,7 @@ public class TestMessage {
             int check = 0;
             for (int i = 0; i < history.size(); i++) {
                 if (history.get(i).equals(messageList.toString())) {
-                    check ++;
+                    check++;
                 }
             }
             if (check != 0) {
@@ -150,7 +150,7 @@ public class TestMessage {
             int check = 0;
             for (int i = 0; i < history.size(); i++) {
                 if (history.get(i).equals(messageList.toString())) {
-                    check ++;
+                    check++;
                 }
             }
             if (check != 0) {

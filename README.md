@@ -7,6 +7,39 @@ Alexia Gil, Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson
 
 When the program starts running, it brings up a welcome message and a menu that allows the user to choose between creating an account, logging in, and exiting. When being run for the first time, the log-in functionality won’t work as no accounts exist to log into. After a user creates an account/logs in, another menu appears with the options of viewing a list of all accounts on the platform, searching for a specific account, or viewing a list of the user’s friends. Upon choosing the first option, the program displays a list of every account and prompts the user to choose an account to look into. After selecting an account the “viewing all accounts” and “search for account” functionalities have the same outcome as both will display a menu that allows the user to see the selected account’s profile, send a friend request, or exit to the main menu. If at the main menu the user chooses to see their friends list, the list and a menu will appear that prompts the use to message their friends (select a friend to message and type the content of the message), view friend requests (view a list of pending friend requests sent to the user by other accounts with the options of approving or declining each friend request), remove a friend (select a current friend to be removed from the friends list), block a friend (removes the friend and prevents them from interacting with the user again), and exiting to the main menu. When a user exits the program, they are prompted to choose whether or not to edit their account info before finally logging out
 
+## Features
+### Account Management
+Account Creation: Users can sign up by providing essential information, which is securely stored in individual files.
+Login System: Secure login functionality allows users to access their profiles and interact with the platform.
+Profile Editing: Users can update their personal information, including names, biographies, and preferences related to profile visibility and message reception.
+
+### Friendship Management
+Friend Requests: Users can send, accept, or decline friend requests, enabling them to build a network of connections.
+Friend List Management: The platform allows users to view their current friends, remove friends, or block users, which also prevents any further interactions.
+
+### Messaging
+Direct Messaging: Users can send private messages to their friends.
+Message History: Users can view and manage their message history, including deleting messages to keep their conversation relevant and tidy.
+
+### Search Functionality
+User Search: Users can search for other profiles using usernames. This feature includes auto-complete suggestions to help find users quickly.
+
+### User Profiles
+Profile Viewing: Users can view their own and others’ profiles, with the visibility contingent upon the user’s privacy settings.
+Dynamic Profiles: Profiles dynamically update based on user interactions and changes to the account settings.
+
+### Real-time Interaction
+Immediate Updates: Changes made by users, like sending messages or updating profiles, are reflected in real-time, enhancing the interactive experience.
+Responsive GUI: The graphical user interface is designed to be intuitive and responsive, ensuring that users can navigate and use the platform effortlessly.
+
+### Advanced Features
+Block System: Users can block other users, which restricts those blocked from sending messages or friend requests.
+Friend Request Management: The platform offers a specialized interface for managing incoming friend requests, including options to accept or reject with immediate feedback.
+
+### Client-Server Communication
+Robust Server Backend: Handles requests like account creation, login, messaging, and more, ensuring data consistency and security.
+Efficient Data Handling: The server efficiently processes and stores user data, while the client handles user interactions, making the platform scalable and robust.
+
 ## MainMenu
 
 Holds all the functionality for users to interact with the system. First a welcome message is displayed and then the user logs in or creates an account. When a user logs in to their account the menu gives them different options. The menu allows the user to loop through and perform as many actions as they want, and then when they are done they exit. Once they exit, the menu prompts them if they want to make any edits to their account before they log out, and they can make as many edits as they like. After the user is done editing, a goodbye message is displayed and the program ends. This class is no longer necessary.

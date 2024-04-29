@@ -14,11 +14,11 @@ import java.util.*;
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
- * @version April 26, 2024
+ * @version April 28, 2024
  *
  */
 
-public class Clients implements ClientList {
+public class Clients {
     private Socket socket;
     private BufferedReader input;
     private PrintWriter output;
@@ -283,7 +283,8 @@ public class Clients implements ClientList {
                                                 return;
                                             } else if (thirdChose.equals("View profile")) {
                                                 clients.output.println(thirdChose); // pass thirdChose (6)
-                                                String countFile = clients.input.readLine(); //receive length of file {4}
+                                                String countFile = clients.input.readLine();
+                                                //receive length of file {4}
 
                                                 if (!countFile.equals("0")) {
                                                     int fileCount = Integer.parseInt(countFile);
@@ -310,7 +311,8 @@ public class Clients implements ClientList {
                                                         latch.await(); // This will block until the count reaches zero
                                                     } catch (InterruptedException e) {
                                                         Thread.currentThread().interrupt();
-                                                        System.out.println("Interrupted while waiting for the profile editor to close.");
+                                                        System.out.println("Interrupted while waiting for " +
+                                                                "the profile editor to close.");
                                                     }
 
                                                 } else { //if no file is passed
@@ -321,20 +323,24 @@ public class Clients implements ClientList {
                                                 }
                                             } else if (thirdChose.equals("Make a friend request")) {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
-                                                String result = clients.input.readLine(); //receive result of making a friend request {4}
+                                                String result = clients.input.readLine();
+                                                //receive result of making a friend request {4}
 
                                                 if (result.equals("Make a friend request successfully!")) {
-                                                    JOptionPane.showMessageDialog(null, "Make a friend request successfully!");
+                                                    JOptionPane.showMessageDialog(null,
+                                                            "Make a friend request successfully!");
                                                 } else {
                                                     JOptionPane.showMessageDialog(null, result);
                                                 }
 
                                             } else if (thirdChose.equals("Block a user")) {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
-                                                String result = clients.input.readLine(); //receive result of blocking a user {4}
+                                                String result = clients.input.readLine();
+                                                //receive result of blocking a user {4}
 
                                                 if (result.equals("Block a user successfully!")) {
-                                                    JOptionPane.showMessageDialog(null, "Block a user successfully!");
+                                                    JOptionPane.showMessageDialog(null,
+                                                            "Block a user successfully!");
                                                 } else {
                                                     JOptionPane.showMessageDialog(null, result);
                                                 }
@@ -343,7 +349,8 @@ public class Clients implements ClientList {
                                                 TextBoxes messageBox = new TextBoxes();
                                                 String content;
                                                 boolean noInput = true;
-                                                messageBox.addTextBoxes("Please enter what you want to send: ");
+                                                messageBox.addTextBoxes("Please enter what " +
+                                                        "you want to send: ");
                                                 messageBox.setButtonEnter();
                                                 messageBox.createPane();
 
@@ -367,14 +374,17 @@ public class Clients implements ClientList {
                                                 if (content == null) {
                                                     return;
                                                 } else if (content.isEmpty()) {
-                                                    JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                                                    JOptionPane.showMessageDialog(null,
+                                                            "Error! Your enter is empty!");
                                                 } else {
                                                     clients.output.println(thirdChose); //pass thirdChose (6)
                                                     clients.output.println(content); //pass the content of message (7)
-                                                    String result = clients.input.readLine(); //receive the result of sending message {4}
+                                                    String result = clients.input.readLine();
+                                                    //receive the result of sending message {4}
 
                                                     if (result.equals("Send a message successfully!")) {
-                                                        JOptionPane.showMessageDialog(null, "Send a message successfully!");
+                                                        JOptionPane.showMessageDialog(null,
+                                                                "Send a message successfully!");
                                                     } else {
                                                         JOptionPane.showMessageDialog(null, result);
                                                     }
@@ -382,7 +392,9 @@ public class Clients implements ClientList {
                                             } else if (thirdChose.equals("View message history")) {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
 
-                                                String messageCount = clients.input.readLine(); //receive the count of messages {4}
+                                                String messageCount = clients.input.readLine();
+                                                //receive the count of messages {4}
+
                                                 int messages = Integer.parseInt(messageCount);
 
                                                 String history = "";
@@ -391,7 +403,8 @@ public class Clients implements ClientList {
                                                     if (m == messages - 1) {
                                                         history += clients.input.readLine(); //receive messages {5}
                                                     } else {
-                                                        history += clients.input.readLine() + "\n"; //receive messages {5}
+                                                        history += clients.input.readLine() + "\n";
+                                                        //receive messages {5}
                                                     }
                                                 }
 
@@ -399,12 +412,14 @@ public class Clients implements ClientList {
                                                 CountDownLatch latch = new CountDownLatch(1);
 
                                                 SwingUtilities.invokeLater(() -> {
-                                                    new MessageHistoryEditor(finalHistory, new MessageHistoryEditor.MessageHistoryListener() {
+                                                    new MessageHistoryEditor(finalHistory,
+                                                            new MessageHistoryEditor.MessageHistoryListener() {
                                                         @Override
                                                         public void onWindowClosed() {
                                                             System.out.println("111");
                                                             clients.output.println("History window was closed");
-                                                            latch.countDown(); // Notify the latch that the task is completed
+                                                            latch.countDown();
+                                                            // Notify the latch that the task is completed
                                                         }
 
                                                         @Override
@@ -422,9 +437,11 @@ public class Clients implements ClientList {
                                                                 } catch (IOException e) {
                                                                     e.printStackTrace();
                                                                 }
-                                                                JOptionPane.showMessageDialog(null, result);
+                                                                JOptionPane.showMessageDialog(null,
+                                                                        result);
                                                             }
-                                                            latch.countDown(); // Notify the latch that the task is completed
+                                                            latch.countDown();
+                                                            // Notify the latch that the task is completed
                                                         }
                                                     });
                                                 });
@@ -434,7 +451,8 @@ public class Clients implements ClientList {
                                                     latch.await(); // This will block until the count reaches zero
                                                 } catch (InterruptedException e) {
                                                     Thread.currentThread().interrupt();
-                                                    System.out.println("Interrupted while waiting for the message history editor to close.");
+                                                    System.out.println("Interrupted while waiting for the " +
+                                                            "message history editor to close.");
                                                 }
                                             } else {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
@@ -471,12 +489,14 @@ public class Clients implements ClientList {
                                     System.out.println(response);
 
                                     if (response.equals(";")) {
-                                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                                        JOptionPane.showMessageDialog(null, "Error! " +
+                                                "Your enter is empty!");
                                         response = "";
                                         second.emptyTextFields();
                                         second.setHitButton(false);
                                     } else if (response.isEmpty()) {
-                                        JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                                        JOptionPane.showMessageDialog(null, "Error! " +
+                                                "Your enter is empty!");
                                         response = "";
                                         second.emptyTextFields();
                                         second.setHitButton(false);
@@ -489,7 +509,8 @@ public class Clients implements ClientList {
 
                                         clients.output.println(secondChose); //pass secondChose (4)
                                         clients.output.println(userSearched); //pass userSearched (5)
-                                        String result = clients.input.readLine(); //receive result of searching a user {2}
+                                        String result = clients.input.readLine();
+                                        //receive result of searching a user {2}
 
                                         if (!result.equals("User searched!")) {
                                             JOptionPane.showMessageDialog(null, result);
@@ -538,7 +559,8 @@ public class Clients implements ClientList {
                                             if (thirdChose.equals("View profile")) {
                                                 clients.output.println(thirdChose); // pass thirdChose (6)
 
-                                                String countFile = clients.input.readLine(); //receive length of file {3}
+                                                String countFile = clients.input.readLine();
+                                                //receive length of file {3}
 
                                                 if (!countFile.equals("0")) {
                                                     int fileCount = Integer.parseInt(countFile);
@@ -566,7 +588,8 @@ public class Clients implements ClientList {
                                                         latch.await(); // This will block until the count reaches zero
                                                     } catch (InterruptedException e) {
                                                         Thread.currentThread().interrupt();
-                                                        System.out.println("Interrupted while waiting for the profile editor to close.");
+                                                        System.out.println("Interrupted while waiting " +
+                                                                "for the profile editor to close.");
                                                     }
 
                                                 } else { //if no file is passed
@@ -577,19 +600,23 @@ public class Clients implements ClientList {
                                                 }
                                             } else if (thirdChose.equals("Make a friend request")) {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
-                                                String resultRequest = clients.input.readLine(); //receive result of making a friend request {3}
+                                                String resultRequest = clients.input.readLine();
+                                                //receive result of making a friend request {3}
 
                                                 if (resultRequest.equals("Make a friend request successfully!")) {
-                                                    JOptionPane.showMessageDialog(null, "Make a friend request successfully!");
+                                                    JOptionPane.showMessageDialog(null,
+                                                            "Make a friend request successfully!");
                                                 } else {
                                                     JOptionPane.showMessageDialog(null, resultRequest);
                                                 }
                                             } else if (thirdChose.equals("Block a user")) {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
-                                                String resultBlock = clients.input.readLine(); //receive result of blocking a user {3}
+                                                String resultBlock = clients.input.readLine();
+                                                //receive result of blocking a user {3}
 
                                                 if (resultBlock.equals("Block a user successfully!")) {
-                                                    JOptionPane.showMessageDialog(null, "Block a user successfully!");
+                                                    JOptionPane.showMessageDialog(null,
+                                                            "Block a user successfully!");
                                                 } else {
                                                     JOptionPane.showMessageDialog(null, resultBlock);
                                                 }
@@ -597,7 +624,8 @@ public class Clients implements ClientList {
                                                 TextBoxes messageBox = new TextBoxes();
                                                 String content;
                                                 boolean noInput = true;
-                                                messageBox.addTextBoxes("Please enter what you want to send: ");
+                                                messageBox.addTextBoxes("Please enter what " +
+                                                        "you want to send: ");
                                                 messageBox.setButtonEnter();
                                                 messageBox.createPane();
 
@@ -621,14 +649,17 @@ public class Clients implements ClientList {
                                                 if (content == null) {
                                                     return;
                                                 } else if (content.isEmpty()) {
-                                                    JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                                                    JOptionPane.showMessageDialog(null,
+                                                            "Error! Your enter is empty!");
                                                 } else {
                                                     clients.output.println(thirdChose); //pass thirdChose (6)
                                                     clients.output.println(content); //pass the content of message (7)
-                                                    String resultSend = clients.input.readLine(); //receive the result of sending message {3}
+                                                    String resultSend = clients.input.readLine();
+                                                    //receive the result of sending message {3}
 
                                                     if (resultSend.equals("Send a message successfully!")) {
-                                                        JOptionPane.showMessageDialog(null, "Send a message successfully!");
+                                                        JOptionPane.showMessageDialog(null,
+                                                                "Send a message successfully!");
                                                     } else {
                                                         JOptionPane.showMessageDialog(null, resultSend);
                                                     }
@@ -636,7 +667,8 @@ public class Clients implements ClientList {
                                             } else if (thirdChose.equals("View message history")) {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
 
-                                                String messageCount = clients.input.readLine(); //receive the count of messages {4}
+                                                String messageCount = clients.input.readLine();
+                                                //receive the count of messages {4}
                                                 int messages = Integer.parseInt(messageCount);
 
                                                 String history = "";
@@ -645,7 +677,8 @@ public class Clients implements ClientList {
                                                     if (m == messages - 1) {
                                                         history += clients.input.readLine(); //receive messages {5}
                                                     } else {
-                                                        history += clients.input.readLine() + "\n"; //receive messages {5}
+                                                        history += clients.input.readLine() + "\n";
+                                                        //receive messages {5}
                                                     }
                                                 }
 
@@ -653,12 +686,14 @@ public class Clients implements ClientList {
                                                 CountDownLatch latch = new CountDownLatch(1);
 
                                                 SwingUtilities.invokeLater(() -> {
-                                                    new MessageHistoryEditor(finalHistory, new MessageHistoryEditor.MessageHistoryListener() {
+                                                    new MessageHistoryEditor(finalHistory,
+                                                            new MessageHistoryEditor.MessageHistoryListener() {
                                                         @Override
                                                         public void onWindowClosed() {
                                                             System.out.println("111");
                                                             clients.output.println("History window was closed");
-                                                            latch.countDown(); // Notify the latch that the task is completed
+                                                            latch.countDown();
+                                                            // Notify the latch that the task is completed
                                                         }
 
                                                         @Override
@@ -676,9 +711,11 @@ public class Clients implements ClientList {
                                                                 } catch (IOException e) {
                                                                     e.printStackTrace();
                                                                 }
-                                                                JOptionPane.showMessageDialog(null, result);
+                                                                JOptionPane.showMessageDialog(null,
+                                                                        result);
                                                             }
-                                                            latch.countDown(); // Notify the latch that the task is completed
+                                                            latch.countDown();
+                                                            // Notify the latch that the task is completed
                                                         }
                                                     });
                                                 });
@@ -688,7 +725,8 @@ public class Clients implements ClientList {
                                                     latch.await(); // This will block until the count reaches zero
                                                 } catch (InterruptedException e) {
                                                     Thread.currentThread().interrupt();
-                                                    System.out.println("Interrupted while waiting for the message history editor to close.");
+                                                    System.out.println("Interrupted while " +
+                                                            "waiting for the message history editor to close.");
                                                 }
                                             } else {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
@@ -721,7 +759,9 @@ public class Clients implements ClientList {
                                     profileEditor.setListener(new EditableUserProfile.UserProfileListener() {
                                         @Override
                                         public void onProfileSave(String[] profileData) {
-                                            clients.output.println("profile_saved_and_closed"); // Notify server of save and close
+                                            clients.output.println("profile_saved_and_closed");
+                                            // Notify server of save and close
+
                                             System.out.println("profile_saved_and_closed");
                                             for (String data : profileData) {
                                                 clients.output.println(data);
@@ -732,7 +772,9 @@ public class Clients implements ClientList {
 
                                         @Override
                                         public void onProfileClose() {
-                                            clients.output.println("profile_edit_cancelled"); // Notify server that the profile edit was cancelled
+                                            clients.output.println("profile_edit_cancelled");
+                                            // Notify server that the profile edit was cancelled
+
                                             System.out.println("profile_edit_cancelled");
                                             latch.countDown(); // Notify the latch that the task is completed
                                         }
@@ -856,7 +898,8 @@ public class Clients implements ClientList {
                                                     latch.await(); // This will block until the count reaches zero
                                                 } catch (InterruptedException e) {
                                                     Thread.currentThread().interrupt();
-                                                    System.out.println("Interrupted while waiting for the profile editor to close.");
+                                                    System.out.println("Interrupted while waiting for the " +
+                                                            "profile editor to close.");
                                                 }
 
                                             } else { //if no file is passed
@@ -868,7 +911,9 @@ public class Clients implements ClientList {
                                         } else if (thirdChose.equals("View Message History")) {
                                             clients.output.println(thirdChose); //pass thirdChose (6)
 
-                                            String messageCount = clients.input.readLine(); //receive the count of messages {4}
+                                            String messageCount = clients.input.readLine();
+                                            //receive the count of messages {4}
+
                                             int messages = Integer.parseInt(messageCount);
 
                                             String history = "";
@@ -885,12 +930,14 @@ public class Clients implements ClientList {
                                             CountDownLatch latch = new CountDownLatch(1);
 
                                             SwingUtilities.invokeLater(() -> {
-                                                new MessageHistoryEditor(finalHistory, new MessageHistoryEditor.MessageHistoryListener() {
+                                                new MessageHistoryEditor(finalHistory,
+                                                        new MessageHistoryEditor.MessageHistoryListener() {
                                                     @Override
                                                     public void onWindowClosed() {
                                                         System.out.println("111");
                                                         clients.output.println("History window was closed");
-                                                        latch.countDown(); // Notify the latch that the task is completed
+                                                        latch.countDown();
+                                                        // Notify the latch that the task is completed
                                                     }
 
                                                     @Override
@@ -910,7 +957,8 @@ public class Clients implements ClientList {
                                                             }
                                                             JOptionPane.showMessageDialog(null, result);
                                                         }
-                                                        latch.countDown(); // Notify the latch that the task is completed
+                                                        latch.countDown();
+                                                        // Notify the latch that the task is completed
                                                     }
                                                 });
                                             });
@@ -920,7 +968,8 @@ public class Clients implements ClientList {
                                                 latch.await(); // This will block until the count reaches zero
                                             } catch (InterruptedException e) {
                                                 Thread.currentThread().interrupt();
-                                                System.out.println("Interrupted while waiting for the message history editor to close.");
+                                                System.out.println("Interrupted while waiting for the " +
+                                                        "message history editor to close.");
                                             }
                                         } else if (thirdChose.equals("Send a Message")) {
                                             TextBoxes messageBox = new TextBoxes();
@@ -950,33 +999,40 @@ public class Clients implements ClientList {
                                             if (content == null) {
                                                 return;
                                             } else if (content.isEmpty()) {
-                                                JOptionPane.showMessageDialog(null, "Error! Your enter is empty!");
+                                                JOptionPane.showMessageDialog(null,
+                                                        "Error! Your enter is empty!");
                                             } else {
                                                 clients.output.println(thirdChose); //pass thirdChose (6)
                                                 clients.output.println(content); //pass the content of message (7)
-                                                String resultSend = clients.input.readLine(); //receive the result of sending message {4}
+                                                String resultSend = clients.input.readLine();
+                                                //receive the result of sending message {4}
 
                                                 if (resultSend.equals("Send a message successfully!")) {
-                                                    JOptionPane.showMessageDialog(null, "Send a message successfully!");
+                                                    JOptionPane.showMessageDialog(null,
+                                                            "Send a message successfully!");
                                                 } else {
                                                     JOptionPane.showMessageDialog(null, resultSend);
                                                 }
                                             }
                                         } else if (thirdChose.equals("Remove a Friend")) {
                                             clients.output.println(thirdChose); //pass thirdChose (6)
-                                            String result = clients.input.readLine(); //receive result of removing a friend {4}
+                                            String result = clients.input.readLine();
+                                            //receive result of removing a friend {4}
 
                                             if (result.equals("Remove a friend successfully!")) {
-                                                JOptionPane.showMessageDialog(null, "Remove a friend successfully!");
+                                                JOptionPane.showMessageDialog(null,
+                                                        "Remove a friend successfully!");
                                             } else {
                                                 JOptionPane.showMessageDialog(null, result);
                                             }
                                         } else if (thirdChose.equals("Block a Friend")) {
                                             clients.output.println(thirdChose); //pass thirdChose (6)
-                                            String result = clients.input.readLine(); //receive result of removing a friend {4}
+                                            String result = clients.input.readLine();
+                                            //receive result of removing a friend {4}
 
                                             if (result.equals("Block a friend successfully!")) {
-                                                JOptionPane.showMessageDialog(null, "Block a friend successfully!");
+                                                JOptionPane.showMessageDialog(null,
+                                                        "Block a friend successfully!");
                                             } else {
                                                 JOptionPane.showMessageDialog(null, result);
                                             }
@@ -1064,7 +1120,8 @@ public class Clients implements ClientList {
                                             return;
                                         } else if (thirdChose.equals("Remove Block")) {
                                             clients.output.println(thirdChose); //pass thirdChose (6)
-                                            String result = clients.input.readLine(); // receive the result of removing block {4}
+                                            String result = clients.input.readLine();
+                                            // receive the result of removing block {4}
 
                                             JOptionPane.showMessageDialog(null, result);
                                         } else {
@@ -1078,7 +1135,8 @@ public class Clients implements ClientList {
                                 clients.output.println(secondChose); //pass secondChose (4)
 
                                 while (true) { //Interactions in friend request
-                                    String requestsCount = clients.input.readLine(); //receive the length of requests {2}
+                                    String requestsCount = clients.input.readLine();
+                                    //receive the length of requests {2}
                                     int count = Integer.parseInt(requestsCount);
 
                                     ArrayList<String> requests = new ArrayList<>();
@@ -1147,22 +1205,27 @@ public class Clients implements ClientList {
                                             return;
                                         } else if (thirdChose.equals("Accept request")) {
                                             clients.output.println(thirdChose); //pass thirdChose (6)
-                                            String result = clients.input.readLine(); //receive the result of accepting request {4}
+                                            String result = clients.input.readLine();
+                                            //receive the result of accepting request {4}
 
                                             JOptionPane.showMessageDialog(null, result);
 
                                         } else if (thirdChose.equals("Reject request")) {
                                             clients.output.println(thirdChose); //pass thirdChose (6)
-                                            String result = clients.input.readLine(); //receive the result of accepting request {4}
+                                            String result = clients.input.readLine();
+                                            //receive the result of accepting request {4}
 
                                             JOptionPane.showMessageDialog(null, result);
                                         } else {
-                                            clients.output.println(thirdChose); //pass thirdChose (6)
+                                            clients.output.println(thirdChose);
+                                            //pass thirdChose (6)
                                         }
                                     }
                                 }
                             } else {
-                                clients.output.println(secondChose); //pass secondChose (4)
+                                clients.output.println(secondChose);
+                                //pass secondChose (4)
+
                                 break;
                             }
                         }
@@ -1170,7 +1233,7 @@ public class Clients implements ClientList {
                     }
                     break;
                 }
-                break;//Log in username end
+                break; //Log in username end
 
             } else if (firstChose.equals("Sign up")) { //Sign up
                 System.out.println("User has chosen to sign up");
@@ -1230,8 +1293,8 @@ public class Clients implements ClientList {
 
                             if (result.equals("Sign up successfully!")) {
                                 JOptionPane.showMessageDialog(null, "Sign up successfully!");
-                                JOptionPane.showMessageDialog(null, "You need to log in your " +
-                                        "account after you signed up.");
+                                JOptionPane.showMessageDialog(null, "You need to log " +
+                                        "in your account after you signed up.");
                                 third.getFrame().dispose();
                             } else {
                                 JOptionPane.showMessageDialog(null, result);

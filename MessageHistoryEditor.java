@@ -5,13 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * MessageHistoryEditor
+ * Message History Editor
  *
- * This class show user the message history and allow them to delete whatever they want.
+ * This class creates the GUI that displays a panel
+ * of the user's message history between them and
+ * another use they have specified. It also allows
+ * them to delete a message if they so choose.
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
- * @version March 31, 2024
+ * @version April 28, 2024
  *
  */
 

@@ -3,7 +3,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 /**
- * TestMessage
+ * FriendTest
  *
  * Test for Friend
  *

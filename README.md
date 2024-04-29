@@ -18,7 +18,7 @@ Our social media platform provides a dynamic environment for user interaction th
 
 ## Features
 ### Account Management
-Account Creation: Users can sign up by providing essential information, which is securely stored in individual files.
+Account Creation: Users can sign up by providing essential information, which is securely stored in individual files.  
 Login System: Secure login functionality allows users to access their profiles and interact with the platform.
 Profile Editing: Users can update their personal information, including names, biographies, and preferences related to profile visibility and message reception.
 
@@ -123,5 +123,5 @@ Functionality: Provides a GUI component for text input, which could be used acro
 Relationship: Could be used by Clients or other GUI classes requiring text input.
 
 ### UserProfileDisplay
-Functionality: Provides a GUI for displaying user profiles.
-Relationship: Used by Clients when a profile needs to be viewed.
+Functionality: Provides a GUI for displaying user profiles.  
+Relationship: Used by Clients when a profile needs to be viewed.  

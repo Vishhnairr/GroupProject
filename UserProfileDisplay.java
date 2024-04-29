@@ -4,13 +4,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * TextBoxes
+ * User Profile Display
  *
- * This class create a GUI to show other user's profile.
+ * This class creates a GUI that displays a specifically
+ * searched user’s profile with all of their information,
+ * not including their password. It allows the user to
+ * look at other users and their information, if that
+ * user is friends with them or if that specific user has
+ * their profile view on public (true).
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
- * @version April 26, 2024
+ * @version April 28, 2024
  *
  */
 

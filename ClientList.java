@@ -1,10 +1,8 @@
 /**
  * ClientList
  *
- * This class runs the GUI that users will interact with when they use
- * the social platform. It stores the commands and data that the users choose
- * and input to send to the platform's server and displays interfaces
- * based on data received from the server.
+ * This class is an interface of the Clients class,
+ * which allows the server to connect to the client.
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
  *
@@ -15,4 +13,3 @@
 public interface ClientList {
     void disconnect(); // Method to disconnect the client
 }
-

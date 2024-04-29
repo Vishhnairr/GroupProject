@@ -1,11 +1,9 @@
-// imports here
-
 import java.io.*;
 import java.util.ArrayList;
 
 /**
  * User
- * <p>
+ *
  * This class creates a User with a first name, a last name, an email, a bio, a username
  * a password and a file that holds users. This method is able to check that every input is correct.
  * It also holds the methods of creating a user, logging in to an account, and editing an account if
@@ -13,7 +11,9 @@ import java.util.ArrayList;
  * confirm there is more than one for the main method to use.
  *
  * @author Lisa Luo, Zixian Liu, Viswanath Nair, Braeden Patterson, Alexia Gil, lab sec 13
+ *
  * @version March 31, 2024
+ *
  */
 
 public class User implements UserList {
@@ -657,7 +657,7 @@ public class User implements UserList {
 
         return false;
     }
-    // only Zixian should use this method or there may be sth wrong
+
     public synchronized boolean updateProfile(String[] profileData) {
 
         if (profileData == null || profileData.length != 8) {
